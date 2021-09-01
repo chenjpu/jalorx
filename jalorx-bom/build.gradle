@@ -1,0 +1,65 @@
+plugins {
+    id 'java-platform'
+}
+
+group projectGroupId
+
+apply plugin: 'maven-publish'
+
+def profiles = new Properties()
+profiles.load(new StringReader(new File("$projectDir/profiles.properties").text))
+boolean jalorxSnapshot = rootProject.version.toString().endsWith("-SNAPSHOT")
+
+def excludedProjects = [
+        "benchmarks"
+]
+apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
+ext.extraPomInfo = {
+    delegate.properties {
+        for(dep in dependencyVersions) {
+            "${dep.key}.version"(dep.value.version)
+        }
+    }
+}
+javaPlatform {
+    allowDependencies()
+}
+
+dependencies {
+	for (dep in dependencyVersions) {
+	    def info = dep.value
+	    if (info.bom == true) {
+	        api platform("$info.group:$info.name:$info.version")
+	    }
+    }
+     
+    constraints {
+    	
+        for (profile in profiles) {
+            api "io.jalorx.profiles:$profile.key:$profile.value"
+        }
+
+        for (Project p : rootProject.subprojects) {
+            if (!p.subprojects.empty) continue
+            if (p.name == "jalorx-bom") continue
+            if (excludedProjects.contains(p.name)) continue
+
+            api "$p.group:$p.name:$p.version"
+        }
+
+        for (dep in dependencyVersions) {
+            def info = dep.value
+            if (info.bom != true){
+	            if (info.name) {
+	                	api "$info.group:$info.name:$info.version"
+	            }
+	
+	            if (info.modules) {
+	                for (m in info.modules) {
+	                    api "$info.group:$m:$info.version"
+	                }
+	            }
+            }
+        }
+    }
+}

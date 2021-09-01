@@ -1,0 +1,11 @@
+description = "JalorX Starts export"
+group   projectStarterGroupId
+
+dependencies {
+	annotationProcessor "io.micronaut:micronaut-inject-java"
+	
+	implementation "org.apache.poi:poi-ooxml:$poiVersion"
+    implementation "org.freemarker:freemarker:$freemarkerVersion"
+	implementation  project(":jalorx-boot")
+}
+

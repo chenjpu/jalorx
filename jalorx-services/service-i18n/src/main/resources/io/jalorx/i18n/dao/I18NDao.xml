@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.jalorx.i18n.dao.I18NDao">
+
+	<!-- <cache /> -->
+	
+	<resultMap id="PairResultMap" type="io.jalorx.boot.Pair">
+        <result property="key" column="KEY_CODE" jdbcType="VARCHAR" />
+        <result property="value" column="VALUE_DESC" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- ///////////////////////////基础接口定义///////////////////////////////// -->
+	
+	 <resultMap id="I18NResultMap" type="io.jalorx.i18n.entity.I18N">
+	    <!--
+	       	自动生成
+	    -->
+        <id property="id" column="ID" jdbcType="BIGINT" />
+        <result property="keyCode" column="KEY_CODE" jdbcType="VARCHAR" />
+        <result property="languageCode" column="LANGUAGE_CODE" jdbcType="VARCHAR" />
+        <result property="valueDesc" column="VALUE_DESC" jdbcType="VARCHAR" />
+        <result property="revision" column="REVISION" jdbcType="INTEGER" />
+	    <result property="createUserId" column="CREATE_USER_ID" jdbcType="NUMERIC" />
+	    <result property="lastUpdateUserId" column="LAST_UPDATE_USER_ID" jdbcType="NUMERIC" />
+	    <result property="createDate" jdbcType="TIMESTAMP" column="CREATE_DATE"/>
+	    <result property="lastUpdateDate" jdbcType="TIMESTAMP" column="LAST_UPDATE_DATE" />
+	</resultMap>
+	
+
+	<select id="getById" resultMap="I18NResultMap">
+		SELECT
+		T.*
+		FROM tpl_i18n_t T
+		WHERE T.ID = #{id}
+	</select>
+	
+	
+	<select id="getByIds" resultMap="I18NResultMap">
+		SELECT
+		T.*
+		FROM tpl_i18n_t T
+		WHERE T.ID in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		  #{id}
+		</foreach>
+	</select>
+
+	<select id="getCount" resultType="int">
+		SELECT
+		count(1)
+		FROM tpl_i18n_t T
+		<filter open="where (" close=")" />
+	</select>
+
+	<select id="selectAll" resultMap="I18NResultMap">
+		SELECT
+		T.*
+		FROM tpl_i18n_t T
+		<filter open="where (" close=")" />
+	</select>
+
+	<select id="select" pageable="true" resultMap="I18NResultMap">
+		SELECT T.* FROM tpl_i18n_t T
+		<filter open="where (" close=")" />
+		ORDER BY T.ID
+	</select>
+	
+	<!-- 插入语句  -->
+	<sql id="base_insert_sql">
+		INSERT INTO tpl_i18n_t (
+			<if test="id != null">ID,</if>KEY_CODE,LANGUAGE_CODE,VALUE_DESC,
+			REVISION, 
+			CREATE_USER_ID,
+			LAST_UPDATE_USER_ID,
+			CREATE_DATE,
+			LAST_UPDATE_DATE,
+			TENANT_ID,
+	        APP_NAME,
+	        APP_SCOPE
+		  ) VALUES (
+			<if test="id != null">#{id,jdbcType=NUMERIC},</if>#{keyCode,jdbcType=VARCHAR},#{languageCode,jdbcType=VARCHAR},#{valueDesc,jdbcType=VARCHAR},
+			1, 
+	        #{createUserId,jdbcType=VARCHAR},
+	        #{currentUserId,jdbcType=VARCHAR},
+	        #{createDate},
+	        #{lastUpdateDate},
+	        #{tenantId,jdbcType=VARCHAR},
+	        #{appName,jdbcType=VARCHAR},
+	        #{appScope,jdbcType=VARCHAR}
+		  )
+	</sql>
+
+	<insert id="insert" parameterType="io.jalorx.i18n.entity.I18N" useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+		<selectKey resultType="long" keyProperty="id" order="BEFORE" databaseId="oracle">
+        	SELECT tpl_i18n_S.NEXTVAL AS value FROM dual  
+		</selectKey>
+		<selectKey resultType="long" keyProperty="id" order="BEFORE" databaseId="dm">
+        	SELECT tpl_i18n_S.NEXTVAL AS value FROM dual  
+		</selectKey>
+		<include refid="base_insert_sql" />
+	</insert> 
+
+	<update id="update" parameterType="io.jalorx.i18n.entity.I18N">
+		UPDATE tpl_i18n_t
+		<set>
+		  <if test="keyCode != null">
+	        KEY_CODE = #{keyCode,jdbcType=VARCHAR},
+	      </if>
+		  <if test="languageCode != null">
+	        LANGUAGE_CODE = #{languageCode,jdbcType=VARCHAR},
+	      </if>
+		  <if test="valueDesc != null">
+	        VALUE_DESC = #{valueDesc,jdbcType=VARCHAR},
+	      </if>
+          REVISION = #{revisionNext,jdbcType=INTEGER},
+          LAST_UPDATE_USER_ID = #{lastUpdateUserId,jdbcType=NUMERIC},
+          LAST_UPDATE_DATE = #{lastUpdateDate},
+		</set>
+		WHERE ID = #{id,jdbcType=NUMERIC}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM tpl_i18n_t
+		WHERE ID = #{id}
+	</delete>
+	
+	<delete id="deleteByIds">
+		DELETE FROM tpl_i18n_t
+		WHERE ID in
+	    <foreach item="id" collection="ids" open="(" separator="," close=")">
+	     #{id}
+	    </foreach>
+	</delete>
+
+	<!-- //////////////////////////////////////////////////////////// -->
+	
+	<select id="getLastUpdateTime" resultMap="I18NResultMap" databaseId="mysql">
+		SELECT
+		T.*
+		FROM tpl_i18n_t T
+		WHERE T.LANGUAGE_CODE = #{languageCode}
+		ORDER BY LAST_UPDATE_DATE DESC
+		LIMIT 1
+	</select>
+	<select id="getLastUpdateTime" resultMap="I18NResultMap" databaseId="sqlserver">
+		SELECT
+		Top 1 T.*
+		FROM tpl_i18n_t T
+		WHERE T.LANGUAGE_CODE = #{languageCode}
+		ORDER BY LAST_UPDATE_DATE DESC
+	</select>
+	
+	<select id="getLastUpdateTime" resultMap="I18NResultMap" databaseId="oracle">
+		SELECT
+		T.*
+		FROM tpl_i18n_t T
+		WHERE T.LANGUAGE_CODE = #{languageCode} and ROWNUM=1
+		ORDER BY LAST_UPDATE_DATE DESC
+	</select>
+	
+	<select id="getLastUpdateTime" resultMap="I18NResultMap" databaseId="dm">
+		SELECT
+		T.*
+		FROM tpl_i18n_t T
+		WHERE T.LANGUAGE_CODE = #{languageCode} and ROWNUM=1
+		ORDER BY LAST_UPDATE_DATE DESC
+	</select>
+ 
+ 	<select id="getI18NMessage" resultMap="PairResultMap" >
+		SELECT
+			T.KEY_CODE,
+			T.VALUE_DESC
+		FROM tpl_i18n_t T
+		WHERE T.LANGUAGE_CODE = #{languageCode}
+	</select>
+</mapper>
+

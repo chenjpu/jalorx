@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.jalorx.demo.dao.DemoDao">
+
+	<!-- <cache /> -->
+
+	<!-- ///////////////////////////基础接口定义///////////////////////////////// -->
+	
+	 <resultMap id="DemoResultMap" type="io.jalorx.demo.model.Demo">
+	    <!--
+	       	自动生成
+	    -->
+        <id column="ID" jdbcType="DECIMAL" property="id" />
+        <result column="NAME" jdbcType="VARCHAR" property="name" />
+        <result column="AGE" jdbcType="DECIMAL" property="age" />
+        <result column="revision" jdbcType="INTEGER" property="revision" />
+        <result column="create_user_id" jdbcType="NUMERIC" property="createUserId" />
+        <result column="last_update_user_id" jdbcType="NUMERIC" property="lastUpdateUserId" />
+        <result column="create_date" jdbcType="DATE" property="createDate" />
+        <result column="last_update_date" jdbcType="DATE" property="lastUpdateDate" />
+	</resultMap>
+	
+
+	<select id="getById" resultMap="DemoResultMap">
+		SELECT
+		T.*
+		FROM TPL_DEMO_T T
+		WHERE T.ID = #{id}
+	</select>
+	
+	
+	<select id="getByIds" resultMap="DemoResultMap">
+		SELECT
+		T.*
+		FROM TPL_DEMO_T T
+		WHERE T.ID in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		  #{id}
+		</foreach>
+	</select>
+
+	<select id="getCount" resultType="int">
+		SELECT
+		count(1)
+		FROM TPL_DEMO_T T
+		<filter open="where (" close=")" rule="age_rule"/>
+	</select>
+
+	<select id="selectAll" resultMap="DemoResultMap">
+		SELECT
+		T.*
+		FROM TPL_DEMO_T T
+		<filter open="where (" close=")" rule="age_rule"/>
+	</select>
+
+	<select id="select" pageable="true" resultMap="DemoResultMap">
+		SELECT T.* FROM TPL_DEMO_T T
+		<filter open="where (" close=")" rule="age_rule"/>
+		ORDER BY T.ID
+	</select>
+	
+	<!-- 插入语句  -->
+	<sql id="base_insert_sql">
+		INSERT INTO TPL_DEMO_T (
+			<if test="id != null">ID,</if>NAME,AGE,
+
+			tenant_id,app_name,revision,
+			create_user_id,last_update_user_id,create_date,last_update_date
+		  ) VALUES (
+			<if test="id != null">#{id,jdbcType=NUMERIC},</if>#{name,jdbcType=VARCHAR},#{age,jdbcType=DECIMAL},
+
+			#{tenantId,jdbcType=VARCHAR},#{appName,jdbcType=VARCHAR},1,
+			0,0,#{_currentDate},#{_currentDate}
+		  )
+	</sql>
+
+	<insert id="insert" parameterType="io.jalorx.demo.model.Demo" useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+		<selectKey resultType="long" keyProperty="id" order="BEFORE" databaseId="oracle">
+        	SELECT TPL_DEMO_s.NEXTVAL AS value FROM dual  
+		</selectKey>
+		<include refid="base_insert_sql" />
+	</insert>
+
+	<update id="update" parameterType="io.jalorx.demo.model.Demo">
+		UPDATE TPL_DEMO_T
+		<set>
+		  <if test="name != null">
+	        NAME = #{name,jdbcType=VARCHAR},
+	      </if>
+		  <if test="age != null">
+	        AGE = #{age,jdbcType=DECIMAL},
+	      </if>
+          revision = #{revisionNext,jdbcType=INTEGER},
+          last_update_user_id = #{currentUserId,jdbcType=NUMERIC},
+          last_update_date = #{_currentDate} ,
+		</set>
+		WHERE ID = #{id,jdbcType=NUMERIC}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM TPL_DEMO_T
+		WHERE ID = #{id}
+	</delete>
+	
+	<delete id="deleteByIds">
+		DELETE FROM TPL_DEMO_T
+		WHERE ID in
+	    <foreach item="id" collection="ids" open="(" separator="," close=")">
+	     #{id}
+	    </foreach>
+	</delete>
+
+	<!-- //////////////////////////////////////////////////////////// -->
+ 
+</mapper>
+

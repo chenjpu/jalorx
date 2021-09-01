@@ -1,0 +1,26 @@
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+	}
+}
+
+rootProject.name = "jalorx"
+
+include "jalorx-bom"
+include "jalorx-boot"
+
+//starters
+include "jalorx-starters:starter-apt"
+include "jalorx-starters:starter-json"
+include "jalorx-starters:starter-metrics"
+include "jalorx-starters:starter-registd"
+include "jalorx-starters:starter-tracing"
+include "jalorx-starters:starter-errors"
+include "jalorx-starters:starter-import"
+include "jalorx-starters:starter-export"
+
+//services
+include "jalorx-services:service-lookup"
+include "jalorx-services:service-security"
+include "jalorx-services:service-attachment"
+include "jalorx-services:service-i18n"

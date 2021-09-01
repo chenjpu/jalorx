@@ -1,0 +1,198 @@
+buildscript {
+	repositories {
+	    mavenLocal()
+	    mavenCentral()
+	}
+}
+
+// 3rd party plugin repositories can be configured in settings.gradle
+plugins {
+  id "com.diffplug.eclipse.apt" version "3.22.0"
+  id "io.spring.dependency-management" version "1.0.9.RELEASE"
+  id "maven-publish"
+  id "eclipse"
+}
+group projectGroupId
+ext {
+    dependencyVersions = [
+    	mybatis: [
+                version: mybatisVersion,
+                group  : 'org.mybatis',
+                name   : 'mybatis',
+                modules: []
+        ],
+        
+        'commons.codec': [
+                version: commonsCodecVersion,
+                group  : 'commons-codec',
+                name   : 'commons-codec',
+                modules: []
+        ],
+        'commons.lang3': [
+                version: commonsLang3Version,
+                group  : 'org.apache.commons',
+                name   : 'commons-lang3',
+                modules: []
+        ],
+        
+        'poi': [
+                version: poiVersion,
+                group  : 'org.apache.poi',
+                name   : 'poi',
+                modules: ['poi-ooxml']
+        ],
+        
+        'freemarker': [
+                version: freemarkerVersion,
+                group  : 'org.freemarker',
+                name   : 'freemarker',
+                modules: ['freemarker']
+        ],
+        
+        micronaut: [
+                version: micronautVersion,
+                group  : 'io.micronaut',
+                name   : 'micronaut-bom',
+                bom    : true,
+        ]
+    ]
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"  
+}
+
+// NEXUS_USERNAME等变量在我们主项目的gradle.properties中可以找到
+def getRepositoryUsername() {
+    return System.getenv("NEXUS_USERNAME")
+}
+
+def getRepositoryPassword() {
+    return System.getenv("NEXUS_PASSWORD")
+}
+
+configure(allprojects) { project ->
+	version = qualifyVersionIfNecessary(version)
+	if(project.name.startsWith("service")){
+		group projectServiceGroupId 
+	}else if(project.name.startsWith("starter")){
+		group projectStarterGroupId 
+	}else{
+		group projectGroupId
+	}	
+	
+	if (!project.name.contains("jalorx-bom")) {
+	 	apply plugin: "java-library"
+	 	apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
+
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+        compileJava.options.compilerArgs.add '-parameters'
+        compileTestJava.options.compilerArgs.add '-parameters'
+        
+		apply plugin: "io.spring.dependency-management"
+	
+		dependencyManagement {
+			resolutionStrategy {
+				cacheChangingModulesFor 0, "seconds"
+			}
+			applyMavenExclusions = false
+			generatedPomCustomization {
+				enabled = true
+			}
+			imports {
+				mavenBom "io.micronaut:micronaut-bom:$micronautVersion"
+			}
+		}
+        
+        
+        dependencies {  // for build
+		   annotationProcessor "io.micronaut:micronaut-inject-java"
+		   annotationProcessor "io.micronaut.security:micronaut-security-annotations"
+		   annotationProcessor "io.micronaut:micronaut-validation"
+		   annotationProcessor "io.micronaut.data:micronaut-data-processor"
+		   
+		   implementation "io.micronaut.data:micronaut-data-tx"
+		
+		   implementation "org.mybatis:mybatis:$mybatisVersion"
+		   implementation "io.projectreactor:reactor-core"
+		   implementation "io.micronaut:micronaut-session"
+		   implementation "io.micronaut:micronaut-inject"
+		   implementation "io.micronaut.security:micronaut-security"
+		   implementation "io.micronaut:micronaut-validation"
+		   implementation "io.micronaut:micronaut-runtime"
+		   implementation "io.micronaut:micronaut-http"
+		   implementation "commons-codec:commons-codec:$commonsCodecVersion"
+		   implementation "org.apache.commons:commons-lang3:$commonsLang3Version"
+		   compileOnly "io.micronaut:micronaut-inject-java"
+		 }
+	
+	}
+	
+
+	configurations.all {
+		// Check for updates every build
+		resolutionStrategy.cacheChangingModulesFor 0, "seconds"
+	}
+
+	def commonCompilerArgs =
+			["-Xlint:serial", "-Xlint:cast", "-Xlint:classfile", "-Xlint:dep-ann",
+			 "-Xlint:divzero", "-Xlint:empty", "-Xlint:finally", "-Xlint:overrides",
+			 "-Xlint:path", /*"-Xlint:processing",*/ "-Xlint:static", "-Xlint:try", "-Xlint:-options"]
+
+	compileJava.options*.compilerArgs = commonCompilerArgs +
+			["-Xlint:varargs", "-Xlint:fallthrough", "-Xlint:rawtypes",
+			 "-Xlint:deprecation", "-Xlint:unchecked"]
+
+	compileTestJava.options*.compilerArgs = commonCompilerArgs +
+			["-Xlint:-varargs", "-Xlint:-fallthrough", "-Xlint:-rawtypes",
+			 "-Xlint:-deprecation", "-Xlint:-unchecked"]
+
+	compileJava {
+		sourceCompatibility = 1.8  // can be switched to 11 for testing
+		targetCompatibility = 1.8
+		options.encoding = "UTF-8"
+	}
+
+	compileTestJava {
+		sourceCompatibility = 1.8  // can be switched to 11 for testing
+		targetCompatibility = 1.8
+		options.encoding = "UTF-8"
+		options.compilerArgs += "-parameters"
+	}
+
+
+	test {
+		systemProperty("java.awt.headless", "true")
+		//systemProperty("testGroups", project.properties.get("testGroups"))
+		scanForTestClasses = false
+		include(["**/*Tests.class", "**/*Test.class"])
+		// Since we set scanForTestClasses to false, we need to filter out inner
+		// classes with the "$" pattern; otherwise, using -Dtest.single=MyTests to
+		// run MyTests by itself will fail if MyTests contains any inner classes.
+		exclude(["**/Abstract*.class", '**/*$*'])
+		reports.junitXml.setDestination(file("$buildDir/test-results"))
+	}
+	
+	repositories {
+	    mavenLocal()
+	    mavenCentral()
+	}
+	
+}
+
+def qualifyVersionIfNecessary(version) {
+	if (rootProject.hasProperty("BRANCH_NAME")) {
+		def qualifier = rootProject.getProperty("BRANCH_NAME")
+		if (qualifier.startsWith("SPR-")) {
+			return version.replace("BUILD", qualifier)
+		}
+	}
+	return version
+}
+
+eclipse {
+    classpath {
+       //downloadSources=true
+    }
+}

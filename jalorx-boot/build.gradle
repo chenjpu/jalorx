@@ -1,0 +1,30 @@
+
+description = "JalorX Boot"
+group   projectGroupId
+
+dependencies {
+    implementation "io.swagger.core.v3:swagger-annotations"
+    implementation "io.micronaut:micronaut-validation"
+    implementation "io.micronaut.cache:micronaut-cache-core"
+    implementation "io.micronaut.security:micronaut-security"
+    implementation "io.micronaut.sql:micronaut-jdbc"
+    implementation "io.micronaut.sql:micronaut-jdbc-hikari"
+    
+    compileOnly "io.micronaut.micrometer:micronaut-micrometer-core"
+    testImplementation "io.micronaut.test:micronaut-test-junit5"
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": "JalorX", "Implementation-Version": project.version)
+    }
+} 
+
+//替换版本号
+task updateVersion {
+   //doLast {
+   def jalorxVersion = file("src/main/java/io/jalorx/boot/JalorVersion.java")
+   def content = jalorxVersion.getText('UTF-8').replaceAll('TAG = "[\\w\\.\\-]*";', 'TAG = "' + project.version + '";');
+   jalorxVersion.write(content, 'UTF-8')
+   //}   
+}

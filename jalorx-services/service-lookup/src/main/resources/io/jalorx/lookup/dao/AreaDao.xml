@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.jalorx.lookup.dao.AreaDao">
+
+	<!-- <cache /> -->
+
+	<!-- ///////////////////////////基础接口定义///////////////////////////////// -->
+
+	<select id="getById"
+		resultType="io.jalorx.lookup.entity.Area">
+		SELECT
+		T.*
+		FROM TPL_AREA_T T
+		WHERE T.ID = #{id}
+	</select>
+
+	<select id="getByIds"
+		resultType="io.jalorx.lookup.entity.Area">
+		SELECT
+		T.*
+		FROM TPL_AREA_T T
+		WHERE T.ID in
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+		<if test="_tenantId != null">
+			and T.TENANT_ID = #{_tenantId}
+		</if>
+	</select>
+
+	<select id="getCount" resultType="int">
+		SELECT
+		count(1)
+		FROM TPL_AREA_T T
+		<filter open="where (" close=")" />
+	</select>
+
+	<select id="selectAll"
+		resultType="io.jalorx.lookup.entity.Area">
+		SELECT T.* , CASE WHEN CNNUM IS NULL THEN 1 ELSE 0 END AS IS_LEAF FROM
+		TPL_AREA_T T
+		LEFT JOIN
+		(SELECT COUNT(1) AS CNNUM , PARENT_ID FROM
+		TPL_AREA_T GROUP BY PARENT_ID ) T2 ON T.ID = T2.PARENT_ID
+		<filter open="where (" close=")" />
+	</select>
+
+	<select id="select"
+		resultType="io.jalorx.lookup.entity.Area" pageable='true'>
+		SELECT T.* FROM TPL_AREA_T T
+		<filter open="where (" close=")" name="T" value="query" />
+		ORDER BY T.ID
+	</select>
+
+	<!-- 插入语句 -->
+	<sql id="base_insert_sql">
+		INSERT INTO tpl_area_t
+		(
+		<if test="id != null">ID,</if>
+		CODE, DESP, TYPE, PARENT_ID,
+		TENANT_ID,APP_NAME,APP_SCOPE,
+		REVISION,
+		CREATE_USER_ID, CREATE_DATE ,LAST_UPDATE_USER_ID, LAST_UPDATE_DATE)
+		VALUES
+		(
+		<if test="id != null">#{id,jdbcType=NUMERIC},</if>
+		#{code,jdbcType=VARCHAR},#{desp,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{parentId,jdbcType=INTEGER},
+		#{tenantId,jdbcType=VARCHAR},#{appName,jdbcType=VARCHAR},#{appScope,jdbcType=VARCHAR},
+		#{revision,jdbcType=NUMERIC},#{currentUserId,jdbcType=VARCHAR},#{_currentDate},#{currentUserId,jdbcType=VARCHAR},#{_currentDate})
+	</sql>
+
+	<insert id="insert"
+		parameterType="io.jalorx.lookup.entity.Area"
+		useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+		<selectKey resultType="long" keyProperty="id" order="BEFORE"
+			databaseId="oracle">
+			SELECT TPL_AREA_S.NEXTVAL AS value FROM dual
+		</selectKey>
+		<include refid="base_insert_sql" />
+	</insert>
+
+	<update id="update"
+		parameterType="io.jalorx.lookup.entity.Area">
+		UPDATE tpl_area_t SET
+		CODE = #{code,jdbcType=VARCHAR},
+		DESP = #{desp,jdbcType=VARCHAR},
+		TYPE = #{type,jdbcType=VARCHAR},
+		REVISION = #{revisionNext,jdbcType=NUMERIC},
+		LAST_UPDATE_USER_ID =
+		#{currentUserId,jdbcType=VARCHAR},
+		LAST_UPDATE_DATE = #{_currentDate}
+		WHERE ID = #{id,jdbcType=NUMERIC}
+	</update>
+
+
+	<delete id="deleteById">
+		DELETE FROM TPL_AREA_T
+		WHERE ID = #{id}
+	</delete>
+
+	<delete id="deleteByIds">
+		DELETE FROM TPL_AREA_T
+		WHERE ID in
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- //////////////////////////////////////////////////////////// -->
+
+</mapper>
+

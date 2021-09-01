@@ -1,0 +1,122 @@
+buildscript {
+	repositories {
+	    mavenLocal()
+        mavenCentral()
+	}
+}
+
+
+apply plugin: 'maven-publish'
+
+ext.startPomInfo = {}
+ext.extraPomInfo = {}
+ext.pomInfo = {
+    ext.startPomInfo.delegate = delegate
+    ext.startPomInfo.call()
+    delegate.name project.title
+    delegate.description project.projectDesc
+    delegate.url projectUrl
+
+    delegate.licenses {
+        delegate.license {
+            delegate.name 'The Software License, Version 2.0'
+            delegate.url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            delegate.distribution 'repo'
+        }
+    }
+
+    delegate.scm {
+        delegate.url "https://github.com/chenjpu/jalorx.git"
+        delegate.connection "https://github.com/chenjpu/jalorx.git"
+        delegate.developerConnection "https://github.com/chenjpu/jalorx.git"
+    }
+
+    if (developers) {
+        delegate.developers {
+            for (dev in developers.split(',')) {
+                delegate.developer {
+                    delegate.id dev.toLowerCase().replace(' ', '')
+                    delegate.name dev
+                }
+            }
+        }
+    }
+    ext.extraPomInfo.delegate = delegate
+    ext.extraPomInfo.call()
+}
+
+if (project.name != 'jalorx-bom') {
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allJava
+    }
+
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }    
+}
+
+//上传Task，Gradle会生成并上传pom.xml文件。
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            //artifactId project.name
+            if (project.name == "jalorx-bom") {
+            	from components.javaPlatform
+
+                pom.withXml {
+                    def xml = asNode()
+
+                    xml.children().find {
+                        it.name().localPart == 'packaging'
+                    } + pomInfo
+
+
+                    for(dep in dependencyVersions) {
+                        String property = "\${${dep.key}.version}"
+                        def info = dep.value
+                        def version = info.version
+                        def group = info.group
+                        if (group && version) {
+                            def modules = []
+                            if (info.name) {
+                                modules << info.name
+                            }
+                            if (info.modules) {
+                                modules.addAll(info.modules)
+                            }
+                            for (module in modules) {
+
+                                def pomDep = xml.dependencyManagement.dependencies.dependency.find {
+                                    it.artifactId.text() == module &&
+                                            it.groupId.text() == group
+                                }
+                                if (pomDep != null) {
+                                    pomDep.version.first().setValue(property)
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            }else{
+            	from components.java
+            }
+             
+        }
+    }
+    
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+//if (!project.version.endsWith("-SNAPSHOT")) {
+    // disable remote publish for non-snapshot versions
+    // since releases are published to bintray
+    tasks.withType(PublishToMavenRepository) { task ->
+        task.enabled = true
+    }
+//}

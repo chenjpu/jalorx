@@ -1,0 +1,10 @@
+description = "JalorX Service Attachment"
+group   projectServiceGroupId
+
+dependencies {
+	annotationProcessor "io.micronaut.openapi:micronaut-openapi"
+	annotationProcessor project(":jalorx-starters:starter-apt")
+	
+	implementation  project(":jalorx-boot")
+    implementation "io.swagger.core.v3:swagger-annotations"
+}

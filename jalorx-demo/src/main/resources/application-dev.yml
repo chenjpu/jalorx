@@ -1,0 +1,65 @@
+micronaut:
+  executors:
+   io:
+     type: fixed
+     nThreads: 10
+     threadFactoryClass: io.jalorx.boot.executor.NamedThreadFactory$IOTF
+  session:
+    maxInactiveInterval: 2h
+datasources:
+  default:
+    url: jdbc:mysql://127.0.0.1:3306/jalorx?useUnicode=true&useSSL=false
+    username: root
+    password: 123
+    driverClassName: com.mysql.cj.jdbc.Driver
+    maximum-pool-size: 5
+    minimum-idle: 2
+
+dynamic1-datasources:
+  default:
+    master: true
+    url: jdbc:mysql://127.0.0.1:3306/jalorx?useUnicode=true&useSSL=false
+    username: root
+    password: 123
+    driverClassName: com.mysql.jdbc.Driver
+    maximum-pool-size: 5
+    minimum-idle: 2
+  pg:
+    master: true
+    url: jdbc:postgresql://127.0.0.1:5432/ksh
+    username: ksh
+    password: ksh
+    driverClassName: org.postgresql.Driver
+    maximum-pool-size: 5
+    minimum-idle: 2
+redis:
+  host: 127.0.0.1
+  port: 6379
+  database: 2
+endpoints:
+  info:
+    sensitive: false
+  routes:
+    sensitive: false
+  refresh:
+    sensitive: false
+  stop:
+    enabled: true
+    sensitive: false
+  health:
+    details-visible: ANONYMOUS
+  beans:
+    enabled: true
+    sensitive: false
+uploadUrl: /data/files
+#日志控制：0关闭1打印控制台2写入数据库
+loglevel: 1
+
+logger:
+  levels:
+    #io.jalorx.boot.json: DEBUG
+    #io.jalorx.boot.datasource: DEBUG
+    #io.jalorx.boot.mybatis: DEBUG
+    #io.jalorx.lookup.dao: DEBUG
+    io.jalorx.security.dao: DEBUG
+    io.jalorx.demo.dao: DEBUG

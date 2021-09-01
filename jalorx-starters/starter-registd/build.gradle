@@ -1,0 +1,10 @@
+description = "JalorX Starts registd"
+group   projectStarterGroupId
+
+dependencies {
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    
+    implementation  project(":jalorx-boot")
+	implementation "io.micronaut.discovery:micronaut-discovery-client"
+}
+

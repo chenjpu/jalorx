@@ -1,0 +1,11 @@
+description = "JalorX Starts metrics"
+group   projectStarterGroupId
+
+dependencies {
+	annotationProcessor "io.micronaut:micronaut-inject-java"
+
+	implementation project(":jalorx-boot")
+	implementation "io.micronaut.micrometer:micronaut-micrometer-core"
+    implementation "io.micronaut.micrometer:micronaut-micrometer-registry-prometheus"
+}
+

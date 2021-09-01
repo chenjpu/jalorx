@@ -1,0 +1,10 @@
+description = "JalorX Starts import"
+group   projectStarterGroupId
+
+dependencies {
+	annotationProcessor "io.micronaut:micronaut-inject-java"
+
+	implementation "org.apache.poi:poi-ooxml:$poiVersion"
+	implementation  project(":jalorx-boot")
+}
+

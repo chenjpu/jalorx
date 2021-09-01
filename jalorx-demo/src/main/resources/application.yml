@@ -1,0 +1,42 @@
+micronaut:
+  application:
+    name: demo
+  router:
+     static-resources:
+       default:
+         enabled: true
+         paths:
+           - "classpath:public"
+  server:
+     threadSelection: AUTO
+     servicePath: /services
+  security:
+    enabled: true
+    endpoints:
+      login:
+        path: /security/login
+        enabled: true
+      logout:
+        path: /security/logout
+        enabled: true
+  session:
+    maxInactiveInterval: 12h
+    http:
+      cookie: true
+      header: true
+      cookiePath: /
+      redis:
+        enabled: true
+        #writeMode: BACKGROUND     
+  config-client:
+    enabled: true
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        step: PT1M
+        descriptions: true
+jackson:
+  dateFormat: "yyyy-MM-dd HH:mm:ss"
+  serializationInclusion: NON_NULL

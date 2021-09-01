@@ -1,0 +1,10 @@
+description = "JalorX Starts errors"
+group   projectStarterGroupId
+
+dependencies {
+	annotationProcessor "io.micronaut:micronaut-inject-java"
+	annotationProcessor "io.micronaut:micronaut-validation"
+
+	implementation  project(":jalorx-boot")
+}
+

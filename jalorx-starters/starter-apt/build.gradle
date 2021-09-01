@@ -1,0 +1,9 @@
+description = "JalorX Starts json"
+group   projectStarterGroupId
+
+dependencies {
+	annotationProcessor "io.micronaut:micronaut-inject-java"
+	
+	implementation  project(":jalorx-boot")
+}
+

@@ -1,0 +1,70 @@
+buildscript {
+	repositories {
+	    mavenLocal()
+	    mavenCentral()
+	}
+}
+
+plugins {
+    id 'java-gradle-plugin'
+    id "maven-publish"
+    id "java"
+    id "eclipse"
+}
+
+group 'io.jalorx'
+version '3.0'
+description "JalorX Gradle Generator Plugin"
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"  
+}
+
+dependencies {
+    //compile gradleApi()
+}
+
+gradlePlugin {
+    // Define the plugin
+    plugins {
+        jalorxPlugin {
+            id = 'io.jalorx'
+            implementationClass = 'io.jalorx.gradle.GeneratorPlugin'
+        }
+    }
+}
+apply plugin: "java-library"
+
+// NEXUS_USERNAME等变量在我们主项目的gradle.properties中可以找到
+def getRepositoryUsername() {
+    return System.getenv("NEXUS_USERNAME")
+}
+
+def getRepositoryPassword() {
+    return System.getenv("NEXUS_PASSWORD")
+}
+
+//上传Task，Gradle会生成并上传pom.xml文件。
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    
+    repositories {
+        mavenLocal()
+        //mavenCentral()
+    }
+}
+
+tasks.withType(PublishToMavenRepository) { task ->
+    task.enabled = true
+}
+
+
+eclipse {
+    classpath {
+       downloadSources=true
+    }
+}

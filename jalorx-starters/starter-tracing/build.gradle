@@ -1,0 +1,14 @@
+description = "JalorX Starts tracing"
+group   projectStarterGroupId
+
+dependencies {
+	annotationProcessor "io.micronaut:micronaut-inject-java"
+
+	implementation  project(":jalorx-boot")
+	implementation "io.micronaut:micronaut-tracing"
+	implementation "io.micronaut:micronaut-management"
+	implementation 'io.zipkin.brave:brave-instrumentation-http'
+	implementation 'io.zipkin.reporter2:zipkin-reporter'
+	implementation 'io.opentracing.brave:brave-opentracing'
+}
+

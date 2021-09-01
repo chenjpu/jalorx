@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.jalorx.security.dao.ActionDao">
+
+	<!-- <cache /> -->
+
+	<!-- ///////////////////////////基础接口定义///////////////////////////////// -->
+	
+	 <resultMap id="ActionResultMap" type="io.jalorx.security.entity.Action">
+	    <!--自动生成  -->
+        <id column="ID" jdbcType="BIGINT" property="id" />
+        <result column="OPER_CODE" jdbcType="INTEGER" property="operCode" />
+        <result column="OPER_DESC" jdbcType="VARCHAR" property="operDesc" />
+        <result column="RES_CODE" jdbcType="INTEGER" property="resCode" />
+        <result column="RES_DESC" jdbcType="VARCHAR" property="resDesc" />
+        <result column="PARAM_DESC" jdbcType="VARCHAR" property="paramDesc" />
+         <result column="METHOD_NAME" jdbcType="VARCHAR" property="methodName" />
+         <result column="IP_ADDRESS" jdbcType="VARCHAR" property="ipAddress" />
+        <result column="create_user_id" jdbcType="NUMERIC" property="createUserId" />
+        <result column="create_date" property="createDate" />
+	</resultMap>
+	
+
+	<select id="getById" resultMap="ActionResultMap">
+		SELECT
+		T.*
+		FROM tpl_action_t T
+		WHERE T.ID = #{id}
+	</select>
+	
+	
+	<select id="getByIds" resultMap="ActionResultMap">
+		SELECT
+		T.*
+		FROM tpl_action_t T
+		WHERE T.ID in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+		  #{id}
+		</foreach>
+	</select>
+
+	<select id="getCount" resultType="int">
+		SELECT
+		count(1)
+		FROM tpl_action_t T
+		<filter open="where (" close=")" />
+	</select>
+
+	<select id="selectAll" resultMap="ActionResultMap">
+		SELECT
+		T.*
+		FROM tpl_action_t T
+		<filter open="where (" close=")" />
+	</select>
+
+	<select id="select" pageable="true" resultMap="ActionResultMap">
+		SELECT T.* FROM tpl_action_t T
+		<filter open="where (" close=")" />
+		ORDER BY T.ID
+	</select>
+	
+	<!-- 插入语句  -->
+	<sql id="base_insert_sql">
+		INSERT INTO tpl_action_t (
+			<if test="id != null">ID,</if>OPER_CODE,OPER_DESC,
+			RES_CODE,RES_DESC,PARAM_DESC,
+			METHOD_NAME,IP_ADDRESS,	
+			TENANT_ID,APP_NAME,APP_SCOPE,
+			CREATE_USER_ID,CREATE_DATE 
+		  ) VALUES (
+			<if test="id != null">#{id,jdbcType=NUMERIC},</if>#{operCode,jdbcType=INTEGER},#{operDesc,jdbcType=VARCHAR},
+			#{resCode,jdbcType=INTEGER},#{resDesc,jdbcType=VARCHAR},#{paramDesc,jdbcType=VARCHAR},
+			#{methodName,jdbcType=VARCHAR},	#{ipAddress,jdbcType=VARCHAR},	
+			#{tenantId,jdbcType=VARCHAR},#{appName,jdbcType=VARCHAR},#{appScope,jdbcType=VARCHAR},		
+			#{createUserId,jdbcType=VARCHAR},#{_currentDate}
+		  )
+	</sql>
+
+	<insert id="insert" parameterType="io.jalorx.security.entity.Action" useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+		<selectKey resultType="long" keyProperty="id" order="BEFORE" databaseId="oracle">
+        	SELECT tpl_action_s.NEXTVAL AS value FROM dual  
+		</selectKey>
+		<include refid="base_insert_sql" />
+	</insert>
+
+	<update id="update" parameterType="io.jalorx.security.entity.Action">
+		UPDATE tpl_action_t
+		<set>
+		  <if test="paramDesc != null">
+	        PARAM_DESC = #{paramDesc,jdbcType=VARCHAR}
+	      </if>
+		</set>
+		WHERE ID = #{id,jdbcType=NUMERIC}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM tpl_action_t
+		WHERE ID = #{id}
+	</delete>
+	
+	<delete id="deleteByIds">
+		DELETE FROM tpl_action_t
+		WHERE ID in
+	    <foreach item="id" collection="ids" open="(" separator="," close=")">
+	     #{id}
+	    </foreach>
+	</delete>
+
+	<!-- //////////////////////////////////////////////////////////// -->
+ 
+</mapper>
+

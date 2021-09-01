@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.jalorx.security.dao.OrgDao">
+
+	<!-- <cache /> -->
+
+	<!-- ///////////////////////////基础接口定义///////////////////////////////// -->
+
+	<select id="getById" resultType="io.jalorx.security.entity.Org">
+		SELECT
+		T.*
+		FROM TPL_ORG_T T
+		WHERE
+		T.ID = #{id}
+	</select>
+
+	<select id="getCount" resultType="int">
+		SELECT
+		count(1)
+		FROM TPL_ORG_T T
+	</select>
+
+	<select id="selectAll" resultType="io.jalorx.security.entity.Org">
+		SELECT T.* , CASE WHEN CNNUM IS NULL THEN 1 ELSE 0 END AS IS_LEAF FROM
+		TPL_ORG_T T
+		LEFT JOIN
+		(SELECT COUNT(1) AS CNNUM , P_ID FROM TPL_ORG_T
+		GROUP BY P_ID ) T2 ON T.ID =
+		T2.P_ID
+		<filter open="where (" close=")" />
+	</select>
+
+	<select id="select" resultType="io.jalorx.security.entity.Org"
+		pageable="true">
+		SELECT T.* , CASE WHEN CNNUM IS NULL THEN 1 ELSE 0 END AS IS_LEAF FROM
+		TPL_ORG_T T
+		LEFT JOIN
+		(SELECT COUNT(1) AS CNNUM , P_ID FROM TPL_ORG_T
+		GROUP BY P_ID ) T2 ON T.ID =
+		T2.P_ID
+		<filter open="where (" close=")" />
+		ORDER BY T.ID
+	</select>
+
+	<sql id="base_insert_sql">
+		INSERT INTO TPL_ORG_T
+		(
+		<if test="id != null">ID,</if>
+		P_ID,ORG_NAME, FILED1, ORG_CODE, ORG_NOTE ,
+		TENANT_ID,APP_NAME,APP_SCOPE,
+		REVISION, CREATE_USER_ID, CREATE_DATE
+		,LAST_UPDATE_USER_ID, LAST_UPDATE_DATE)
+		VALUES
+		(
+		<if test="id != null">#{id,jdbcType=NUMERIC},</if>
+		#{pId,jdbcType=NUMERIC},
+		#{orgName,jdbcType=VARCHAR},
+		#{filed1,jdbcType=VARCHAR},
+		#{orgCode,jdbcType=VARCHAR},
+		#{orgNote,jdbcType=VARCHAR},
+		#{tenantId,jdbcType=VARCHAR},#{appName,jdbcType=VARCHAR},#{appScope,jdbcType=VARCHAR},
+		#{revision,jdbcType=NUMERIC},
+		#{currentUserId,jdbcType=VARCHAR},
+		#{_currentDate},
+		#{currentUserId,jdbcType=VARCHAR},
+		#{_currentDate})
+	</sql>
+	<insert id="insert" parameterType="io.jalorx.security.entity.Org"
+		useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+		<selectKey resultType="long" keyProperty="id" order="BEFORE"
+			databaseId="oracle">
+			SELECT TPL_ORG_S.NEXTVAL AS value FROM dual
+		</selectKey>
+		<include refid="base_insert_sql" />
+	</insert>
+
+	<update id="update" parameterType="io.jalorx.security.entity.Org">
+		UPDATE TPL_ORG_T SET
+		P_ID =
+		#{pId,jdbcType=NUMERIC},
+		ORG_NAME = #{orgName,jdbcType=VARCHAR},
+		FILED1
+		= #{filed1,jdbcType=VARCHAR},
+		ORG_CODE = #{orgCode,jdbcType=VARCHAR},
+		ORG_NOTE = #{orgNote,jdbcType=VARCHAR},
+		REVISION =
+		#{revisionNext,jdbcType=NUMERIC},
+		LAST_UPDATE_USER_ID =
+		#{currentUserId,jdbcType=VARCHAR},
+		LAST_UPDATE_DATE = #{_currentDate}
+		WHERE ID = #{id,jdbcType=NUMERIC}
+	</update>
+
+
+	<delete id="deleteById">
+		DELETE FROM TPL_ORG_T
+		WHERE ID = #{id}
+	</delete>
+
+	<delete id="deleteByIds">
+		DELETE FROM TPL_ORG_T
+		WHERE ID in
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- //////////////////////////////////////////////////////////// -->
+	<select id="getByName" resultType="int">
+		SELECT
+		count(1)
+		FROM TPL_ORG_T T
+		WHERE T.ORG_NAME = #{orgName}
+	</select>
+	<select id="getByCode" resultType="io.jalorx.security.entity.Org">
+		SELECT
+		T.*
+		FROM TPL_ORG_T T
+		WHERE T.ORG_CODE = #{orgCode}
+	</select>
+
+	<select id="getByCodes" resultType="io.jalorx.security.entity.Org">
+		SELECT * FROM TPL_ORG_T T
+		WHERE T.ORG_CODE
+		<foreach collection="orgCodes" item="orgCode" open="in ("
+			close=")" separator=",">
+			#{orgCode}
+		</foreach>
+	</select>
+
+	<select id="getIdsByCodes" resultType="long">
+		SELECT
+		T.id
+		FROM TPL_ORG_T T
+		WHERE T.ORG_CODE
+		<foreach collection="orgCodes" item="code" open="in (" close=")"
+			separator=",">
+			#{code}
+		</foreach>
+	</select>
+
+	<select id="getAllByCodes" resultType="io.jalorx.security.entity.Org">
+		SELECT
+		T.*, CASE WHEN CNNUM IS NULL THEN 1 ELSE 0 END AS IS_LEAF
+		FROM
+		(SELECT * FROM TPL_ORG_T WHERE P_ID IN (SELECT ID FROM TPL_ORG_T
+		WHERE
+		ORG_CODE
+		<foreach collection="orgCodes" item="orgCode" open="in ("
+			close=")" separator=",">
+			#{orgCode}
+		</foreach>
+		OR ORG_CODE
+		<foreach collection="orgCodes" item="orgCode" open="in ("
+			close=")" separator=",">
+			#{orgCode}
+		</foreach>
+		) T LEFT JOIN
+		(SELECT COUNT(1) AS CNNUM , P_ID FROM TPL_ORG_T GROUP BY
+		P_ID ) T2 ON T.ID =
+		T2.P_ID
+	</select>
+
+	<select id="getListByPId" resultType="io.jalorx.security.entity.Org">
+		SELECT
+		T.*
+		FROM TPL_ORG_T T
+		WHERE T.P_ID = #{id}
+	</select>
+
+	<!-- 异步加载树 -->
+	<select id="initTree" resultType="io.jalorx.boot.TreeNode">
+		SELECT
+		T.ID,
+		T.ORG_CODE as CODE,
+		T.ORG_NAME as LABEL,
+		t.P_ID as PARENT_ID,
+		CASE WHEN CNNUM IS NULL THEN 1 ELSE 0 END AS LEAF
+		FROM (SELECT * FROM
+		TPL_ORG_T WHERE
+		<choose>
+			<when test="ids != null and ids.length > 0">
+				P_ID IN
+				<foreach collection="ids" item="id" open="(" close=")"
+					separator=",">
+					#{id}
+				</foreach>
+				OR ID IN
+				<foreach collection="ids" item="id" open="(" close=")"
+					separator=",">
+					#{id}
+				</foreach>
+				OR P_ID is null
+			</when>
+			<otherwise>
+				P_ID is null
+			</otherwise>
+		</choose>
+		) T LEFT JOIN
+		(SELECT COUNT(1) AS CNNUM , P_ID FROM TPL_ORG_T GROUP BY
+		P_ID ) T2 ON T.ID =
+		T2.P_ID
+	</select>
+
+	<select id="getChildrenByPId" resultType="io.jalorx.boot.TreeNode">
+		SELECT
+		T.ID,
+		T.ORG_CODE
+		as CODE,
+		T.ORG_NAME as LABEL,
+		t.P_ID as PARENT_ID,
+		CASE WHEN CNNUM IS
+		NULL THEN 1 ELSE 0 END AS LEAF
+		FROM (SELECT * FROM TPL_ORG_T WHERE P_ID
+		= #{id}) T LEFT JOIN
+		(SELECT COUNT(1) AS CNNUM , P_ID FROM TPL_ORG_T
+		GROUP BY P_ID ) T2 ON T.ID =
+		T2.P_ID
+	</select>
+
+</mapper>
+
