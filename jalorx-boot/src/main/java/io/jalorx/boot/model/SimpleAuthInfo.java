@@ -18,13 +18,12 @@ import io.jalorx.boot.RowRule;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.authentication.AuthenticationResponse;
-import io.micronaut.security.authentication.ServerAuthentication;
 
 /**
  * @author chenb
  */
 @Introspected
-public class SimpleAuthInfo extends ServerAuthentication implements AuthInfo,AuthenticationResponse, Serializable {
+public class SimpleAuthInfo  implements AuthInfo,AuthenticationResponse, Authentication {
 
 	private static final long serialVersionUID = 8875138309999956798L;
 
@@ -52,11 +51,8 @@ public class SimpleAuthInfo extends ServerAuthentication implements AuthInfo,Aut
 	private String backUp2;
 
 	public SimpleAuthInfo() {
-		super("", Collections.emptyList(),null);
 	}
-
 	public SimpleAuthInfo(Collection<String> roles, Account user) {
-		super(user.getAcount(), roles,null);
 		this.roles     = roles;
 		this.userId    = user.getId();
 		this.acount    = user.getAcount();
@@ -344,5 +340,13 @@ public class SimpleAuthInfo extends ServerAuthentication implements AuthInfo,Aut
 
 	public Collection<RowRule> getRowRules() {
 		return rowRules.values();
+	}
+	@Override
+	public String getName() {
+		return this.acount;
+	}
+	@Override
+	public Map<String, Object> getAttributes() {
+		return new HashMap<>(attrs);
 	}
 }

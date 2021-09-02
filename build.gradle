@@ -117,6 +117,7 @@ configure(allprojects) { project ->
 		   implementation "org.mybatis:mybatis:$mybatisVersion"
 		   implementation "io.projectreactor:reactor-core"
 		   implementation "io.micronaut:micronaut-session"
+		   implementation "io.micronaut:micronaut-core"
 		   implementation "io.micronaut:micronaut-inject"
 		   implementation "io.micronaut.security:micronaut-security"
 		   implementation "io.micronaut:micronaut-validation"
@@ -124,6 +125,11 @@ configure(allprojects) { project ->
 		   implementation "io.micronaut:micronaut-http"
 		   implementation "commons-codec:commons-codec:$commonsCodecVersion"
 		   implementation "org.apache.commons:commons-lang3:$commonsLang3Version"
+		   
+		    implementation "io.swagger.core.v3:swagger-annotations"
+		    implementation "io.micronaut:micronaut-http-server"
+		    implementation "io.micronaut:micronaut-http-server-netty"
+		   
 		   compileOnly "io.micronaut:micronaut-inject-java"
 		 }
 	

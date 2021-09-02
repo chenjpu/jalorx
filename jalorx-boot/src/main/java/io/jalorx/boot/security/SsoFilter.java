@@ -2,7 +2,6 @@ package io.jalorx.boot.security;
 
 import java.time.Instant;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.reactivestreams.Publisher;
 
@@ -22,29 +21,19 @@ public class SsoFilter implements HttpServerFilter {
 
 	private static final CharSequence AUTHENTICATION = SecurityFilter.AUTHENTICATION;
 
-	public SsoFilter() {}
-
 	@Override
 	public Publisher<MutableHttpResponse<?>> doFilter(HttpRequest<?> request, ServerFilterChain chain) {
 		Optional<Session> session = SessionForRequest.find(request);
 
-		Optional<AuthInfo> infoOption = session.map(s -> {
+		session.ifPresent(s ->{
 			s.setLastAccessedTime(Instant.now());
-			return s.get(AUTHENTICATION, AuthInfo.class);
-		})
-				.orElse(Optional.empty());
-
-		return infoOption.map(info -> {
-			// request.getAttributes().put(AuthInfoContext.AUTHINFO_ATTRIBUTE, info);
-			Supplier<Publisher<MutableHttpResponse<?>>> trace = () -> doReq(request, chain);
-			return AuthInfoContext.with(info, trace);
-		})
-				.orElseGet(() -> doReq(request, chain));
+			s.get(AUTHENTICATION, AuthInfo.class).ifPresent(AuthInfoContext::set);
+		});
+	   return chain.proceed(request);
 
 	}
 
-	protected Publisher<MutableHttpResponse<?>> doReq(HttpRequest<?> request,
-			ServerFilterChain chain) {
+	protected Publisher<MutableHttpResponse<?>> doReq(HttpRequest<?> request, ServerFilterChain chain) {
 		Publisher<MutableHttpResponse<?>> finalPublisher = chain.proceed(request);
 		return finalPublisher;
 	}

@@ -61,5 +61,6 @@ logger:
     #io.jalorx.boot.datasource: DEBUG
     #io.jalorx.boot.mybatis: DEBUG
     #io.jalorx.lookup.dao: DEBUG
-    io.jalorx.security.dao: DEBUG
+    io.jalorx.boot.security: DEBUG
+    #io.jalorx.security.dao: DEBUG
     io.jalorx.demo.dao: DEBUG

@@ -13,7 +13,8 @@ public final class AuthInfoContext {
 
 	private static final ThreadLocal<AuthInfo> AUTHINFO = new ThreadLocal<>();
 
-	private AuthInfoContext() {}
+	private AuthInfoContext() {
+	}
 
 	public static void set(@Nullable AuthInfo info) {
 		if (info == null) {
@@ -26,12 +27,12 @@ public final class AuthInfoContext {
 	/**
 	 * Wrap the execution of the given runnable in request context processing.
 	 *
-	 * @param info The AuthInfo
+	 * @param info     The AuthInfo
 	 * @param runnable The runnable
 	 */
 	public static void with(AuthInfo info, Runnable runnable) {
 		AuthInfo existing = AUTHINFO.get();
-		boolean  isSet    = false;
+		boolean isSet = false;
 		try {
 			if (existing == null) {
 				isSet = true;
@@ -49,7 +50,7 @@ public final class AuthInfoContext {
 	 * Return a new runnable by instrumenting the given runnable with request
 	 * context handling.
 	 *
-	 * @param info The AuthInfo
+	 * @param info     The AuthInfo
 	 * @param runnable The runnable
 	 * @return The newly instrumented runnable
 	 */
@@ -60,14 +61,14 @@ public final class AuthInfoContext {
 	/**
 	 * Wrap the execution of the given callable in request context processing.
 	 *
-	 * @param info The AuthInfo
+	 * @param info     The AuthInfo
 	 * @param callable The callable
-	 * @param <T> The return type of the callable
+	 * @param <T>      The return type of the callable
 	 * @return The return value of the callable
 	 */
 	public static <T> T with(AuthInfo info, Supplier<T> callable) {
 		AuthInfo existing = AUTHINFO.get();
-		boolean  isSet    = false;
+		boolean isSet = false;
 		try {
 			if (existing == null) {
 				isSet = true;
@@ -84,15 +85,15 @@ public final class AuthInfoContext {
 	/**
 	 * Wrap the execution of the given callable in request context processing.
 	 *
-	 * @param info The AuthInfo
+	 * @param info     The AuthInfo
 	 * @param callable The callable
-	 * @param <T> The return type of the callable
+	 * @param <T>      The return type of the callable
 	 * @return The return value of the callable
 	 * @throws Exception If the callable throws an exception
 	 */
 	public static <T> T with(AuthInfo info, Callable<T> callable) throws Exception {
 		AuthInfo existing = AUTHINFO.get();
-		boolean  isSet    = false;
+		boolean isSet = false;
 		try {
 			if (existing == null) {
 				isSet = true;

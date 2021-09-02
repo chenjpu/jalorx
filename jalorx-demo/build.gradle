@@ -9,8 +9,8 @@ buildscript {
 }
 plugins {
     id "com.diffplug.eclipse.apt" version "3.22.0"
-    id("com.github.johnrengelman.shadow") version "6.0.0"
-    id("io.micronaut.application") version "2.0.3"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
+    //id("io.micronaut.application") version "2.0.3"
     id "application"
 }
 
@@ -29,14 +29,14 @@ jalorxGenerator {
 	}
 }
 
-micronaut {
+//micronaut {
     //runtime("netty")
     //testRuntime("junit5")
-    processing {
-        incremental(true)
-        annotations("com.example.*")
-    }
-}
+//    processing {
+//        incremental(true)
+//        annotations("com.example.*")//
+//    }
+//}
 
 //编译JAVA文件时采用UTF-8
 tasks.withType(JavaCompile) {
@@ -78,6 +78,7 @@ dependencies {
     implementation "io.micronaut:micronaut-http-client"
     //implementation "io.micronaut.redis:micronaut-redis-lettuce"
     
+    implementation "io.micronaut:micronaut-http"
     implementation "io.micronaut:micronaut-http-server-netty"
     implementation "mysql:mysql-connector-java"
     //implementation "org.postgresql:postgresql"

@@ -51,8 +51,7 @@ final class AuthInfoContextInstrumentation
 		@Override
 		public Instrumentation newInstrumentation() {
 
-			currentAuthInfo = AuthInfoContext.current()
-					.orElse(null);
+			currentAuthInfo = AuthInfoContext.current().orElse(null);
 			if (invocationAuthInfo != currentAuthInfo) {
 				isSet = true;
 				AuthInfoContext.set(invocationAuthInfo);
