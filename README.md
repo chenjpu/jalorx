@@ -54,14 +54,6 @@ Windows->Preferences->Java->Code Style->Formatter->Import...
 
 [-] TODO
 
-从源代码生成，签出代码并运行:
-  
-```
-./jalorx-generator-plugin/gradlew publishToMavenLocal
-./gradlew publishToMavenLocal
-
-```
-
 
 ### 3.1 jalorx-boot 
 
@@ -73,12 +65,21 @@ Windows->Preferences->Java->Code Style->Formatter->Import...
 基础服务套件集
 
 
-### 3.2 jalorx-starters 
+### 3.3 jalorx-starters 
 
 扩展插件集
 
+### 3.4 工具框架发布
 
-### 3.2 jalorx-demo
+从源代码生成，签出代码并运行:
+  
+```
+./jalorx-generator-plugin/gradlew publishToMavenLocal
+./gradlew publishToMavenLocal
+
+```
+
+### 3.5 jalorx-demo
 
 demo示例
 
@@ -95,7 +96,6 @@ dolt clone chenjpu/jalorx
 dolt sql-server -p=123
 ```
 4.启动应用
-
 
 ```
 ./gradlew run
