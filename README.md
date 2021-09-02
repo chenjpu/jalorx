@@ -71,11 +71,17 @@ Windows->Preferences->Java->Code Style->Formatter->Import...
 ### 3.4 工具框架发布
 
 从源代码生成，签出代码并运行:
-  
+
+1.发布代码工具(jalorx-generator-plugin目录)
+
 ```
-./jalorx-generator-plugin/gradlew publishToMavenLocal
 ./gradlew publishToMavenLocal
 
+```
+2.发布基础框架(项目根目录)
+
+```
+./gradlew publishToMavenLocal
 ```
 
 ### 3.5 jalorx-demo
@@ -94,11 +100,10 @@ dolt clone chenjpu/jalorx
 ```
 dolt sql-server -p=123
 ```
-4.启动应用
+4.启动应用(jalorx-demo目录)
 
 ```
 ./gradlew run
-
 ```
 5.浏览器访问
 
