@@ -83,6 +83,7 @@ Windows->Preferences->Java->Code Style->Formatter->Import...
 demo示例
 
 1.安装dolt工具(https://docs.dolthub.com/introduction/quickstart)
+
 2.下载jalorx数据库
 
 ```
@@ -100,7 +101,14 @@ dolt sql-server -p=123
 ./gradlew run
 
 ```
+5.浏览器访问
 
+```
+http://127.0.0.1:8080
+
+user: root
+passward : 123
+```
 **1、导入jalorx-demo工程之前，需要demo工程根目录运行  gradle eclipse**
 
 **2、出现非预期的行为，可以通过根目录运行gradle eclipse和项目中Refresh Gradle Project刷新解决**
