@@ -57,9 +57,11 @@ Windows->Preferences->Java->Code Style->Formatter->Import...
 从源代码生成，签出代码并运行:
   
 ```
+./jalorx-generator-plugin/gradlew publishToMavenLocal
 ./gradlew publishToMavenLocal
 
 ```
+
 
 ### 3.1 jalorx-boot 
 
@@ -80,8 +82,22 @@ Windows->Preferences->Java->Code Style->Formatter->Import...
 
 demo示例
 
+1.安装dolt工具(https://docs.dolthub.com/introduction/quickstart)
+2.下载jalorx数据库
+
 ```
-gradle run
+dolt clone chenjpu/jalorx
+```
+3.启动数据库库
+
+```
+dolt sql-server -p=123
+```
+4.启动应用
+
+
+```
+./gradlew run
 
 ```
 
