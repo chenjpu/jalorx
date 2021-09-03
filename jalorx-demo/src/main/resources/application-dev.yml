@@ -15,12 +15,30 @@ datasources:
     maximum-pool-size: 5
     minimum-idle: 2
 
+r2dbc:
+  datasources:
+    default:
+      url: r2dbc:mysql://root:123@127.0.0.1:3306/jalorx
+      #username: root
+      #password: 123
+      dialect: MYSQL
+      options:
+        driver: pool
+        protocol: mysql
+        maxSize: 20
+        initialSize: 5
+        maxLifeTime: PT280S
+        maxIdleTime: PT240S
+        maxAcquireTime: PT6S
+        poolName: r2dbc
+        registerJmx: true
+
 dynamic1-datasources:
   default:
     master: true
     url: jdbc:mysql://127.0.0.1:3306/jalorx?useUnicode=true&useSSL=false
     username: root
-    password: 123
+    #password: 123
     driverClassName: com.mysql.jdbc.Driver
     maximum-pool-size: 5
     minimum-idle: 2
@@ -36,8 +54,10 @@ redis:
   host: 127.0.0.1
   port: 6379
   database: 2
-endpoints:
+
+endpoints: 
   info:
+    enabled: true
     sensitive: false
   routes:
     sensitive: false

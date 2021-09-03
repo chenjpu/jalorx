@@ -26,7 +26,7 @@ import io.micronaut.core.util.CollectionUtils;
  * @param <T> 业务对象类型
  * @param <PK> 主键类型
  */
-public abstract class GenericServiceImpl<T extends Id, PK extends Serializable>
+public abstract class GenericServiceImpl<T extends Id<?>, PK extends Serializable>
 		extends BaseThisAware
 		implements
 		Service<T, PK> {

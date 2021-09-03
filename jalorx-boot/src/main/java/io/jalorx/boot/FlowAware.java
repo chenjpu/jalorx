@@ -13,7 +13,7 @@ import io.jalorx.boot.model.Id;
  * @author chenb
  *
  */
-public interface FlowAware extends Id {
+public interface FlowAware extends Id<Long> {
 
 	/**
 	 * 返回流程信息对象

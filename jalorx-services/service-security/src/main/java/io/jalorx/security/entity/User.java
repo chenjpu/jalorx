@@ -440,7 +440,7 @@ public class User extends LongIdVO implements Account {
    */
   @JsonIgnore
   public boolean isRoot() {
-    return id == 0;
+    return getId() == 0;
   }
 
   @JsonIgnore
@@ -491,7 +491,7 @@ public class User extends LongIdVO implements Account {
 
   @JsonIgnore
   public Meta metaof() {
-    Meta m = new Meta(this.id);
+    Meta m = new Meta(this.getId());
     m.acount = this.acount;
     m.email = this.email;
     m.firstname = this.firstname;
@@ -501,7 +501,7 @@ public class User extends LongIdVO implements Account {
 
 
   @Introspected
-  public static class Meta implements Id {
+  public static class Meta implements Id<Long> {
 
     /**
      * 

@@ -10,6 +10,6 @@ import io.micronaut.http.client.annotation.Client;
 @Client(id = "demo", path = "/security/user")
 @Named("User.MetaDataClient")
 @Requires(env = "json.remote")
-public interface RemoteUserMetaDataClient extends MetaDataClient<Id,String> {
+public interface RemoteUserMetaDataClient extends MetaDataClient<Id<String>,String> {
 
 }

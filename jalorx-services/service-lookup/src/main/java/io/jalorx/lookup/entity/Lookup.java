@@ -1,7 +1,5 @@
 package io.jalorx.lookup.entity;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -122,7 +120,7 @@ public class Lookup extends LongIdVO {
   }
 
   @Introspected
-  public static class Meta implements Id {
+  public static class Meta implements Id<String> {
     /**
      * 
      */
@@ -138,7 +136,7 @@ public class Lookup extends LongIdVO {
     }
 
     @Override
-    public Serializable getId() {
+    public String getId() {
       return id;
     }
 

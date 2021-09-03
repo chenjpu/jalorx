@@ -28,7 +28,7 @@ import jakarta.inject.Inject;
 @SuppressWarnings({"unchecked"})
 public abstract class MetaDataCollector<A extends Annotation, T> {
 	static Logger         LOG   = LoggerFactory.getLogger(MetaDataCollector.class);
-	static final List<Id> EMPTY = Collections.emptyList();
+	static final List<Id<?>> EMPTY = Collections.emptyList();
 
 	@Inject
 	protected BeanContext  context;
@@ -44,7 +44,7 @@ public abstract class MetaDataCollector<A extends Annotation, T> {
 
 	protected abstract List<T> collector(A a, Object vaule);
 
-	public List<Id> collector(Set<T> ids) {
+	public List<Id<?>> collector(Set<T> ids) {
 		String name = getServiceName();
 		return context.findBean(MetaDataClient.class, Qualifiers.byName(name))
 				.map(mc -> mc.getDetails(ids))

@@ -8,6 +8,6 @@ import io.jalorx.boot.model.Id;
  *
  * @param <T>实体类
  */
-public interface BaseService<T extends Id> extends Service<T, Long> {
+public interface BaseService<T extends Id<?>> extends Service<T, Long> {
 
 }

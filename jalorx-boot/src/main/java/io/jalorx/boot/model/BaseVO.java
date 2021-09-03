@@ -9,19 +9,22 @@
 
 package io.jalorx.boot.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.jalorx.boot.POJO;
 import io.jalorx.boot.annotation.User;
 import io.jalorx.boot.utils.AuthInfoUtils;
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.Transient;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * @author chenb
  *
  */
+@Introspected
 public abstract class BaseVO implements POJO {
 
 	/**
@@ -33,17 +36,16 @@ public abstract class BaseVO implements POJO {
 	// protected String scope;//
 	@Schema(title = "修改版本号")
 	protected int revision = 1;// 版本
-
 	@User
 	@Schema(title = "创建人ID")
 	protected String createUserId;
 	@Schema(title = "创建时间")
-	protected Date   createDate;
+	protected LocalDateTime   createDate;
 	@User
 	@Schema(title = "最后修改人ID")
 	protected String lastUpdateUserId;
 	@Schema(title = "最后修改时间")
-	protected Date   lastUpdateDate;
+	protected LocalDateTime   lastUpdateDate;
 
 	@Schema(title = "项目名称")
 	protected String appName;
@@ -77,8 +79,8 @@ public abstract class BaseVO implements POJO {
 	}
 
 	public void createInit() {
-		this.createDate     = new Date();
-		this.lastUpdateDate = new Date();
+		this.createDate     = LocalDateTime.now();
+		this.lastUpdateDate = LocalDateTime.now();
 		this.appName        = "local";
 		this.appScope       = "local";
 		this.tenantId       = "global";
@@ -91,7 +93,7 @@ public abstract class BaseVO implements POJO {
 	}
 
 	public void updateInit() {
-		this.lastUpdateDate = new Date();
+		this.lastUpdateDate = LocalDateTime.now();
 		if (AuthInfoUtils.isLogin()) {
 			if (AuthInfoUtils.isLogin()) {
 				String userId = AuthInfoUtils.getAuthInfo()
@@ -133,14 +135,14 @@ public abstract class BaseVO implements POJO {
 	/**
 	 * @return the createDate
 	 */
-	public Date getCreateDate() {
+	public LocalDateTime getCreateDate() {
 		return createDate;
 	}
 
 	/**
 	 * @param createDate the createDate to set
 	 */
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(LocalDateTime createDate) {
 		this.createDate = createDate;
 	}
 
@@ -161,14 +163,14 @@ public abstract class BaseVO implements POJO {
 	/**
 	 * @return the lastUpdateDate
 	 */
-	public Date getLastUpdateDate() {
+	public LocalDateTime getLastUpdateDate() {
 		return lastUpdateDate;
 	}
 
 	/**
 	 * @param lastUpdateDate the lastUpdateDate to set
 	 */
-	public void setLastUpdateDate(Date lastUpdateDate) {
+	public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
 
@@ -180,16 +182,19 @@ public abstract class BaseVO implements POJO {
 	}
 
 	@JsonIgnore()
+	@Transient
 	public int getRevisionNext() {
 		return revision + 1;
 	}
 
 	@JsonIgnore()
+	@Transient
 	public Object getCurrentUser() {
 		return AuthInfoUtils.getAuthInfo();
 	}
 
 	@JsonIgnore()
+	@Transient
 	public long getCurrentUserId() {
 		return AuthInfoUtils.getAuthInfo()
 				.getUserId();

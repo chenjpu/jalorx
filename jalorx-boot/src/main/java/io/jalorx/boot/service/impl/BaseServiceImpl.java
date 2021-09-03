@@ -11,7 +11,7 @@ import io.jalorx.boot.service.BaseService;
  *
  * @param <T>业务对象类型
  */
-public abstract class BaseServiceImpl<T extends Id> extends GenericServiceImpl<T, Long>
+public abstract class BaseServiceImpl<T extends Id<?>> extends GenericServiceImpl<T, Long>
 		implements
 		BaseService<T> {
 

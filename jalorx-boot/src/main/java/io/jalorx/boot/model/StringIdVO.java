@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @author chenb
  *
  */
-public abstract class StringIdVO extends BaseVO implements Id {
+public abstract class StringIdVO extends BaseVO implements Id<String> {
 	/**
 	 * 
 	 */

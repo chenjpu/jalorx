@@ -13,7 +13,7 @@ import io.micronaut.http.annotation.Post;
  * @author chenb
  *
  */
-public interface MetaDataClient<U extends Id, T> {
+public interface MetaDataClient<U extends Id<?>, T> {
 
 	@Post("/ext/attrs")
 	List<U> getDetails(@Body Set<T> ids);

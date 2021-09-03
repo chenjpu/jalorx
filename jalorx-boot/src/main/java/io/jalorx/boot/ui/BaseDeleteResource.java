@@ -9,7 +9,7 @@ import io.jalorx.boot.service.BaseService;
  *         id为Long类型的资源删除
  * @param <T>
  */
-public abstract class BaseDeleteResource<T extends Id> extends GenericDeleteResource<T, Long> {
+public abstract class BaseDeleteResource<T extends Id<?>> extends GenericDeleteResource<T, Long> {
 
 	protected abstract BaseService<T> getService();
 

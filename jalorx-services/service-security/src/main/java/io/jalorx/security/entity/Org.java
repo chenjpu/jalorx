@@ -1,8 +1,6 @@
 package io.jalorx.security.entity;
 
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -96,15 +94,15 @@ public class Org extends LongIdVO {
 
   @JsonIgnore
   public Meta metaof() {
-    Meta m = new Meta(this.id);
-    m.id = this.id;
+    Meta m = new Meta(this.getId());
+    m.id = this.getId();
     m.orgName = this.orgName;
     m.orgCode = this.orgCode;
     return m;
   }
 
   @Introspected
-  public static class Meta implements Id {
+  public static class Meta implements Id<Long> {
     /**
      * 
      */
@@ -121,7 +119,7 @@ public class Org extends LongIdVO {
     }
 
     @Override
-    public Serializable getId() {
+    public Long getId() {
       return id;
     }
 

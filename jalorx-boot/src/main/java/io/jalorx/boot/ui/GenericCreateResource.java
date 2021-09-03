@@ -22,7 +22,7 @@ import io.micronaut.http.annotation.Post;
  * @param <T>
  * @param <PK>
  */
-public abstract class GenericCreateResource<T extends Id, PK extends Serializable>
+public abstract class GenericCreateResource<T extends Id<?>, PK extends Serializable>
 		implements
 		BaseAwareResource {
 

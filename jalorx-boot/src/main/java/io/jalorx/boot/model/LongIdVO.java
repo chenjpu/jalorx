@@ -1,14 +1,27 @@
 package io.jalorx.boot.model;
 
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.GeneratedValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public abstract class LongIdVO extends BaseVO implements Id {
+
+@Introspected
+public abstract class LongIdVO extends BaseVO implements Id<Long> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4948363701048760213L;
 	@Schema(title = "主键ID")
-	protected Long            id;
+	@GeneratedValue
+	@io.micronaut.data.annotation.Id
+	private Long id;
+
+	public LongIdVO() {
+	}
+
+	public LongIdVO(Long id) {
+		this.id = id;
+	}
 
 	/**
 	 * @return the id

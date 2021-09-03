@@ -21,7 +21,7 @@ import io.micronaut.http.annotation.Put;
  * @param <T>
  * @param <PK>
  */
-public abstract class GenericUpdateResource<T extends Id, PK extends Serializable>
+public abstract class GenericUpdateResource<T extends Id<?>, PK extends Serializable>
 		implements
 		BaseAwareResource {
 

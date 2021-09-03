@@ -1,6 +1,7 @@
 buildscript {
     repositories {
 		mavenLocal()
+		//jcenter()
 		mavenCentral()
     }
     dependencies {
@@ -45,6 +46,7 @@ tasks.withType(JavaCompile) {
 
 repositories {
     mavenLocal()
+    //jcenter()
     mavenCentral()
 }
 
@@ -52,7 +54,7 @@ dependencies {
     annotationProcessor(platform("io.jalorx:jalorx-bom:$jalorxVersion"))
     annotationProcessor "io.micronaut:micronaut-inject-java"
     annotationProcessor "io.micronaut:micronaut-validation"
-    annotationProcessor "io.micronaut.data:micronaut-data-processor"
+    annotationProcessor "io.micronaut.data:micronaut-data-processor:3.0.1"
     annotationProcessor "io.micronaut.openapi:micronaut-openapi"
     annotationProcessor "io.jalorx.starters:starter-apt"
     
@@ -76,26 +78,26 @@ dependencies {
 
 	implementation "io.micronaut.data:micronaut-data-tx"
     implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut:micronaut-management"
+    implementation "io.micronaut.jmx:micronaut-jmx"
     //implementation "io.micronaut.redis:micronaut-redis-lettuce"
     
     implementation "io.micronaut:micronaut-http"
     implementation "io.micronaut:micronaut-http-server-netty"
     implementation "mysql:mysql-connector-java"
+    implementation "dev.miku:r2dbc-mysql"
+    implementation "io.r2dbc:r2dbc-pool"
+    
+    implementation("io.micronaut.data:micronaut-data-r2dbc:3.0.1")
+   
+    implementation("io.micronaut.r2dbc:micronaut-r2dbc-core")
     //implementation "org.postgresql:postgresql"
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
 }
 
-compileJava {
-	sourceCompatibility = 1.8  // can be switched to 11 for testing
-	targetCompatibility = 1.8
-	options.encoding = "UTF-8"
-}
-
-compileTestJava {
-	sourceCompatibility = 1.8  // can be switched to 11 for testing
-	targetCompatibility = 1.8
-	options.encoding = "UTF-8"
-	options.compilerArgs += "-parameters"
+java {
+    sourceCompatibility = JavaVersion.toVersion("1.8")
+    targetCompatibility = JavaVersion.toVersion("1.8")
 }
 
 run.jvmArgs('-noverify', '-Xdebug','-Xrunjdwp:transport=dt_socket,address=9999,server=y,suspend=n', '-Dmicronaut.environments=dev')

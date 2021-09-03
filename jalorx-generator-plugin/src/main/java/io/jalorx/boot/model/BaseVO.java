@@ -9,7 +9,7 @@
 
 package io.jalorx.boot.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import io.jalorx.boot.POJO;
 
@@ -31,9 +31,9 @@ public abstract class BaseVO implements POJO {
   protected int revision = 1;// 版本
 
   protected String createUserId;
-  protected Date createDate;
+  protected LocalDateTime createDate;
   protected String lastUpdateUserId;
-  protected Date lastUpdateDate;
+  protected LocalDateTime lastUpdateDate;
   
   protected String appName;
   protected String tenantId;
@@ -50,10 +50,10 @@ public abstract class BaseVO implements POJO {
   public void setCreateUserId(String createUserId) {
     this.createUserId = createUserId;
   }
-  public Date getCreateDate() {
+  public LocalDateTime getCreateDate() {
     return createDate;
   }
-  public void setCreateDate(Date createDate) {
+  public void setCreateDate(LocalDateTime createDate) {
     this.createDate = createDate;
   }
   public String getLastUpdateUserId() {
@@ -62,10 +62,10 @@ public abstract class BaseVO implements POJO {
   public void setLastUpdateUserId(String lastUpdateUserId) {
     this.lastUpdateUserId = lastUpdateUserId;
   }
-  public Date getLastUpdateDate() {
+  public LocalDateTime getLastUpdateDate() {
     return lastUpdateDate;
   }
-  public void setLastUpdateDate(Date lastUpdateDate) {
+  public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
     this.lastUpdateDate = lastUpdateDate;
   }
   public String getAppName() {

@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @param <T>
  * @param <PK>
  */
-public abstract class GenericDeleteResource<T extends Id, PK extends Serializable>
+public abstract class GenericDeleteResource<T extends Id<?>, PK extends Serializable>
 		implements
 		BaseAwareResource {
 

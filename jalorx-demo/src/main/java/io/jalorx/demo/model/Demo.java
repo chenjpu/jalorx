@@ -11,10 +11,13 @@ import javax.validation.constraints.NotEmpty;
 import io.jalorx.boot.annotation.Lookup;
 import io.jalorx.boot.model.LongIdVO;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.data.annotation.Transient;
 import io.micronaut.validation.Validated;
 
 @Introspected
 @Validated
+@MappedEntity("TPL_DEMO_T")
 public class Demo extends LongIdVO {
 
 	private static final long serialVersionUID = -8274082110506731628L;
@@ -35,7 +38,17 @@ public class Demo extends LongIdVO {
 	private Long age;
 
 	@Lookup(type = "STATUS")
+	@Transient
 	private String status = "1";
+	
+	@Override
+	public Long getId() {
+		return super.getId();
+	}
+	@Override
+	public void setId(Long id) {
+		super.setId(id);
+	}
 
 	/**
 	 *

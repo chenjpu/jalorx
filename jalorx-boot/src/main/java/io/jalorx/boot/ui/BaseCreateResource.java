@@ -9,7 +9,7 @@ import io.jalorx.boot.service.BaseService;
  *         id为Long类型的资源创建
  * @param <T>
  */
-public abstract class BaseCreateResource<T extends Id> extends GenericCreateResource<T, Long> {
+public abstract class BaseCreateResource<T extends Id<?>> extends GenericCreateResource<T, Long> {
 
 	protected abstract BaseService<T> getService();
 

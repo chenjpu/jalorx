@@ -26,7 +26,7 @@ public class MetaResponce<T> implements POJO {
 
 	private final T data;
 
-	private final Map<String, List<Id>> meta = new HashMap<>();
+	private final Map<String, List<Id<?>>> meta = new HashMap<>();
 
 	protected MetaResponce(T data) {
 		this.data = data;
@@ -40,7 +40,7 @@ public class MetaResponce<T> implements POJO {
 		return data;
 	}
 
-	public Map<String, List<Id>> getMeta() {
+	public Map<String, List<Id<?>>> getMeta() {
 		return meta;
 	}
 
@@ -52,25 +52,25 @@ public class MetaResponce<T> implements POJO {
 		return new MetaResponce<>(data);
 	}
 
-	public MetaResponce<T> meta(Class<? extends Annotation> key, Id... values) {
+	public MetaResponce<T> meta(Class<? extends Annotation> key, Id<?>... values) {
 		return meta(key.getSimpleName(), values);
 	}
 
-	public MetaResponce<T> meta(Class<? extends Annotation> key, Iterable<? extends Id> values) {
+	public MetaResponce<T> meta(Class<? extends Annotation> key, Iterable<? extends Id<?>> values) {
 		return meta(key.getSimpleName(), values);
 	}
 
-	public MetaResponce<T> meta(String key, Id... values) {
-		List<Id> list = this.meta.computeIfAbsent(key, k -> new LinkedList<>());
-		for (Id e : values) {
+	public MetaResponce<T> meta(String key, Id<?>... values) {
+		List<Id<?>> list = this.meta.computeIfAbsent(key, k -> new LinkedList<>());
+		for (Id<?> e : values) {
 			list.add(e);
 		}
 		return this;
 	}
 
-	public MetaResponce<T> meta(String key, Iterable<? extends Id> values) {
-		List<Id> list = this.meta.computeIfAbsent(key, k -> new LinkedList<>());
-		for (Id e : values) {
+	public MetaResponce<T> meta(String key, Iterable<? extends Id<?>> values) {
+		List<Id<?>> list = this.meta.computeIfAbsent(key, k -> new LinkedList<>());
+		for (Id<?> e : values) {
 			list.add(e);
 		}
 		return this;

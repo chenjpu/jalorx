@@ -31,7 +31,7 @@ import io.micronaut.transaction.annotation.ReadOnly;
  * @param <T> 业务对象类型
  * @param <PK> 主键类型
  */
-public interface Service<T extends Id, PK extends Serializable> {
+public interface Service<T extends Id<?>, PK extends Serializable> {
 
 	/**
 	 * 更具id号获得对象，可以返回。如果返回null，不作相应的异常处理
