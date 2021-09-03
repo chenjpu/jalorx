@@ -31,10 +31,15 @@ public class AnonymousReactiveResource {
 	Flux<Demo> r2dbc1() {
 		return demoService.findAll(); // <1>
 	}
-	
+
 	@Get("/r2dbc/{id}")
-	Publisher<Demo> notTx( @PathVariable("id") @NotNull Long id) {
+	Publisher<Demo> byid(@PathVariable("id") @NotNull Long id) {
 		return demoService.findById(id); // <1>
 	}
-	
+
+	@Get("/r2dbc/age/{age}")
+	Publisher<Demo> ageGreaterThan(@PathVariable("age") @NotNull int age) {
+		return demoService.findByAgeGreaterThan(age); // <1>
+	}
+
 }

@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
  * @author ftl
  *
  */
-@Named("demoService")
+@Named("demoService2")
 public class DemoService2Impl  implements DemoService2 {
 
 	@Inject
@@ -28,6 +28,11 @@ public class DemoService2Impl  implements DemoService2 {
 	@Override
 	public Flux<Demo> findAll() {
 		return dao.findAll();
+	}
+
+	@Override
+	public Flux<Demo> findByAgeGreaterThan(int age) {
+		return dao.findByAgeGreaterThan(age);
 	}
 
 }

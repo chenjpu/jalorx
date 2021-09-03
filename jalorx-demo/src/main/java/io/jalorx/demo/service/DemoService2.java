@@ -25,4 +25,7 @@ public interface DemoService2 {
 
 	@ReadOnly
     Flux<Demo> findAll();
+	
+	@ReadOnly
+	Flux<Demo> findByAgeGreaterThan(int age);
 }
