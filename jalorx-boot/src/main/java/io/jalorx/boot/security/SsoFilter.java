@@ -16,7 +16,7 @@ import io.micronaut.security.filters.SecurityFilter;
 import io.micronaut.session.Session;
 import io.micronaut.session.http.SessionForRequest;
 
-@Filter("/**")
+@Filter({ "/services/**", "/api/**" })
 public class SsoFilter implements HttpServerFilter {
 
 	private static final CharSequence AUTHENTICATION = SecurityFilter.AUTHENTICATION;
@@ -25,11 +25,11 @@ public class SsoFilter implements HttpServerFilter {
 	public Publisher<MutableHttpResponse<?>> doFilter(HttpRequest<?> request, ServerFilterChain chain) {
 		Optional<Session> session = SessionForRequest.find(request);
 
-		session.ifPresent(s ->{
+		session.ifPresent(s -> {
 			s.setLastAccessedTime(Instant.now());
 			s.get(AUTHENTICATION, AuthInfo.class).ifPresent(AuthInfoContext::set);
 		});
-	   return chain.proceed(request);
+		return chain.proceed(request);
 
 	}
 
