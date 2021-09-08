@@ -8,14 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.jalorx.boot.dao.DynamicDao;
 import io.jalorx.boot.service.impl.BaseServiceImpl;
 import io.jalorx.demo.dao.DemoDao;
+import io.jalorx.demo.dao.sql.DemoSqlSupport;
 import io.jalorx.demo.inner.ExportFile;
 import io.jalorx.demo.inner.ImportFile;
 import io.jalorx.demo.model.Demo;
@@ -29,6 +28,8 @@ import io.jalorx.export.word.BaseExport;
 import io.jalorx.export.word.WDefinition;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.http.server.types.files.SystemFile;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * @author ftl
@@ -39,6 +40,9 @@ public class DemoServiceImpl extends BaseServiceImpl<Demo> implements DemoServic
 
 	@Inject
 	DemoDao dao;
+	
+	@Inject
+	DynamicDao dynamicDao;
 
 	@Inject
 	ImportFile importFile;
@@ -69,12 +73,19 @@ public class DemoServiceImpl extends BaseServiceImpl<Demo> implements DemoServic
 	////
 	@Override
 	public Demo get(Long id) {
-		return super.get(id);
+		return dynamicDao.findOne(DemoSqlSupport.queryPerson(id)).get();
+		//return super.get(id);
 	}
 
 	@Override
 	public Demo getMysql(Long id) {
-		return super.get(id);
+		return dynamicDao.findOne(DemoSqlSupport.queryPerson(id)).get();
+		//return super.get(id);
+	}
+	
+	@Override
+	public Iterable<Demo> getGradAge(int age) {
+		return dynamicDao.findAll(DemoSqlSupport.queryAll(age));
 	}
 
 	@Override

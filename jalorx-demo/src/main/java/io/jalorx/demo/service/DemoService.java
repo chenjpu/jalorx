@@ -47,4 +47,6 @@ public interface DemoService extends BaseService<Demo> {
 	SystemFile export();
 
 	SystemFile exportWord();
+
+	Iterable<Demo> getGradAge(int age);
 }

@@ -1,0 +1,52 @@
+package io.jalorx.demo.dao.sql;
+
+import static io.jalorx.boot.sql.dsl.SqlBuilder.*;
+
+import java.sql.JDBCType;
+
+import io.jalorx.boot.sql.SelectProvider;
+import io.jalorx.boot.sql.dsl.BasicColumn;
+import io.jalorx.boot.sql.dsl.SqlColumn;
+import io.jalorx.boot.sql.dsl.SqlTable;
+import io.jalorx.demo.model.Demo;
+
+public final class DemoSqlSupport {
+	static final DemoTable person = new DemoTable();
+	
+	static final BasicColumn all = person.all;
+	static final SqlColumn<Long> id = person.id;
+	static final SqlColumn<String> name = person.name;
+	static final SqlColumn<Integer> age = person.age;
+
+	static final class DemoTable extends SqlTable {
+		final BasicColumn all = allColumns();
+		final SqlColumn<Long> id = column("id", JDBCType.INTEGER);
+		final SqlColumn<String> name = column("name", JDBCType.VARCHAR);
+		final SqlColumn<Integer> age = column("age", JDBCType.INTEGER);
+
+		public DemoTable() {
+			super("tpl_demo_t");
+		}
+	}
+	
+	
+	public static final SelectProvider<Demo> queryPerson(Long userID) {
+		SelectProvider<Demo> selectStatement = select(all)
+				.from(person)
+				.where(id, isEqualTo(userID))
+				.build().render(Demo.class);
+
+		return selectStatement;
+	}
+	
+	public static final SelectProvider<Demo> queryAll(int rage) {
+		SelectProvider<Demo> selectStatement = select(all)
+				.from(person)
+				.where(age, isGreaterThan(rage))
+				.build().render(Demo.class);
+
+		return selectStatement;
+	}
+	
+	
+}

@@ -9,7 +9,8 @@ dependencies {
     implementation "io.micronaut.security:micronaut-security"
     implementation "io.micronaut.sql:micronaut-jdbc"
     implementation "io.micronaut.sql:micronaut-jdbc-hikari"
-    implementation("io.micronaut.data:micronaut-data-model")
+    implementation "io.micronaut.data:micronaut-data-model"
+    implementation "io.micronaut.data:micronaut-data-jdbc"
     
     compileOnly "io.micronaut.micrometer:micronaut-micrometer-core"
     testImplementation "io.micronaut.test:micronaut-test-junit5"

@@ -62,6 +62,10 @@ public class AnonymousResource {
 	public Demo mysql() {
 		return demoService.get(11L);
 	}
+	@Get("/mysql/age")
+	public Iterable<Demo> mysqlAge() {
+		return demoService.getGradAge(10);
+	}
 
 	@Get("/validate")
 	public Demo validate(@NotEmpty @QueryValue("id") String id,
