@@ -11,6 +11,7 @@ include "jalorx-boot"
 
 //starters
 include "jalorx-starters:starter-apt"
+include "jalorx-starters:starter-data"
 include "jalorx-starters:starter-json"
 include "jalorx-starters:starter-metrics"
 include "jalorx-starters:starter-registd"

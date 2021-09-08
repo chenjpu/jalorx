@@ -1,0 +1,12 @@
+description = "JalorX Starts data"
+group   projectStarterGroupId
+
+dependencies {
+	annotationProcessor "io.micronaut:micronaut-inject-java"
+	
+	implementation  project(":jalorx-boot")
+	
+	implementation 'io.micronaut.data:micronaut-data-model'
+	implementation 'io.micronaut.data:micronaut-data-jdbc'
+}
+

@@ -5,5 +5,8 @@ dependencies {
 	annotationProcessor "io.micronaut:micronaut-inject-java"
 	
 	implementation  project(":jalorx-boot")
+	implementation  project(":jalorx-starters:starter-data")
+	
+	implementation 'io.micronaut.data:micronaut-data-processor'
 }
 

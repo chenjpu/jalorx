@@ -43,6 +43,7 @@ public final class DemoSqlSupport {
 		SelectProvider<Demo> selectStatement = select(all)
 				.from(person)
 				.where(age, isGreaterThan(rage))
+				.and(name, isEqualTo("ssssss"))
 				.build().render(Demo.class);
 
 		return selectStatement;

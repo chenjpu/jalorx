@@ -73,6 +73,7 @@ dependencies {
     
     //implementation "io.jalorx.starters:starter-json"
     implementation "io.jalorx.starters:starter-errors"
+    implementation "io.jalorx.starters:starter-data"
     implementation "io.jalorx.starters:starter-export"
     implementation "io.jalorx.starters:starter-import"
 
