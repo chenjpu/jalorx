@@ -15,19 +15,10 @@
  */
 package io.jalorx.apt.data.visitors.finders;
 
-import java.util.Map;
-
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.reflect.ClassUtils;
-import io.micronaut.data.annotation.MappedEntity;
-import io.micronaut.data.intercept.DataInterceptor;
-import io.micronaut.data.model.query.QueryModel;
 import io.micronaut.data.processor.visitors.MatchContext;
-import io.micronaut.data.processor.visitors.MethodMatchContext;
-import io.micronaut.data.processor.visitors.finders.DynamicFinder;
-import io.micronaut.data.processor.visitors.finders.MethodMatchInfo;
 import io.micronaut.data.processor.visitors.finders.TypeUtils;
 import io.micronaut.inject.ast.ClassElement;
 import io.micronaut.inject.ast.MethodElement;
@@ -83,44 +74,4 @@ public class FindByFinder extends DynamicFinder {
 		}
 		return false;
 	}
-	
-	@Nullable
-    protected MethodMatchInfo buildInfo(
-            @NonNull MethodMatchContext matchContext,
-            @NonNull ClassElement queryResultType,
-            @Nullable QueryModel query) {
-        ClassElement returnType = matchContext.getReturnType();
-        
-        if (!TypeUtils.isVoid(returnType)) {
-
-            Map.Entry<ClassElement, Class<? extends DataInterceptor>> entry = FindersUtils.resolveFindInterceptor(matchContext, returnType);
-            ClassElement resultType = entry.getKey();
-            Class<? extends DataInterceptor> interceptorType = entry.getValue();
-
-            boolean isDto = false;
-            if (resultType == null || TypeUtils.areTypesCompatible(resultType, queryResultType)) {
-                if (!queryResultType.isPrimitive() || resultType == null) {
-                    resultType = queryResultType;
-                }
-            } else {
-                if (resultType.hasStereotype(Introspected.class) && queryResultType.hasStereotype(MappedEntity.class)) {
-                    if (query == null) {
-                        query = QueryModel.from(matchContext.getRootEntity());
-                    }
-                    //if (!ignoreAttemptProjection(query)) {
-                    //    attemptProjection(matchContext, queryResultType, query, resultType);
-                    //}
-                    isDto = true;
-                } else {
-                    matchContext.failAndThrow("Query results in a type [" + queryResultType.getName() + "] whilst method returns an incompatible type: " + resultType.getName());
-                }
-            }
-            System.err.println(matchContext);
-            return new MethodMatchInfo(resultType, query, FindersUtils.getInterceptorElement(matchContext, interceptorType), isDto);
-        }
-        System.err.println("err" + matchContext);
-        matchContext.fail("Unsupported Repository method return type");
-        return null;
-    }
-
 }

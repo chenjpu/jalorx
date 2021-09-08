@@ -145,8 +145,6 @@ public abstract class AbstractQueryInterceptor<T, R> implements DataInterceptor<
             findQueries.put(methodKey, storedQuery);
         }
         
-        SelectProvider<?> sqlProvider = (SelectProvider<?>)context.getParameterValues()[0];
-       
         Pageable pageable = storedQuery.hasPageable() ? getPageable(context) : Pageable.UNPAGED;
         return new DefaultPreparedQuery<>(
                 context,
@@ -167,14 +165,21 @@ public abstract class AbstractQueryInterceptor<T, R> implements DataInterceptor<
         ExecutableMethod<T, R> executableMethod = context.getExecutableMethod();
         StoredQuery<?, Long> storedQuery = countQueries.get(methodKey);
         if (storedQuery == null) {
+        	
+        	String query = context.stringValue(Query.class, DataMethod.META_MEMBER_COUNT_QUERY).orElseThrow(() ->
+            	new IllegalStateException("No query present in method")
+        	);
 
-            Class rootEntity = getRequiredRootEntity(context);
+            //Class rootEntity = getRequiredRootEntity(context);
+        	
+        	Class rootEntity = context.classValue(DATA_METHOD_ANN_NAME, DataMethod.META_MEMBER_ROOT_ENTITY)
+                    .orElseThrow(() -> new IllegalStateException("No root entity present in method"));
 
             storedQuery = new DefaultStoredQuery<Object, Long>(
                     executableMethod,
                     Long.class,
                     rootEntity,
-                    null,
+                    query,
                     DataMethod.META_MEMBER_PARAMETER_BINDING,
                     true
             );
@@ -950,7 +955,7 @@ public abstract class AbstractQueryInterceptor<T, R> implements DataInterceptor<
     private final class DefaultPreparedQuery<E, RT> extends DefaultStoredDataOperation<RT> implements PreparedQuery<E, RT> {
         private final Pageable pageable;
         private final StoredQuery<E, RT> storedQuery;
-        private final SelectProvider<?> sqlProvider;
+        private final SelectProvider sqlProvider;
         private final boolean dto;
         private final MethodInvocationContext<T, R> context;
         private String[] parameterNames;
@@ -972,7 +977,7 @@ public abstract class AbstractQueryInterceptor<T, R> implements DataInterceptor<
                 boolean dtoProjection) {
             super(context);
             this.context = context;
-            this.sqlProvider = (SelectProvider<?>)context.getParameterValues()[0];
+            this.sqlProvider = (SelectProvider)context.getParameterValues()[0];
             this.storedQuery = storedQuery;
             this.pageable = pageable;
             this.dto = dtoProjection;
@@ -1129,7 +1134,7 @@ public abstract class AbstractQueryInterceptor<T, R> implements DataInterceptor<
         @NonNull
         @Override
         public String getQuery() {
-            return sqlProvider.getSql();
+            return storedQuery.isCount()?sqlProvider.getCountSql():sqlProvider .getSql();
         }
 
         @NonNull

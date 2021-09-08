@@ -26,6 +26,7 @@ import io.jalorx.export.DataSource;
 import io.jalorx.export.excel.Definition;
 import io.jalorx.export.word.BaseExport;
 import io.jalorx.export.word.WDefinition;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.http.server.types.files.SystemFile;
 import jakarta.inject.Inject;
@@ -86,7 +87,7 @@ public class DemoServiceImpl extends BaseServiceImpl<Demo> implements DemoServic
 	@Override
 	public Iterable<Demo> getGradAge(int age) {
 		//dynamicDao.findByAgeGreaterThan(age);
-		return dynamicDao.findAll(DemoSqlSupport.queryAll(age));
+		return dynamicDao.findAll(DemoSqlSupport.queryAll(age),Pageable.from(1, 3));
 	}
 
 	@Override

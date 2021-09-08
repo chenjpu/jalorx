@@ -74,7 +74,7 @@ public abstract class AbstractListMethod extends AbstractPatternBasedMethod {
                 if (prop == null) {
                     if (TypeRole.ID.equals(paramName) && (rootEntity.hasIdentity() || rootEntity.hasCompositeIdentity())) {
                         query.idEq(new QueryParameter(queryParam.getName()));
-                    } else {
+                    } else if(!queryParam.getType().isAssignable("io.jalorx.boot.sql.SelectProvider")) {
                         matchContext.fail("Cannot query persistentEntity [" + rootEntity.getSimpleName() + "] on non-existent property: " + paramName);
                         return null;
                     }

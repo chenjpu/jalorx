@@ -42,7 +42,7 @@ public class SelectRenderer {
         sequence = builder.sequence().orElseGet(() -> new AtomicInteger(1));
     }
 
-    public <T> SelectProvider<T> render(Class<T> clazz) {
+    public SelectProvider render() {
         FragmentCollector fragmentCollector = selectModel
                 .mapQueryExpressions(this::renderQueryExpression)
                 .collect(FragmentCollector.collect());
@@ -51,9 +51,9 @@ public class SelectRenderer {
 
         String selectStatement = fragmentCollector.fragments().collect(Collectors.joining(" ")); //$NON-NLS-1$
 
-        return DefaultSelectStatementProvider.<T>withSelectStatement(selectStatement)
+        return DefaultSelectStatementProvider.withSelectStatement(selectStatement)
                 .withParameters(fragmentCollector.parameters())
-                .build(clazz);
+                .build();
     }
 
     private FragmentAndParameters renderQueryExpression(QueryExpressionModel queryExpressionModel) {

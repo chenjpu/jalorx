@@ -22,21 +22,14 @@ import java.util.Objects;
 
 import io.jalorx.boot.sql.SelectProvider;
 
-public class DefaultSelectStatementProvider<T> implements SelectProvider<T> {
-	private final Class<T> clazz;
+public class DefaultSelectStatementProvider implements SelectProvider {
     private final String selectStatement;
     private final Map<String, Object> parameters;
 
-    private DefaultSelectStatementProvider(Class<T> clazz,Builder<T> builder) {
-    	this.clazz = clazz;
+    private DefaultSelectStatementProvider(Builder builder) {
         selectStatement = Objects.requireNonNull(builder.selectStatement);
         parameters = Collections.unmodifiableMap(Objects.requireNonNull(builder.parameters));
     }
-    
-    @Override
-	public Class<T> getRootEntity() {
-		return clazz;
-	}
 
     @Override
     public Map<String, Object> getParameters() {
@@ -48,26 +41,26 @@ public class DefaultSelectStatementProvider<T> implements SelectProvider<T> {
         return selectStatement;
     }
 
-    public static <T> Builder<T> withSelectStatement(String selectStatement) {
-        return new Builder<T>().withSelectStatement(selectStatement);
+    public static  Builder withSelectStatement(String selectStatement) {
+        return new Builder().withSelectStatement(selectStatement);
     }
 
-    public static class Builder<T> {
+    public static class Builder {
         private String selectStatement;
         private final Map<String, Object> parameters = new HashMap<>();
 
-        public Builder<T> withSelectStatement(String selectStatement) {
+        public Builder withSelectStatement(String selectStatement) {
             this.selectStatement = selectStatement;
             return this;
         }
 
-        public Builder<T> withParameters(Map<String, Object> parameters) {
+        public Builder withParameters(Map<String, Object> parameters) {
             this.parameters.putAll(parameters);
             return this;
         }
 
-        public SelectProvider<T> build(Class<T> clazz) {
-            return new DefaultSelectStatementProvider<T>(clazz,this);
+        public SelectProvider build() {
+            return new DefaultSelectStatementProvider(this);
         }
     }
 }

@@ -93,11 +93,11 @@ public class WhereConditionVisitor<T> implements ConditionVisitor<T, FragmentAnd
 
     @Override
     public FragmentAndParameters visit(AbstractSubselectCondition<T> condition) {
-        SelectProvider<T> selectStatement = SelectRenderer.withSelectModel(condition.selectModel())
+        SelectProvider selectStatement = SelectRenderer.withSelectModel(condition.selectModel())
                 .withRenderingStrategy(renderingStrategy)
                 .withSequence(sequence)
                 .build()
-                .render(null);
+                .render();
 
         String fragment = condition.renderCondition(columnName(), selectStatement.getSql());
 

@@ -53,16 +53,16 @@ public class SelectModel {
     }
 
     @NotNull
-    public <T> SelectProvider<T> render(Class<T> clazz,RenderingStrategy renderingStrategy) {
+    public SelectProvider render(RenderingStrategy renderingStrategy) {
         return SelectRenderer.withSelectModel(this)
                 .withRenderingStrategy(renderingStrategy)
                 .build()
-                .render(clazz);
+                .render();
     }
     
     @NotNull
-    public <T> SelectProvider<T> render(Class<T> clazz) {
-        return this.render(clazz,RenderingStrategies.DEFAULT_PARAMETER);
+    public <T> SelectProvider render() {
+        return this.render(RenderingStrategies.DEFAULT_PARAMETER);
     }
 
     public static Builder withQueryExpressions(List<QueryExpressionModel> queryExpressions) {

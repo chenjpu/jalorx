@@ -1,6 +1,8 @@
 package io.jalorx.demo.dao.sql;
 
-import static io.jalorx.boot.sql.dsl.SqlBuilder.*;
+import static io.jalorx.boot.sql.dsl.SqlBuilder.isEqualTo;
+import static io.jalorx.boot.sql.dsl.SqlBuilder.isGreaterThan;
+import static io.jalorx.boot.sql.dsl.SqlBuilder.select;
 
 import java.sql.JDBCType;
 
@@ -8,7 +10,6 @@ import io.jalorx.boot.sql.SelectProvider;
 import io.jalorx.boot.sql.dsl.BasicColumn;
 import io.jalorx.boot.sql.dsl.SqlColumn;
 import io.jalorx.boot.sql.dsl.SqlTable;
-import io.jalorx.demo.model.Demo;
 
 public final class DemoSqlSupport {
 	static final DemoTable person = new DemoTable();
@@ -30,21 +31,21 @@ public final class DemoSqlSupport {
 	}
 	
 	
-	public static final SelectProvider<Demo> queryPerson(Long userID) {
-		SelectProvider<Demo> selectStatement = select(all)
+	public static final SelectProvider queryPerson(Long userID) {
+		SelectProvider selectStatement = select(all)
 				.from(person)
 				.where(id, isEqualTo(userID))
-				.build().render(Demo.class);
+				.build().render();
 
 		return selectStatement;
 	}
 	
-	public static final SelectProvider<Demo> queryAll(int rage) {
-		SelectProvider<Demo> selectStatement = select(all)
+	public static final SelectProvider queryAll(int rage) {
+		SelectProvider selectStatement = select(all)
 				.from(person)
 				.where(age, isGreaterThan(rage))
-				.and(name, isEqualTo("ssssss"))
-				.build().render(Demo.class);
+				//.and(name, isEqualTo("ssssss"))
+				.build().render();
 
 		return selectStatement;
 	}

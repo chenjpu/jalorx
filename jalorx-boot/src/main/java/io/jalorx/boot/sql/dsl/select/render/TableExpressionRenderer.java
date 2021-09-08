@@ -50,12 +50,12 @@ public class TableExpressionRenderer implements TableExpressionVisitor<FragmentA
 
     @Override
     public FragmentAndParameters visit(SubQuery subQuery) {
-        SelectProvider<?> selectStatement = new SelectRenderer.Builder()
+        SelectProvider selectStatement = new SelectRenderer.Builder()
                 .withSelectModel(subQuery.selectModel())
                 .withRenderingStrategy(renderingStrategy)
                 .withSequence(sequence)
                 .build()
-                .render(null);
+                .render();
 
         String fragment = "(" + selectStatement.getSql() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 

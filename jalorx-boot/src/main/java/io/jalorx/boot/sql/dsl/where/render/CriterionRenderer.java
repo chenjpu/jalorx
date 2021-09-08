@@ -78,12 +78,12 @@ public class CriterionRenderer implements SqlCriterionVisitor<Optional<RenderedC
     public Optional<RenderedCriterion> visit(ExistsCriterion criterion) {
         ExistsPredicate existsPredicate = criterion.existsPredicate();
 
-        SelectProvider<?> selectStatement = SelectRenderer
+        SelectProvider selectStatement = SelectRenderer
                 .withSelectModel(existsPredicate.selectModelBuilder().build())
                 .withRenderingStrategy(renderingStrategy)
                 .withSequence(sequence)
                 .build()
-                .render(null);
+                .render();
 
         String fragment = existsPredicate.operator() + " (" //$NON-NLS-1$
                 + selectStatement.getSql() + ")"; //$NON-NLS-1$
