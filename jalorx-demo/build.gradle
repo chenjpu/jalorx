@@ -54,7 +54,7 @@ dependencies {
     annotationProcessor(platform("io.jalorx:jalorx-bom:$jalorxVersion"))
     annotationProcessor "io.micronaut:micronaut-inject-java"
     annotationProcessor "io.micronaut:micronaut-validation"
-    annotationProcessor "io.micronaut.data:micronaut-data-processor:3.0.1"
+    annotationProcessor "io.micronaut.data:micronaut-data-processor"
     annotationProcessor "io.micronaut.openapi:micronaut-openapi"
     annotationProcessor "io.jalorx.starters:starter-apt"
     
@@ -88,7 +88,7 @@ dependencies {
     implementation "dev.miku:r2dbc-mysql"
     implementation "io.r2dbc:r2dbc-pool"
     
-    implementation("io.micronaut.data:micronaut-data-r2dbc:3.0.1")
+    implementation("io.micronaut.data:micronaut-data-r2dbc")
    
     implementation("io.micronaut.r2dbc:micronaut-r2dbc-core")
     //implementation "org.postgresql:postgresql"
