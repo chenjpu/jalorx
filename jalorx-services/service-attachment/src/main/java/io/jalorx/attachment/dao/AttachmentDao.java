@@ -1,13 +1,13 @@
 package io.jalorx.attachment.dao;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import io.jalorx.attachment.entity.Attachment;
-import io.jalorx.boot.dao.BaseDao;
+import io.jalorx.boot.repository.BaseRepository;
+import io.micronaut.data.jdbc.annotation.JdbcRepository;
+import io.micronaut.data.model.query.builder.sql.Dialect;
 
 
-@Mapper
-public interface AttachmentDao extends BaseDao<Attachment> {
+@JdbcRepository(dialect = Dialect.MYSQL) 
+public interface AttachmentDao extends BaseRepository<Attachment> {
   
   
 }

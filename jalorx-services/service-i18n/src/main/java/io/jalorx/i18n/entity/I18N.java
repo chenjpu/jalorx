@@ -4,6 +4,8 @@ package io.jalorx.i18n.entity;
 import io.jalorx.boot.annotation.Lookup;
 import io.jalorx.boot.model.LongIdVO;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.validation.Validated;
 
 /**
  * 国际化实体类，用于存储语言-键-值.
@@ -11,6 +13,8 @@ import io.micronaut.core.annotation.Introspected;
  * @author Bruce
  */
 @Introspected
+@Validated
+@MappedEntity("TPL_I18N_T")
 public class I18N extends LongIdVO {
 
   /**

@@ -7,10 +7,13 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import io.micronaut.core.annotation.Introspected;
+
 /**
  * @author chenb
  *
  */
+@Introspected
 public class Pair implements Serializable {
 
 	/**

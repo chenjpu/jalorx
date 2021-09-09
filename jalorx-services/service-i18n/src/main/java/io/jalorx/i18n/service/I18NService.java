@@ -17,8 +17,6 @@ import io.micronaut.transaction.annotation.ReadOnly;
  */
 @Transactional()
 public interface I18NService extends BaseService<I18N> {
-  @ReadOnly
-  I18N getLastUpdateTime(String languageCode);
 
   @ReadOnly
   List<Pair> getI18NMessage(String languageCode);

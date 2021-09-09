@@ -1,9 +1,13 @@
 package io.jalorx.attachment.entity;
 
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.validation.Validated;
 
 
 @Introspected
+@Validated
+@MappedEntity("TPL_FILE_T")
 public class Attachment extends BaseUploadVO {
 
   private static final long serialVersionUID = 1757475622243875292L;

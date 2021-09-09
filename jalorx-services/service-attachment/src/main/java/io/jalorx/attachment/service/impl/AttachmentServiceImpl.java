@@ -3,7 +3,7 @@ package io.jalorx.attachment.service.impl;
 import io.jalorx.attachment.dao.AttachmentDao;
 import io.jalorx.attachment.entity.Attachment;
 import io.jalorx.attachment.service.AttachmentService;
-import io.jalorx.boot.service.impl.BaseServiceImpl;
+import io.jalorx.boot.service.impl2.BaseServiceImpl;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
