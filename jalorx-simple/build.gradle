@@ -1,0 +1,118 @@
+buildscript {
+    repositories {
+		mavenLocal()
+		//jcenter()
+		mavenCentral()
+    }
+    dependencies {
+        classpath 'io.jalorx:generator-plugin:3.0' 
+    }
+}
+plugins {
+    id "com.diffplug.eclipse.apt" version "3.22.0"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
+    //id("io.micronaut.application") version "2.0.3"
+    id "application"
+}
+
+apply plugin: 'io.jalorx'
+jalorxGenerator {
+    //overwrite = true
+	jdbcConnection {
+		connectionURL="jdbc:mysql://127.0.0.1:3306/jalorx?useSSL=false"
+		driverClass="com.mysql.jdbc.Driver"
+		userId="root"
+		password="123"
+	}
+	
+	context {
+	
+	}
+}
+
+//micronaut {
+    //runtime("netty")
+    //testRuntime("junit5")
+//    processing {
+//        incremental(true)
+//        annotations("com.example.*")//
+//    }
+//}
+
+//编译JAVA文件时采用UTF-8
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"  
+}
+
+repositories {
+    mavenLocal()
+    //jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor(platform("io.jalorx:jalorx-bom:$jalorxVersion"))
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut:micronaut-validation"
+    annotationProcessor "io.micronaut.data:micronaut-data-processor"
+    annotationProcessor "io.micronaut.openapi:micronaut-openapi"
+    annotationProcessor "io.jalorx.starters:starter-apt"
+    
+    implementation(platform("io.jalorx:jalorx-bom:$jalorxVersion"))
+    implementation "io.swagger.core.v3:swagger-annotations"
+    implementation "io.micronaut:micronaut-core"
+    implementation "io.micronaut:micronaut-validation"
+    implementation "io.micronaut:micronaut-session"
+    implementation "io.micronaut.security:micronaut-security"
+	implementation "io.jalorx:jalorx-boot"
+    implementation "io.jalorx.services:service-lookup"
+    implementation "io.jalorx.services:service-security"
+    implementation "io.jalorx.services:service-attachment"
+    implementation "io.jalorx.services:service-i18n"
+    
+    //implementation "io.jalorx.starters:starter-json"
+    implementation "io.jalorx.starters:starter-errors"
+    implementation "io.jalorx.starters:starter-data"
+
+	implementation "io.micronaut.data:micronaut-data-tx"
+    implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut:micronaut-management"
+    implementation "io.micronaut.jmx:micronaut-jmx"
+    //implementation "io.micronaut.redis:micronaut-redis-lettuce"
+    
+    implementation "io.micronaut:micronaut-http"
+    implementation "io.micronaut:micronaut-http-server-netty"
+    implementation "mysql:mysql-connector-java"
+    //implementation "dev.miku:r2dbc-mysql"
+    //implementation "io.r2dbc:r2dbc-pool"
+    
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+    //implementation "org.postgresql:postgresql"
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("1.8")
+    targetCompatibility = JavaVersion.toVersion("1.8")
+}
+
+run.jvmArgs('-noverify', '-Xdebug','-Xrunjdwp:transport=dt_socket,address=9999,server=y,suspend=n', '-Dmicronaut.environments=dev')
+mainClassName = "io.jalorx.simple.Application"
+
+eclipse {
+    classpath {
+       //downloadSources=true
+    }
+}
+
+configurations.all{
+    exclude group: 'io.projectreactor', module: 'reactor-tools'
+    exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+}
+
+shadowJar {
+  archiveBaseName = 'jalorx-app'
+  archiveClassifier = ''
+  archiveVersion = ''
+  mergeServiceFiles()
+}
