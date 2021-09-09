@@ -26,7 +26,7 @@ public abstract class JalorX {
 		return Micronaut.build(args)
 				.classes(classes)
 				.banner(false)
-				.eagerInitSingletons(true)
+				.eagerInitSingletons(false)
 				.start();
 	}
 
