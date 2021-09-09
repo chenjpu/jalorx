@@ -7,9 +7,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.jalorx.boot.model.Id;
 import io.jalorx.boot.model.LongIdVO;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.data.annotation.Transient;
+import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Introspected
+@Validated
+@MappedEntity("TPL_LOOKUP_T")
 public class Lookup extends LongIdVO {
 
   /**
@@ -29,9 +34,6 @@ public class Lookup extends LongIdVO {
   @Schema(title = "类型")
   private String type;
 
-  @Schema(title = "是否叶子节点")
-  private boolean isLeaf;
-
   @Schema(title = "父级ID")
   private long parentId;
 
@@ -41,10 +43,12 @@ public class Lookup extends LongIdVO {
 
   @JsonIgnore
   @Schema(title = "父级编码")
+  @Transient
   private String parentCode;
 
   @JsonIgnore
   @Schema(title = "父级描述")
+  @Transient
   private String parentDesp;
 
   public String getCode() {
@@ -102,15 +106,6 @@ public class Lookup extends LongIdVO {
   public void setParentDesp(String parentDesp) {
     this.parentDesp = parentDesp;
   }
-
-  public boolean isLeaf() {
-    return isLeaf;
-  }
-
-  public void setLeaf(boolean isLeaf) {
-    this.isLeaf = isLeaf;
-  }
-
 
   @JsonIgnore
   public Meta metaof() {

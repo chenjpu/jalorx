@@ -2,7 +2,6 @@ package io.jalorx.security.ui.org;
 
 import java.util.List;
 
-import jakarta.inject.Inject;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -26,6 +25,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 @Controller("/security/org")
 @Resource(code=10120,desc = "Org Resource")
@@ -69,7 +69,7 @@ public class ReadResource extends BaseReadResource<Org> {
    * @throws BusinessAccessException 业务异常
    */
   @Get("/batch/{ids}")
-  public List<Org> gets(@PathVariable("ids") @NotEmpty String ids) throws BusinessAccessException {
+  public Iterable<Org> gets(@PathVariable("ids") @NotEmpty String ids) throws BusinessAccessException {
     Long[] pks = StringUtils.toLongIds(ids);
     return service.get(pks);
   }
@@ -103,7 +103,7 @@ public class ReadResource extends BaseReadResource<Org> {
    * @throws BusinessAccessException 业务异常
    */
   @Get("/list")
-  public List<Org> list(
+  public Iterable<Org> list(
       @Parameter(name = "Q", in = ParameterIn.QUERY, array = @ArraySchema(schema = @Schema(type = "string")), description = QE, required = false, allowEmptyValue = true) HttpParameters params)
       throws BusinessAccessException {
     return service.getAll(getQueryFilter(params));

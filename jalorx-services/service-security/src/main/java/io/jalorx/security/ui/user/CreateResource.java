@@ -3,7 +3,6 @@ package io.jalorx.security.ui.user;
 import java.io.Serializable;
 import java.util.List;
 
-import jakarta.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -23,6 +22,7 @@ import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 @Controller("/security/user")
 @Resource(code=10100,desc = "User Resource")
@@ -66,7 +66,7 @@ public class CreateResource extends BaseCreateResource<User> {
    * @param list 用户对象集合
    */
   @Post("/batch")
-  public List<Serializable> create(@NotNull @Valid @Body List<User> list) throws BusinessAccessException {
+  public Iterable<Serializable> create(@NotNull @Valid @Body List<User> list) throws BusinessAccessException {
     for (User user : list) {
       String defaultPwd = passwordEncoder.encode(user.getAcount() + ".as");
       if (StringUtils.isBlank(user.getPassword())) {

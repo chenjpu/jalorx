@@ -29,9 +29,9 @@ import io.micronaut.transaction.annotation.ReadOnly;
  * 
  * @author chenb
  * @param <T> 业务对象类型
- * @param <PK> 主键类型
+ * @param <ID> 主键类型
  */
-public interface Service<T extends Id<?>, PK extends Serializable> {
+public interface Service<T extends Id<?>, ID extends Serializable> {
 
 	/**
 	 * 更具id号获得对象，可以返回。如果返回null，不作相应的异常处理
@@ -41,7 +41,7 @@ public interface Service<T extends Id<?>, PK extends Serializable> {
 	 */
 	@ReadOnly
 	@DS.Slave
-	T get(PK id) throws BusinessAccessException;
+	T get(ID id) throws BusinessAccessException;
 
 	/**
 	 * 更具id号获得对象，可以返回。如果返回null，不作相应的异常处理
@@ -51,7 +51,7 @@ public interface Service<T extends Id<?>, PK extends Serializable> {
 	 */
 	@ReadOnly
 	@DS.Slave
-	List<T> get(PK[] id) throws BusinessAccessException;
+	Iterable<T> get(ID[] id) throws BusinessAccessException;
 
 	/**
 	 * 更具id号获得对象，一般不应该返回null。如果返回null，应该做相应的异常处理
@@ -62,7 +62,7 @@ public interface Service<T extends Id<?>, PK extends Serializable> {
 	 */
 	@ReadOnly
 	@DS.Master
-	T find(PK id) throws BusinessAccessException;
+	T find(ID id) throws BusinessAccessException;
 
 	/**
 	 * 获得指定范围内的对象集合
@@ -97,7 +97,7 @@ public interface Service<T extends Id<?>, PK extends Serializable> {
 	 */
 	@ReadOnly
 	@DS.Slave
-	List<T> getAll() throws BusinessAccessException;
+	Iterable<T> getAll() throws BusinessAccessException;
 
 	/**
 	 * 获得指定过滤条件的对象集合
@@ -108,7 +108,7 @@ public interface Service<T extends Id<?>, PK extends Serializable> {
 	 */
 	@ReadOnly
 	@DS.Slave
-	List<T> getAll(QueryFilter query) throws BusinessAccessException;
+	Iterable<T> getAll(QueryFilter query) throws BusinessAccessException;
 
 	/**
 	 * 存储对象 注意:这个地方应该会有检查是否存在此记录的业务逻辑
@@ -130,7 +130,7 @@ public interface Service<T extends Id<?>, PK extends Serializable> {
 	 */
 	@Transactional
 	@DS.Master
-	List<Serializable> save(List<T> list) throws BusinessAccessException;
+	Iterable<Serializable> save(List<T> list) throws BusinessAccessException;
 
 	/**
 	 * 批量修改业务对象
@@ -160,7 +160,7 @@ public interface Service<T extends Id<?>, PK extends Serializable> {
 	 */
 	@Transactional
 	@DS.Master
-	void remove(PK id) throws BusinessAccessException;
+	void remove(ID id) throws BusinessAccessException;
 
 	/**
 	 * 批量删除记录
@@ -170,7 +170,7 @@ public interface Service<T extends Id<?>, PK extends Serializable> {
 	 */
 	@Transactional
 	@DS.Master
-	void remove(PK[] id) throws BusinessAccessException;
+	void remove(ID[] id) throws BusinessAccessException;
 
 	/**
 	 * 删除记录

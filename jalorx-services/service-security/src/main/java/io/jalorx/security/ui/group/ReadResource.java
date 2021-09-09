@@ -1,8 +1,5 @@
 package io.jalorx.security.ui.group;
 
-import java.util.List;
-
-import jakarta.inject.Inject;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +17,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 @Controller("/security/group")
 @Resource(code=10107,desc = "Group Resource")
@@ -62,7 +60,7 @@ public class ReadResource extends BaseReadResource<Group> {
    * @throws BusinessAccessException 业务异常
    */
   @Get("/batch/{ids}")
-  public List<Group> gets(@NotEmpty String ids) throws BusinessAccessException {
+  public Iterable<Group> gets(@NotEmpty String ids) throws BusinessAccessException {
     Long[] pks = StringUtils.toLongIds(ids);
     return service.get(pks);
   }
@@ -95,7 +93,7 @@ public class ReadResource extends BaseReadResource<Group> {
    * @throws BusinessAccessException 业务异常
    */
   @Get("/list")
-  public List<Group> list(HttpParameters params) throws BusinessAccessException {
+  public Iterable<Group> list(HttpParameters params) throws BusinessAccessException {
     return service.getAll(getQueryFilter(params));
   }
 

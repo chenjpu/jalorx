@@ -21,9 +21,9 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.data.intercept.DataInterceptor;
 import io.micronaut.data.model.query.QueryModel;
+import io.micronaut.data.processor.model.SourcePersistentEntity;
 import io.micronaut.data.processor.visitors.MatchContext;
 import io.micronaut.data.processor.visitors.MethodMatchContext;
-import io.micronaut.data.processor.visitors.finders.DynamicFinder;
 import io.micronaut.data.processor.visitors.finders.MethodMatchInfo;
 import io.micronaut.data.processor.visitors.finders.TypeUtils;
 import io.micronaut.inject.ast.ClassElement;
@@ -35,7 +35,7 @@ import io.micronaut.inject.ast.MethodElement;
  * @author graemerocher
  * @since 1.0.0
  */
-public class ExistsByFinder extends DynamicFinder {
+public class ExistsByFinder extends AbstractListMethod {
 
     /**
      * The prefixes used.
@@ -64,7 +64,6 @@ public class ExistsByFinder extends DynamicFinder {
                         matchContext.getReturnType().getFirstTypeArgument().orElse(null)
                 )));
     }
-
    
 	@Nullable
     @Override
@@ -73,6 +72,7 @@ public class ExistsByFinder extends DynamicFinder {
             @NonNull MethodMatchContext matchContext,
             @NonNull ClassElement queryResultType,
             @Nullable QueryModel query) {
+		
         Class<? extends DataInterceptor> interceptor = ExistsByInterceptor.class;
         ClassElement returnType = matchContext.getReturnType();
         if (TypeUtils.isReactiveType(returnType)) {

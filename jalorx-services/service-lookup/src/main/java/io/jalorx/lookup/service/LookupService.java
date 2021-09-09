@@ -18,9 +18,6 @@ import io.micronaut.transaction.annotation.ReadOnly;
 public interface LookupService extends BaseService<Lookup>,MetaDataClient<Lookup.Meta,Pair> {
 
   @ReadOnly
-  List<Lookup> selectTreeById(Long id);
-
-  @ReadOnly
   List<Lookup> lookupByParentId(Long parentId);
 
   @ReadOnly

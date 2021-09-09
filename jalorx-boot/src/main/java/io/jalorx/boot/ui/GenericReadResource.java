@@ -1,7 +1,6 @@
 package io.jalorx.boot.ui;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -55,7 +54,7 @@ public abstract class GenericReadResource<T extends Id<?>, PK extends Serializab
 	@Get(uri = "/batch/{ids}", headRoute = false)
 	@Operation.Read
 	@io.swagger.v3.oas.annotations.Operation(summary = "根据主键ID集合批量查询对象")
-	public List<T> gets(
+	public Iterable<T> gets(
 			@Parameter(description = "comma-separated id", example = "100,200", schema = @Schema(type = "string")) @PathVariable("ids") PK[] ids)
 			throws BusinessAccessException {
 		if (ArrayUtils.isEmpty(ids)) {
@@ -91,7 +90,7 @@ public abstract class GenericReadResource<T extends Id<?>, PK extends Serializab
 	@Get(uri = "/list", headRoute = false)
 	@Operation.Read
 	@io.swagger.v3.oas.annotations.Operation(summary = "批量查询")
-	public List<T> list(
+	public Iterable<T> list(
 			@Parameter(name = "Q", in = ParameterIn.QUERY, array = @ArraySchema(schema = @Schema(type = "string")), description = QE, required = false, allowEmptyValue = true) HttpParameters params)
 			throws BusinessAccessException {
 		return getService().getAll(getQueryFilter(params));

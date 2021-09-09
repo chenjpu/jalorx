@@ -16,7 +16,7 @@ import io.micronaut.transaction.annotation.ReadOnly;
  * @author chenb
  *
  */
-public interface CascaderService<PK extends Serializable> {
+public interface CascaderService<ID extends Serializable> {
 
 	/**
 	 * 指定父id查询所有的直接子节点
@@ -26,7 +26,7 @@ public interface CascaderService<PK extends Serializable> {
 	 */
 	@DS.Slave
 	@ReadOnly
-	List<TreeNode> getChildrenByPId(PK pId);
+	List<TreeNode> getChildrenByPId(ID pId);
 
 	/**
 	 * 通过以选择的节点，初始化树结构
@@ -36,5 +36,5 @@ public interface CascaderService<PK extends Serializable> {
 	 */
 	@DS.Slave
 	@ReadOnly
-	List<TreeNode> getAllByIds(PK[] ids);
+	List<TreeNode> getAllByIds(ID[] ids);
 }

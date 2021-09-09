@@ -1,16 +1,16 @@
 package io.jalorx.lookup.dao;
 
 
-import org.apache.ibatis.annotations.Mapper;
-
-import io.jalorx.boot.dao.BaseDao;
+import io.jalorx.boot.repository.BaseRepository;
 import io.jalorx.lookup.entity.Area;
+import io.micronaut.data.jdbc.annotation.JdbcRepository;
+import io.micronaut.data.model.query.builder.sql.Dialect;
 
 /**
  * @author chenb
  *
  */
-@Mapper
-public interface AreaDao extends BaseDao<Area> {
+@JdbcRepository(dialect = Dialect.MYSQL) 
+public interface AreaDao extends BaseRepository<Area> {
 
 }

@@ -62,11 +62,11 @@ public class CreateResource extends BaseCreateResource<Group> {
    * </pre>
    * 
    * @param list 业务对象集合
-   * @return 返回标识符集合
+   * @return 返回标识符集合 
    * @throws BusinessAccessException 业务异常
    */
   @Post("/batch")
-  public List<Serializable> create(@NotNull @Valid @Body List<Group> list) throws BusinessAccessException {
+  public Iterable<Serializable> create(@NotNull @Valid @Body List<Group> list) throws BusinessAccessException {
     return service.save(list);
   }
 

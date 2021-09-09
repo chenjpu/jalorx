@@ -7,9 +7,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.jalorx.boot.model.LongIdVO;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Introspected
+@Validated
+@MappedEntity("TPL_AREA_T")
 public class Area extends LongIdVO {
 
   /**

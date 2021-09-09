@@ -3,7 +3,6 @@ package io.jalorx.security.ui.user;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -27,6 +26,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 @Controller("/security/user")
 @Resource(code=10100,desc = "User Resource")
@@ -90,7 +90,7 @@ public class AuthenticatedResource {
    * @return
    */
   @Post("/usersInfo")
-  public List<User> getUsersInfo(@NotEmpty @Body Long[] ids) {
+  public Iterable<User> getUsersInfo(@NotEmpty @Body Long[] ids) {
     return service.get(ids);
   }
   

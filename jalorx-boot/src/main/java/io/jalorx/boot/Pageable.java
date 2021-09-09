@@ -2,6 +2,8 @@ package io.jalorx.boot;
 
 import java.util.Collection;
 
+import io.micronaut.data.model.Page;
+
 /**
  * 分页数据对象
  * 
@@ -33,9 +35,17 @@ public class Pageable<T> implements POJO {
 	/**
 	 * 满足条件的对象数量
 	 */
-	private int length; //
+	private long length; //
 
 	public Pageable() {}
+	
+	
+	private Pageable(Page<T> page) {
+		this.page     = page.getPageNumber();
+		this.pageSize = page.getSize();
+		this.length   = page.getTotalSize();
+		this.data     = page.getContent();
+	}
 
 	public Pageable(int page, int pageSize, int length, Collection<T> data) {
 		this.page     = page;
@@ -89,7 +99,7 @@ public class Pageable<T> implements POJO {
 	/**
 	 * @return the length
 	 */
-	public int getLength() {
+	public long getLength() {
 		return length;
 	}
 
@@ -98,6 +108,11 @@ public class Pageable<T> implements POJO {
 	 */
 	public void setLength(int length) {
 		this.length = length;
+	}
+	
+	
+	public static <T> Pageable<T> of(Page<T> page) {
+		return new Pageable<T>(page);
 	}
 
 }

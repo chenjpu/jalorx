@@ -3,7 +3,6 @@ package io.jalorx.security.ui.org;
 import java.io.Serializable;
 import java.util.List;
 
-import jakarta.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -17,6 +16,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 @Controller("/security/org")
 @Resource(code=10120,desc = "Org Resource")
@@ -59,7 +59,7 @@ public class CreateResource {
    * @throws BusinessAccessException 业务异常
    */
   @Post("/batch")
-  public List<Serializable> create(@NotNull @Valid @Body List<Org> list) throws BusinessAccessException {
+  public Iterable<Serializable> create(@NotNull @Valid @Body List<Org> list) throws BusinessAccessException {
     return service.save(list);
   }
 

@@ -52,7 +52,7 @@ public abstract class GenericCreateResource<T extends Id<?>, PK extends Serializ
 	@Post("/batch")
 	@Operation.Create
 	@io.swagger.v3.oas.annotations.Operation(summary = "对象批量创建")
-	public List<Serializable> create(@NotEmpty @Valid @Body List<T> list) throws BusinessAccessException {
+	public Iterable<Serializable> create(@NotEmpty @Valid @Body List<T> list) throws BusinessAccessException {
 		return getService().save(list);
 	}
 
