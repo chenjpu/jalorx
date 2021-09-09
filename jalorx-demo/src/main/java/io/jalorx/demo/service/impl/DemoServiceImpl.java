@@ -11,7 +11,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.jalorx.boot.service.impl.BaseServiceImpl;
+import io.jalorx.boot.service.impl2.BaseServiceImpl;
 import io.jalorx.demo.dao.DemoDao;
 import io.jalorx.demo.dao.DemoRepository2;
 import io.jalorx.demo.dao.sql.DemoSqlSupport;
@@ -98,7 +98,7 @@ public class DemoServiceImpl extends BaseServiceImpl<Demo> implements DemoServic
 		test.setName("ssssss");
 		test.setAge(10L);
 		test.createInit();
-		dao.insert(test);
+		dao.save(test);
 
 		if (test.getId() % 2 == 0) {
 			throw new NullPointerException();

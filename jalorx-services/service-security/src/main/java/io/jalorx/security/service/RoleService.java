@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.apache.ibatis.annotations.Param;
-
 import io.jalorx.boot.BusinessAccessException;
 import io.jalorx.boot.model.RuntimeRole;
 import io.jalorx.boot.service.BaseService;
@@ -64,6 +62,6 @@ public interface RoleService extends BaseService<Role> {
    * @param id
    */
   @Transactional
-  void deleteRoleAndPermsById(@Param("id") Long id);
+  void deleteRoleAndPermsById(Long id);
 
 }
