@@ -2,6 +2,7 @@ package io.jalorx.boot.model;
 
 import javax.validation.constraints.NotEmpty;
 
+import io.micronaut.data.annotation.Transient;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -23,6 +24,7 @@ public abstract class CommonVO extends LongIdVO {
 	@NotEmpty
 	private String desp;// 描述
 	@Schema(title = "显示序列号")
+	@Transient
 	private int    order; // 显示序号
 
 	public String getName() {

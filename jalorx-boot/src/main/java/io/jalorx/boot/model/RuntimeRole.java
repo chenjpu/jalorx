@@ -1,7 +1,5 @@
 package io.jalorx.boot.model;
 
-import java.io.Serializable;
-
 import io.micronaut.core.annotation.Introspected;
 
 /**
@@ -13,28 +11,28 @@ import io.micronaut.core.annotation.Introspected;
 @Introspected
 public class RuntimeRole {
 
-	private Serializable roleID;
-	private Serializable dataID;
+	private Long roleId;
+	private Long dataId;
 
-	public Serializable getRoleID() {
-		return roleID;
+	public Long getRoleId() {
+		return roleId;
 	}
 
-	public void setRoleID(Serializable roleID) {
-		this.roleID = roleID;
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
 	}
 
-	public Serializable getDataID() {
-		return dataID;
+	public Long getDataId() {
+		return dataId;
 	}
 
-	public void setDataID(Serializable dataID) {
-		this.dataID = dataID;
+	public void setDataId(Long dataId) {
+		this.dataId = dataId;
 	}
 
 	@Override
 	public String toString() {
-		return roleID + "-" + dataID;
+		return roleId + "-" + dataId;
 
 	}
 }

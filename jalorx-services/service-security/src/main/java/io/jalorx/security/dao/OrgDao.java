@@ -2,34 +2,32 @@ package io.jalorx.security.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import io.jalorx.boot.TreeNode;
-import io.jalorx.boot.dao.BaseDao;
+import io.jalorx.boot.repository.BaseRepository;
 import io.jalorx.security.entity.Org;
+import io.micronaut.data.jdbc.annotation.JdbcRepository;
+import io.micronaut.data.model.query.builder.sql.Dialect;
 
 /**
  * 组织DAO.
  * 
  * @author chenb
  */
-@Mapper
-public interface OrgDao extends BaseDao<Org> {
+@JdbcRepository(dialect = Dialect.MYSQL)
+public interface OrgDao extends BaseRepository<Org> {
 
-  int getByName(@Param("orgName") String orgName);
+  int countOrgName(String orgName);
 
-  Org getByCode(@Param("orgCode") String orgCode);
+  Org getByOrgCode(String orgCode);
 
-  List<Org> getByCodes(@Param("orgCodes") String[] orgCodes);
+  List<Org> getByOrgCodeIn(String[] orgCodes);
 
-  List<Org> getAllByCodes(@Param("orgCodes") String[] orgCodes);
+  //List<Org> getAllByCodes(@Param("orgCodes") String[] orgCodes);
+  
+  List<Org> getByPId(Long id);
 
-  List<Org> getListByPId(@Param("id") Long id);
+  Long[] getIdByOrgCodeIn(String[] orgCodes);
 
-  Long[] getIdsByCodes(@Param("orgCodes") String[] orgCodes);
+  //List<TreeNode> initTree(Long[] ids);
 
-  List<TreeNode> initTree(@Param("ids") Long[] ids);
-
-  List<TreeNode> getChildrenByPId(@Param("id") Long pId);
+  //List<TreeNode> getChildrenByPId(Long pId);
 }

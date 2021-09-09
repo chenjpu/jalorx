@@ -2,10 +2,13 @@ description = "JalorX Service Security"
 group   projectServiceGroupId
 
 dependencies {
-    annotationProcessor "io.micronaut:micronaut-inject-java"
-	annotationProcessor "io.micronaut.openapi:micronaut-openapi"
+    annotationProcessor "io.micronaut.openapi:micronaut-openapi"
+	annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut:micronaut-validation"
+    annotationProcessor "io.micronaut.data:micronaut-data-processor"
 	annotationProcessor project(":jalorx-starters:starter-apt")
 	
 	implementation  project(":jalorx-boot")
     implementation "io.swagger.core.v3:swagger-annotations"
+    implementation "io.micronaut.data:micronaut-data-jdbc"
 }

@@ -2,31 +2,20 @@ package io.jalorx.security.dao;
 
 import java.io.Serializable;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import io.jalorx.boot.dao.BaseDao;
+import io.jalorx.boot.repository.BaseRepository;
 import io.jalorx.security.entity.Group;
+import io.micronaut.data.annotation.Query;
+import io.micronaut.data.jdbc.annotation.JdbcRepository;
+import io.micronaut.data.model.query.builder.sql.Dialect;
 
 /**
  * @author chenb
  */
-@Mapper
-public interface GroupDao extends BaseDao<Group> {
+@JdbcRepository(dialect = Dialect.MYSQL)
+public interface GroupDao extends BaseRepository<Group> {
 
-  Long[] getUsersByGroupId(Long groupId);
+  @Query("select distinct g.code as group_code from tpl_user_group_t t join tpl_app_group_t g on (t.group_id = g.id) where t.user_id = :userId")
+  String[] findGroupCodeByUserId(Serializable userId);
 
-  String[] getUserEmailsByGroupIds(@Param("groupIds") Long[] groupIds);
-
-  void insertGroupUsers(@Param("groupId") Long groupId, @Param("userIds") Long[] userIds);
-
-  void delGroupUsersByIds(@Param("id") Long id, @Param("userIds") Long[] userIds);
-
-  String[] getGroupCodesByUserId(Serializable userId);
-
-  Group findGroupByCode(String code);
-
-  String[] getGroupIdsByUserId(Serializable userId);
-
-
+  Group findByCode(String code);
 }

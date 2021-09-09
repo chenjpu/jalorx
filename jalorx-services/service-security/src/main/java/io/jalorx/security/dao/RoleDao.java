@@ -1,30 +1,20 @@
 package io.jalorx.security.dao;
 
-import java.io.Serializable;
-import java.util.List;
-
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import io.jalorx.boot.dao.BaseDao;
-import io.jalorx.boot.model.RuntimeRole;
+import io.jalorx.boot.repository.BaseRepository;
 import io.jalorx.security.entity.Role;
+import io.micronaut.data.annotation.Query;
+import io.micronaut.data.jdbc.annotation.JdbcRepository;
+import io.micronaut.data.model.query.builder.sql.Dialect;
 
 /**
  * @author chenb
  */
-@Mapper
-public interface RoleDao extends BaseDao<Role> {
+@JdbcRepository(dialect = Dialect.MYSQL)
+public interface RoleDao extends BaseRepository<Role> {
 
-  List<Serializable> findRoleByUserId(Serializable userId);
+	@Query("delete from tpl_app_role_perms_t where role_id=:id")
+	void deleteRolePermsById(@Param("id") Long id);
 
-  Long[] getUsersByRoleId(Long roleId);
-
-  void insertRoleUsers(@Param("roleId") Long roleId, @Param("userIds") Long[] userIds);
-
-  void delRoleUsersByIds(@Param("id") Long id, @Param("userIds") Long[] userIds);
-
-  void deleteRolePermsById(@Param("id") Long id);
-
-	List<RuntimeRole> findRuntimeRolesByUserId(Serializable userId);
 }

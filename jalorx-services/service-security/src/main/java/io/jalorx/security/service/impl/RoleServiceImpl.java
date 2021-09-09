@@ -1,20 +1,23 @@
 package io.jalorx.security.service.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 import io.jalorx.boot.BusinessAccessException;
 import io.jalorx.boot.model.RuntimeRole;
-import io.jalorx.boot.service.impl.BaseServiceImpl;
+import io.jalorx.boot.service.impl2.BaseServiceImpl;
 import io.jalorx.security.dao.PermissionDao;
 import io.jalorx.security.dao.RoleDao;
+import io.jalorx.security.dao.UserRoleRelationDao;
 import io.jalorx.security.entity.Role;
+import io.jalorx.security.entity.UserRoleRelation;
 import io.jalorx.security.service.RoleService;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * @author chenb
@@ -27,6 +30,9 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 
   @Inject
   RoleDao dao;
+  
+  @Inject
+  private UserRoleRelationDao userRoleRelationDao;
 
   @Override
   protected RoleDao getDao() {
@@ -51,25 +57,30 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 
   @Override
   public List<Serializable> findRoleByUserId(Serializable userId) throws BusinessAccessException {
-    return getDao().findRoleByUserId(userId);
+	  List<Long> roleIds = Arrays.asList(userRoleRelationDao.findRoleIdByUserId((Long)userId));
+	  return new ArrayList<>(roleIds);
   }
 
   @Override
   public Long[] getUsersByRoleId(Long roleId) {
-    return getDao().getUsersByRoleId(roleId);
+    return userRoleRelationDao.getUserIdByRoleId(roleId);
   }
 
   @Override
   public void userRoleSetting(Long roleId, Long[] userIds) {
     
     if (userIds.length > 0) {
-      getDao().insertRoleUsers(roleId, userIds);
+    	List<UserRoleRelation> ugrs = new ArrayList<>(userIds.length);
+		for (Long userId : userIds) {
+			ugrs.add(UserRoleRelation.valueOf(userId, roleId));
+		}
+		userRoleRelationDao.saveAll(ugrs);
     }
   }
 
   @Override
   public void delRoleUsersByIds(Long roleId, Long[] userIds) {
-    getDao().delRoleUsersByIds(roleId, userIds);
+	  userRoleRelationDao.deleteByRoleIdAndUserIdIn(roleId, userIds);
   }
 
   /*
@@ -83,6 +94,6 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 
 	@Override
 	public List<RuntimeRole> findRuntimeRolesByUserId(Serializable userId) {
-		return getDao().findRuntimeRolesByUserId(userId);
+		return userRoleRelationDao.findByUserId((Long)userId);
 	}
 }

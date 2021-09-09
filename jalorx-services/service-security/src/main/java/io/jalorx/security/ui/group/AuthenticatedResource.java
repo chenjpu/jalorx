@@ -42,7 +42,7 @@ public class AuthenticatedResource {
    * @return
    */
   @Get("/groupIds/{userId}")
-  public String[] getGroupIdsByUserId(@NotEmpty @PathVariable("userId") long userId) {
+  public Long[] getGroupIdsByUserId(@NotEmpty @PathVariable("userId") long userId) {
     return service.getGroupIdsByUserId(userId);
   }
 

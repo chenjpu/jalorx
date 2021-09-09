@@ -3,18 +3,17 @@ package io.jalorx.security.service.impl;
 import java.util.List;
 import java.util.function.Consumer;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.jalorx.boot.TreeNode;
 import io.jalorx.boot.annotation.Cache;
-import io.jalorx.boot.service.impl.BaseServiceImpl;
+import io.jalorx.boot.service.impl2.BaseServiceImpl;
 import io.jalorx.security.dao.OrgDao;
 import io.jalorx.security.entity.Org;
 import io.jalorx.security.service.OrgService;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * 组织Service
@@ -25,7 +24,7 @@ import io.jalorx.security.service.OrgService;
 @Cache(name = "JalorX:Org")
 public class OrgServiceImpl extends BaseServiceImpl<Org> implements OrgService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(OrgServiceImpl.class);
+  static final Logger LOGGER = LoggerFactory.getLogger(OrgServiceImpl.class);
 
   @Inject
   OrgDao dao;
@@ -37,22 +36,22 @@ public class OrgServiceImpl extends BaseServiceImpl<Org> implements OrgService {
 
   @Override
   public int getByName(String orgName) {
-    return getDao().getByName(orgName);
+    return getDao().countOrgName(orgName);
   }
 
   @Override
   public Org getByCode(String orgCode) {
-    return getDao().getByCode(orgCode);
+    return getDao().getByOrgCode(orgCode);
   }
 
   @Override
   public List<Org> getByCodes(String[] orgCodes) {
-    return getDao().getByCodes(orgCodes);
+    return getDao().getByOrgCodeIn(orgCodes);
   }
 
   @Override
   public List<Org> getAllByCodes(String[] orgCodes) {
-    return getDao().getAllByCodes(orgCodes);
+    return getDao().getByOrgCodeIn(orgCodes);
   }
 
   /**
@@ -60,7 +59,7 @@ public class OrgServiceImpl extends BaseServiceImpl<Org> implements OrgService {
    */
   @Override
   public void remove(Long id) {
-    List<Org> list = getDao().getListByPId(id);
+    List<Org> list = getDao().getByPId(id);
     dao.deleteById(id);
     if (list == null) {
       return;
@@ -76,32 +75,34 @@ public class OrgServiceImpl extends BaseServiceImpl<Org> implements OrgService {
    */
   @Override
   public List<Org> getListByPId(Long id) {
-    return getDao().getListByPId(id);
+    return getDao().getByPId(id);
   }
 
   @Override
   public List<TreeNode> getChildrenByPId(Long pId) {
-    return getDao().getChildrenByPId(pId);
+	throw new UnsupportedOperationException();
+    //return getDao().getChildrenByPId(pId);
   }
 
   @Override
   public List<TreeNode> getAllByIds(Long[] ids) {
-    return getDao().initTree(ids);
+	throw new UnsupportedOperationException();
+    //return getDao().initTree(ids);
   }
 
   @Override
   public Long[] getIdsByCodes(String[] orgCodes) {
-    return getDao().getIdsByCodes(orgCodes);
+    return getDao().getIdByOrgCodeIn(orgCodes);
   }
 
   @Override
   public boolean loadAll(Consumer<Org> fun) {
-    long starttime = System.currentTimeMillis();
-    List<Org> list = this.getAll();
+    //long starttime = System.currentTimeMillis();
+    Iterable<Org> list = this.getAll();
     // 传入setLookupByCode方法
     list.forEach(fun::accept);
-    long endtime = System.currentTimeMillis();
-    LOGGER.info("Total of " + list.size() + " records and cost " + (endtime - starttime) + " ms");
+    //long endtime = System.currentTimeMillis();
+    //LOGGER.info("Total of " + list.size() + " records and cost " + (endtime - starttime) + " ms");
     return true;
   }
 

@@ -3,17 +3,19 @@ package io.jalorx.security.service.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import io.jalorx.boot.annotation.Cache;
+import io.jalorx.boot.service.impl2.BaseServiceImpl;
+import io.jalorx.security.dao.UserDao;
+import io.jalorx.security.dao.UserRoleRelationDao;
+import io.jalorx.security.entity.User;
+import io.jalorx.security.entity.UserRoleRelation;
+import io.jalorx.security.service.UserService;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
-
-import io.jalorx.boot.annotation.Cache;
-import io.jalorx.boot.service.impl.BaseServiceImpl;
-import io.jalorx.security.dao.UserDao;
-import io.jalorx.security.entity.User;
-import io.jalorx.security.service.UserService;
 
 /**
  * @author chenb
@@ -23,61 +25,68 @@ import io.jalorx.security.service.UserService;
 @Named("User.MetaDataClient")
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 
-  @Inject
-  UserDao dao;
+	@Inject
+	UserDao dao;
 
-  @Override
-  protected UserDao getDao() {
-    return dao;
-  }
+	@Inject
+	UserRoleRelationDao userRoleRelationDao;
 
-  public User findByUserAcount(String username) {
-    return getDao().findByUserAcount(username);
-  }
+	@Override
+	protected UserDao getDao() {
+		return dao;
+	}
 
-  @Override
-  public void userRoleSetting(Long userId, Long[] roleIds) {
-    dao.delRolesByUserId(userId);
-    if (roleIds.length > 0) {
-      getDao().insertUserRoles(userId, roleIds);
-    }
-  }
+	public User findByUserAcount(String username) {
+		return getDao().findByAcount(username);
+	}
 
-  @Override
-  public Long[] getRolesByUserId(Long userId) {
-    return getDao().getRolesByUserId(userId);
-  }
+	@Override
+	public void userRoleSetting(Long userId, Long[] roleIds) {
+		userRoleRelationDao.deleteByUserId(userId);
+		if (roleIds.length > 0) {
+			List<UserRoleRelation> ugrs = new ArrayList<>(roleIds.length);
+			for (Long roleId : roleIds) {
+				ugrs.add(UserRoleRelation.valueOf(userId, roleId));
+			}
+			userRoleRelationDao.saveAll(ugrs);
+		}
+	}
 
-  @Override
-  public void delUserRolesByIds(long userId, Long[] roleIds) {
-    getDao().delUserRolesByIds(userId, roleIds);
-  }
+	@Override
+	public Long[] getRolesByUserId(Long userId) {
+		return userRoleRelationDao.findRoleIdByUserId(userId);
+	}
 
-  @Override
-  public void modifyPsw(String pwd, Serializable currentUserId) {
-    getDao().modifyPsw(pwd, (Long) currentUserId);
-  }
+	@Override
+	public void delUserRolesByIds(long userId, Long[] roleIds) {
+		userRoleRelationDao.deleteByUserIdAndRoleIdIn(userId, roleIds);
+	}
 
-  /**
-   * 修改账户信息
-   */
-  @Override
-  public void modifyAccount(User user) {
-    getDao().modifyAccount(user);
-  }
+	@Override
+	public void modifyPsw(String pwd, Serializable currentUserId) {
+		getDao().update((Long) currentUserId, pwd);
+	}
 
-  @Override
-  public List<User.Meta> getDetails(Set<String> idsSet) {
-    List<User.Meta> list = new ArrayList<>(idsSet.size());
-    for (String ids : idsSet) {
-      Long id = Long.valueOf(ids);
-      User user = dao.getById(id);
-      if (user != null) {
-        list.add(user.metaof());
-      } else {
-        list.add(new User.Meta(id));
-      }
-    }
-    return list;
-  }
+	/**
+	 * 修改账户信息
+	 */
+	@Override
+	public void modifyAccount(User user) {
+		getDao().update(user);
+	}
+
+	@Override
+	public List<User.Meta> getDetails(Set<String> idsSet) {
+		List<User.Meta> list = new ArrayList<>(idsSet.size());
+		for (String ids : idsSet) {
+			Long id = Long.valueOf(ids);
+			Optional<User> user = dao.findById(id);
+			if (user.isPresent()) {
+				list.add(user.get().metaof());
+			} else {
+				list.add(new User.Meta(id));
+			}
+		}
+		return list;
+	}
 }

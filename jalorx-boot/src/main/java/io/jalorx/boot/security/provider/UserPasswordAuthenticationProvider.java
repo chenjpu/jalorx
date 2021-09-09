@@ -102,12 +102,12 @@ public class UserPasswordAuthenticationProvider implements AuthenticationProvide
 		if (runtimeRole != null) {
 			authInfo.switchRole(runtimeRole.toString());
 			if (!authInfo.isRoot()) {
-				Collection<String> permissions = authFetcher.findAuthoritiesByRoleID(runtimeRole.getRoleID());
+				Collection<String> permissions = authFetcher.findAuthoritiesByRoleID(runtimeRole.getRoleId());
 				authInfo.setPermissions(permissions);
 			}
 
 			if (!authInfo.isDataALL()) {
-				Collection<RowRule> rowRules = authFetcher.findDataRowRuleByRuleID(runtimeRole.getDataID());
+				Collection<RowRule> rowRules = authFetcher.findDataRowRuleByRuleID(runtimeRole.getDataId());
 				authInfo.setRowRules(rowRules);
 			}
 		}

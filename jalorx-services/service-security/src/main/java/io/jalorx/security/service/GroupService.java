@@ -55,5 +55,5 @@ public interface GroupService extends BaseService<Group> {
    * 查询某用户所在的群组信息 TODO @param userId 用户ID @return String[] @exception
    */
   @ReadOnly
-  String[] getGroupIdsByUserId(Serializable userId);
+  Long[] getGroupIdsByUserId(Serializable userId);
 }

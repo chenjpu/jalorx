@@ -5,12 +5,17 @@ import javax.validation.constraints.NotEmpty;
 import io.jalorx.boot.annotation.Lookup;
 import io.jalorx.boot.model.CommonVO;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.data.annotation.Transient;
+import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * 组.
  */
 @Introspected
+@Validated
+@MappedEntity("tpl_app_group_t")
 public class Group extends CommonVO {
 
   private static final long serialVersionUID = 7455231256212125627L;
@@ -23,6 +28,7 @@ public class Group extends CommonVO {
   private Short status;
   
   @Schema(title = "是否系统内置标识")
+  @Transient
   private boolean defaultIn;
   
   @Schema(title = "类型")

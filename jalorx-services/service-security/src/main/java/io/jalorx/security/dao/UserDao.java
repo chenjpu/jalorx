@@ -1,28 +1,20 @@
 package io.jalorx.security.dao;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import io.jalorx.boot.dao.BaseDao;
+import io.jalorx.boot.repository.BaseRepository;
 import io.jalorx.security.entity.User;
+import io.micronaut.data.annotation.Id;
+import io.micronaut.data.jdbc.annotation.JdbcRepository;
+import io.micronaut.data.model.query.builder.sql.Dialect;
 
 /**
  * @author chenb
  */
-@Mapper
-public interface UserDao extends BaseDao<User> {
+@JdbcRepository(dialect = Dialect.MYSQL)
+public interface UserDao extends BaseRepository<User> {
 
-  User findByUserAcount(String username);
+  User findByAcount(String username);
 
-  void insertUserRoles(@Param("userId") Long userId, @Param("roleIds") Long[] roleIds);
+  void update(@Id Long id, String password);
 
-  void delRolesByUserId(long id);
-
-  void delUserRolesByIds(@Param("id") long id, @Param("roleIds") Long[] roleIds);
-
-  Long[] getRolesByUserId(@Param("userId") Long userId);
-
-  void modifyPsw(@Param("password") String password, @Param("currentUserId") Long currentUserId);
-
-  void modifyAccount(User user);
+  String[] findEmailByIdIn(Long[] Ids);
 }
