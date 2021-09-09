@@ -6,6 +6,7 @@ import io.micronaut.core.annotation.Introspected;
 import io.micronaut.data.annotation.Embeddable;
 import io.micronaut.data.annotation.EmbeddedId;
 import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.data.annotation.MappedProperty;
 import io.micronaut.validation.Validated;
 
 @Introspected
@@ -35,7 +36,9 @@ public class UserGroupRelation {
 	
 	@Embeddable
 	public static class RelationId {
+		@MappedProperty("user_id")
 		private final long userId;
+		@MappedProperty("group_id")
 		private final long groupId;
 
 		public RelationId(long userId, long groupId) {

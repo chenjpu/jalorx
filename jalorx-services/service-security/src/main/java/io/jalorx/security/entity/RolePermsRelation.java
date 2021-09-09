@@ -8,6 +8,7 @@ import io.micronaut.core.annotation.Introspected;
 import io.micronaut.data.annotation.Embeddable;
 import io.micronaut.data.annotation.EmbeddedId;
 import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.data.annotation.MappedProperty;
 import io.micronaut.validation.Validated;
 
 @Introspected
@@ -39,7 +40,9 @@ public class RolePermsRelation {
 
 	@Embeddable
 	public static class RelationId {
+		@MappedProperty("code")
 		private final String code;
+		@MappedProperty("role_id")
 		private final long roleId;
 
 		public RelationId(long roleId,String code) {

@@ -75,7 +75,7 @@ dependencies {
     implementation "io.jalorx.starters:starter-data"
 
 	implementation "io.micronaut.data:micronaut-data-tx"
-    //implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut:micronaut-http-client"
     //implementation "io.micronaut:micronaut-management"
     //implementation "io.micronaut.jmx:micronaut-jmx"
     //implementation "io.micronaut.redis:micronaut-redis-lettuce"
