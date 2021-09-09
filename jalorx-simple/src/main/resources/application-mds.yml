@@ -1,0 +1,33 @@
+micronaut:
+  executors:
+   io:
+     type: fixed
+     nThreads: 500
+     threadFactoryClass: io.jalorx.boot.executor.NamedThreadFactory$IOTF
+dynamic-datasources:
+  default:
+    master: true
+    url: jdbc:mysql://127.0.0.1:3306/jalorx?useUnicode=true&useSSL=false
+    username: root
+    password: 123
+    driverClassName: com.mysql.cj.jdbc.Driver
+    maximum-pool-size: 500
+    minimum-idle: 5
+  pg:
+    master: true
+    url: jdbc:postgresql://1127.0.0.1:5432/ksh
+    username: ksh
+    password: ksh
+    driverClassName: org.postgresql.Driver
+    maximum-pool-size: 500
+    minimum-idle: 5
+redis:
+  uri: redis://127.0.0.1:6379
+noop-cache:
+  enabled: true
+endpoints:
+  info:
+    sensitive: false
+uploadUrl: /data/files
+#日志控制：0关闭1打印控制台2写入数据库
+loglevel: 1
