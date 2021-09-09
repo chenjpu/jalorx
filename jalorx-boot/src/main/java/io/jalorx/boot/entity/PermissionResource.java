@@ -5,10 +5,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.jalorx.boot.model.LongIdVO;
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.validation.Validated;
 
 /**
  * 权限资源表tpl_perm_resource_t
  */
+@Introspected
+@Validated
+@MappedEntity("tpl_perm_resource_t")
 public class PermissionResource extends LongIdVO {
 
 	private static final long serialVersionUID = 5030442800316489341L;

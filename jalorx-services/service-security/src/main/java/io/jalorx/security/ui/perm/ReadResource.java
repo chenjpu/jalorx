@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.inject.Inject;
 import javax.validation.constraints.NotNull;
 
 import io.jalorx.boot.annotation.Operation;
@@ -13,9 +12,6 @@ import io.jalorx.boot.annotation.Resource;
 import io.jalorx.boot.context.Loader;
 import io.jalorx.boot.entity.PermissionOperation;
 import io.jalorx.boot.entity.PermissionResource;
-import io.jalorx.boot.service.BaseService;
-import io.jalorx.boot.ui.BaseReadResource;
-import io.jalorx.security.entity.PermissionVO;
 import io.jalorx.security.service.PermissionResourceService;
 import io.jalorx.security.service.PermissionService;
 import io.micronaut.http.annotation.Controller;
@@ -23,13 +19,14 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 @Controller("/security/permission")
 @Resource(code=10103,desc = "Permission Resource")
 @Validated
 @Operation.Read
 @Tag(name = "security/permission")
-public class ReadResource extends BaseReadResource<PermissionVO> {
+public class ReadResource  {
   
 
   @Inject
@@ -41,11 +38,6 @@ public class ReadResource extends BaseReadResource<PermissionVO> {
   @Inject
   Loader<List<PermissionResource>> permissionResource;
   
-
-  @Override
-  protected BaseService<PermissionVO> getService() {
-    return service;
-  }
 
   /**
    * 查询所有的权限

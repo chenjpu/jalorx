@@ -10,8 +10,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import io.jalorx.boot.BusinessAccessException;
 import io.jalorx.boot.model.RuntimeRole;
 import io.jalorx.boot.service.impl2.BaseServiceImpl;
-import io.jalorx.security.dao.PermissionDao;
 import io.jalorx.security.dao.RoleDao;
+import io.jalorx.security.dao.RolePermsRelationDao;
 import io.jalorx.security.dao.UserRoleRelationDao;
 import io.jalorx.security.entity.Role;
 import io.jalorx.security.entity.UserRoleRelation;
@@ -26,13 +26,13 @@ import jakarta.inject.Singleton;
 public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleService {
 
   @Inject
-  private PermissionDao permissionDao;
-
-  @Inject
   RoleDao dao;
   
   @Inject
-  private UserRoleRelationDao userRoleRelationDao;
+  UserRoleRelationDao userRoleRelationDao;
+  
+  @Inject
+  RolePermsRelationDao rolePermsRelationDao;
 
   @Override
   protected RoleDao getDao() {
@@ -44,7 +44,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 	public void remove(Long[] ids) throws BusinessAccessException {
     if (ArrayUtils.isNotEmpty(ids)) {
       super.remove(ids);
-      permissionDao.delPermsByRoleIds(ids);
+      rolePermsRelationDao.deleteByRoleIdIn(ids);
     }
   }
 
@@ -52,7 +52,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
   @Override
 	public void remove(Long id) throws BusinessAccessException {
     super.remove(id);
-    permissionDao.delPermsByRoleId(id);
+    rolePermsRelationDao.deleteByRoleId(id);
   }
 
   @Override

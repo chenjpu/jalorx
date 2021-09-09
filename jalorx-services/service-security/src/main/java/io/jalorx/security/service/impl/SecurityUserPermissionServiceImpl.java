@@ -3,13 +3,13 @@ package io.jalorx.security.service.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import io.jalorx.boot.Account;
 import io.jalorx.boot.security.SecurityUserPermissionService;
-import io.jalorx.security.dao.PermissionDao;
-import io.jalorx.security.dao.RoleDao;
+import io.jalorx.security.dao.RolePermsRelationDao;
 import io.jalorx.security.dao.UserDao;
 import io.jalorx.security.dao.UserRoleRelationDao;
 import jakarta.inject.Inject;
@@ -19,14 +19,13 @@ import jakarta.inject.Singleton;
 public class SecurityUserPermissionServiceImpl implements SecurityUserPermissionService {
 
   @Inject
-  private PermissionDao permissionDao;
-  @Inject
   private UserDao userDao;
-  @Inject
-  private RoleDao roleDao;
   
   @Inject
   private UserRoleRelationDao userRoleRelationDao;
+  
+  @Inject
+  RolePermsRelationDao rolePermsRelationDao;
 
   @Override
   public Account findByUserAcount(String username) {
@@ -42,7 +41,7 @@ public class SecurityUserPermissionServiceImpl implements SecurityUserPermission
 
   @Override
   public Set<Serializable> findPermissionsByUserId(Serializable id) {
-    return permissionDao.findPermissionsByUserId(id);
+	  return new HashSet<>(rolePermsRelationDao.findCodeByUserId((Long)id));
   }
 
 }

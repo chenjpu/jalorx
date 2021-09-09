@@ -9,7 +9,7 @@ import jakarta.inject.Singleton;
 
 import io.jalorx.boot.entity.PermissionOperation;
 import io.jalorx.boot.entity.PermissionResource;
-import io.jalorx.boot.service.impl.BaseServiceImpl;
+import io.jalorx.boot.service.impl2.BaseServiceImpl;
 import io.jalorx.security.dao.PermissionResourceDao;
 import io.jalorx.security.service.PermissionResourceService;
 
