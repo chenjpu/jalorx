@@ -7,7 +7,7 @@ package io.jalorx.boot;
  */
 public final class JalorVersion {
 
-	public static final String TAG     = "3.0.0-BUILD-SNAPSHOT";
+	public static final String TAG     = "4.0.0-BUILD-SNAPSHOT";
 	public static final String VERSION = "v3";
 	public static final String LOGO    = " ::JalorX Boot::";
 
