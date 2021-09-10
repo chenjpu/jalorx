@@ -68,7 +68,7 @@ import java.util.Objects;
  * 
  * @author chenb
  */
-public class QueryFilter implements Serializable {
+public class QueryDsl implements Serializable {
 
 	/**
 	 * 
@@ -124,8 +124,8 @@ public class QueryFilter implements Serializable {
 		if (this == anObject) {
 			return true;
 		}
-		if (anObject instanceof QueryFilter) {
-			QueryFilter anotherQueryFilter = (QueryFilter) anObject;
+		if (anObject instanceof QueryDsl) {
+			QueryDsl anotherQueryFilter = (QueryDsl) anObject;
 			return commands.equals(anotherQueryFilter.commands)
 					&& params.equals(anotherQueryFilter.params);
 		}

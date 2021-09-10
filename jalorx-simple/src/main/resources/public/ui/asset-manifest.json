@@ -50,9 +50,9 @@
   "/32.async.js": "/ui/32.async.js",
   "/static/jalorx-logo.png": "/ui/static/jalorx-logo.dd569c16.png",
   "/index.html": "/ui/index.html",
-  "/jalorx-logo.png": "/ui/jalorx-logo.png",
-  "/userLogo.png": "/ui/userLogo.png",
   "/jalorx-icon.png": "/ui/jalorx-icon.png",
   "/favicon.png": "/ui/favicon.png",
+  "/jalorx-logo.png": "/ui/jalorx-logo.png",
+  "/userLogo.png": "/ui/userLogo.png",
   "/color.less": "/ui/color.less"
 }

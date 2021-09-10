@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import io.jalorx.boot.annotation.Cache;
-import io.jalorx.boot.service.impl2.BaseServiceImpl;
+import io.jalorx.boot.service.impl.BaseServiceImpl;
 import io.jalorx.security.dao.UserDao;
 import io.jalorx.security.dao.UserRoleRelationDao;
 import io.jalorx.security.entity.User;

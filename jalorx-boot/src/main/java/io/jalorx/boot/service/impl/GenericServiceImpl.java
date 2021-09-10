@@ -1,8 +1,9 @@
-package io.jalorx.boot.service.impl2;
+package io.jalorx.boot.service.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -12,9 +13,13 @@ import io.jalorx.boot.errors.ErrCode;
 import io.jalorx.boot.model.Id;
 import io.jalorx.boot.repository.GenericRepository;
 import io.jalorx.boot.service.Service;
-import io.jalorx.boot.sql.QueryFilter;
+import io.jalorx.boot.sql.QueryDsl;
+import io.jalorx.boot.sql.QueryDslSelectProvider;
+import io.jalorx.boot.sql.SelectProvider;
 import io.jalorx.boot.utils.DaoUtils;
+import io.micronaut.core.reflect.GenericTypeUtils;
 import io.micronaut.core.util.CollectionUtils;
+import jakarta.inject.Inject;
 
 /**
  * 通用服务接口的实现
@@ -27,6 +32,19 @@ import io.micronaut.core.util.CollectionUtils;
 public abstract class GenericServiceImpl<T extends Id<PK>, PK extends Serializable> implements Service<T, PK> {
 
 	protected abstract GenericRepository<T, PK> getDao();
+
+	@Inject
+	private QueryDslSelectProvider dslSelectProvider;
+
+	private Class<?> entityClass;
+
+	public GenericServiceImpl() {
+		this.entityClass = getEntityClass(this.getClass());
+	}
+
+	protected QueryDslSelectProvider getDslSelectProvider() {
+		return dslSelectProvider;
+	}
 
 	// @Cacheable(cacheNames = "id", key = "#id")
 	public T get(PK id) throws BusinessAccessException {
@@ -69,8 +87,13 @@ public abstract class GenericServiceImpl<T extends Id<PK>, PK extends Serializab
 	}
 
 	// @Cacheable(cacheNames = "list", key = "#filter")
-	public Iterable<T> getAll(QueryFilter filter) throws BusinessAccessException {
-		return getDao().findAll();
+	public Iterable<T> getAll(QueryDsl filter) throws BusinessAccessException {
+		if (entityClass != null) {
+			SelectProvider sp = dslSelectProvider.from(filter, entityClass);
+			return getDao().findAll(sp);
+		} else {
+			return getDao().findAll();
+		}
 	}
 
 	// @Caching(evict = {@CacheEvict(cacheNames = "id", key = "#id"),
@@ -97,19 +120,20 @@ public abstract class GenericServiceImpl<T extends Id<PK>, PK extends Serializab
 	// @Cacheable(cacheNames = "list", keyGenerator = "cache.pageableKey")
 	public Pageable<T> getAll(int page, int pageSize) throws BusinessAccessException {
 		this.validatePageSize(pageSize);
-		//int length = getDao().getCount();
-		//page = DaoUtils.realPage(page, pageSize, length);
-		return Pageable.of(getDao().findAll(io.micronaut.data.model.Pageable.from(page, pageSize)));
+		// int length = getDao().getCount();
+		// page = DaoUtils.realPage(page, pageSize, length);
+		return Pageable.of(getDao().findAll(DaoUtils.from(page, pageSize)));
 	}
 
 	// @Cacheable(cacheNames = "list", keyGenerator = "cache.pageableKey")
-	public Pageable<T> getAll(QueryFilter filter, int page, int pageSize) throws BusinessAccessException {
-
+	public Pageable<T> getAll(QueryDsl filter, int page, int pageSize) throws BusinessAccessException {
 		this.validatePageSize(pageSize);
-
-		//int length = getDao().getCount(filter);
-		//page = DaoUtils.realPage(page, pageSize, length);
-		return Pageable.of(getDao().findAll(io.micronaut.data.model.Pageable.from(page, pageSize)));
+		if (entityClass != null) {
+			SelectProvider sp = dslSelectProvider.from(filter, entityClass);
+			return Pageable.of(getDao().findAll(sp, DaoUtils.from(page, pageSize)));
+		} else {
+			return Pageable.of(getDao().findAll(DaoUtils.from(page, pageSize)));
+		}
 	}
 
 	// @Caching(evict = {@CacheEvict(cacheNames = "id", key = "#o.id"),
@@ -147,6 +171,14 @@ public abstract class GenericServiceImpl<T extends Id<PK>, PK extends Serializab
 			return;
 		}
 		throw new BusinessAccessException(ErrCode.A_NUMBER_EXCEEDING_LIMITS, pageSize);
+	}
+
+	protected Class<?> getEntityClass(Class<?> superclass) {
+		Optional<Class> clazz = GenericTypeUtils.resolveSuperGenericTypeArgument(superclass);
+		if (clazz.isPresent() || superclass == Object.class) {
+			return clazz.orElse(null);
+		}
+		return getEntityClass(superclass.getSuperclass());
 	}
 
 }

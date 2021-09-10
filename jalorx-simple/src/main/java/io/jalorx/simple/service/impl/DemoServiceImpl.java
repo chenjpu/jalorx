@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import io.jalorx.boot.service.impl2.BaseServiceImpl;
+import io.jalorx.boot.service.impl.BaseServiceImpl;
 import io.jalorx.simple.dao.DemoDao;
 import io.jalorx.simple.dao.DemoRepository2;
 import io.jalorx.simple.dao.sql.DemoSqlSupport;

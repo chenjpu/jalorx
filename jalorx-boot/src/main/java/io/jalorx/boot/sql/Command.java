@@ -6,7 +6,9 @@ package io.jalorx.boot.sql;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.jalorx.boot.utils.StringUtils;
+import io.jalorx.boot.sql.dsl.SqlColumn;
+import io.jalorx.boot.sql.dsl.select.QueryExpressionDSL;
+import io.jalorx.boot.sql.dsl.select.SelectModel;
 
 /**
  * @author chenb
@@ -29,7 +31,7 @@ public class Command implements Serializable {
 	}
 
 	public Command(String field, Op operator, Object value) {
-		this.field    = StringUtils.convertPropertyNameToUnderscoreName(field);
+		this.field    = field;
 		this.operator = operator;
 		this.value    = escape(value);
 	}
@@ -75,9 +77,9 @@ public class Command implements Serializable {
 	public Object getEnd() {
 		return "%" + value;
 	}
-
-	public String toSql(String filterName, int i) {
-		return operator.toSql(filterName, this, i);
+	
+	public void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder,SqlColumn<Object> column) {
+		operator.and(builder, this, column);
 	}
 
 	@Override

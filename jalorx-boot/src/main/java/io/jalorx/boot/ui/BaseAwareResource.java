@@ -2,7 +2,7 @@ package io.jalorx.boot.ui;
 
 import java.util.Optional;
 
-import io.jalorx.boot.sql.QueryFilter;
+import io.jalorx.boot.sql.QueryDsl;
 import io.jalorx.boot.utils.QueryUtils;
 import io.micronaut.http.HttpParameters;
 import io.micronaut.http.HttpRequest;
@@ -39,13 +39,13 @@ public interface BaseAwareResource {
 	 * 
 	 * @return
 	 */
-	default QueryFilter getQueryFilter() {
+	default QueryDsl getQueryFilter() {
 		Optional<HttpRequest<Object>> request = ServerRequestContext.currentRequest();
 		return request.map(r -> getQueryFilter(r.getParameters()))
-				.orElse(new QueryFilter());
+				.orElse(new QueryDsl());
 	}
 
-	default QueryFilter getQueryFilter(HttpParameters params) {
+	default QueryDsl getQueryFilter(HttpParameters params) {
 		return QueryUtils.parseMultiQuery(params);
 	}
 

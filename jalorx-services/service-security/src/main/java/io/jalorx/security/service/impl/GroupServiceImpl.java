@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.jalorx.boot.annotation.Cache;
-import io.jalorx.boot.service.impl2.BaseServiceImpl;
+import io.jalorx.boot.service.impl.BaseServiceImpl;
 import io.jalorx.security.dao.GroupDao;
 import io.jalorx.security.dao.UserDao;
 import io.jalorx.security.dao.UserGroupRelationDao;

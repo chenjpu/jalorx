@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import io.jalorx.boot.TreeNode;
 import io.jalorx.boot.annotation.Cache;
-import io.jalorx.boot.service.impl2.BaseServiceImpl;
+import io.jalorx.boot.service.impl.BaseServiceImpl;
 import io.jalorx.security.dao.OrgDao;
 import io.jalorx.security.entity.Org;
 import io.jalorx.security.service.OrgService;

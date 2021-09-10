@@ -43,6 +43,7 @@ public final class ErrCode {
 	public final static ErrCode A_JSON_PARSING_FAILURE      = new ErrCode("A0427", "请求JSON解析失败");
 	public final static ErrCode A_ILLEGAL_INPUT_CONTENT     = new ErrCode("A0430", "用户输入内容非法");
 	public final static ErrCode A_EXIST_LINKED_DATA         = new ErrCode("A0431", "存在关联数据，无法删除");
+	public final static ErrCode A_DSL_NOEXIST               = new ErrCode("A0500", "不存在查询字段");
 
 	public final static ErrCode A_UNKNOWN = new ErrCode("A9999", "用户未知错误");
 

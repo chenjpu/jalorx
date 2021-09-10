@@ -9,7 +9,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import io.jalorx.boot.BusinessAccessException;
 import io.jalorx.boot.model.RuntimeRole;
-import io.jalorx.boot.service.impl2.BaseServiceImpl;
+import io.jalorx.boot.service.impl.BaseServiceImpl;
 import io.jalorx.security.dao.RoleDao;
 import io.jalorx.security.dao.RolePermsRelationDao;
 import io.jalorx.security.dao.UserRoleRelationDao;

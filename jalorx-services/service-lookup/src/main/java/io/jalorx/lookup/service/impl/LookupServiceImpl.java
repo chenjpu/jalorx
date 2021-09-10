@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import io.jalorx.boot.Pair;
 import io.jalorx.boot.annotation.Cache;
-import io.jalorx.boot.service.impl2.BaseServiceImpl;
+import io.jalorx.boot.service.impl.BaseServiceImpl;
 import io.jalorx.lookup.dao.LookupDao;
 import io.jalorx.lookup.entity.Lookup;
 import io.jalorx.lookup.service.LookupService;

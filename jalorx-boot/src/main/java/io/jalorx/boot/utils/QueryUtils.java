@@ -19,7 +19,7 @@ import io.jalorx.boot.Pair.Q;
 import io.jalorx.boot.errors.ErrCode;
 import io.jalorx.boot.sql.Command;
 import io.jalorx.boot.sql.Op;
-import io.jalorx.boot.sql.QueryFilter;
+import io.jalorx.boot.sql.QueryDsl;
 import io.micronaut.http.HttpParameters;
 
 /**
@@ -37,8 +37,8 @@ public class QueryUtils {
 		return map;
 	}
 
-	public static QueryFilter parseMultiQuery(HttpParameters params) throws BusinessAccessException {
-		QueryFilter queryFilter = new QueryFilter();
+	public static QueryDsl parseMultiQuery(HttpParameters params) throws BusinessAccessException {
+		QueryDsl queryFilter = new QueryDsl();
 
 		params.forEach((key, value) -> {
 			if ("Q".equals(key)) {

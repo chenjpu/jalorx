@@ -1,6 +1,6 @@
 package io.jalorx.demo.service.impl;
 
-import io.jalorx.boot.service.impl2.BaseServiceImpl;
+import io.jalorx.boot.service.impl.BaseServiceImpl;
 import io.jalorx.demo.dao.DemoDao;
 import io.jalorx.demo.model.Demo;
 import io.jalorx.demo.service.PGDemoService;

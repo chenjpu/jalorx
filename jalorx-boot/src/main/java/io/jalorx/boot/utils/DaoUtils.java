@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.Validate;
 
+import io.micronaut.data.model.Pageable;
+
 /**
  * @author chenb
  *
@@ -18,6 +20,10 @@ public class DaoUtils {
 			page = (length + pageSize - 1) / pageSize;
 		}
 		return page;
+	}
+	
+	public static Pageable from(int page, int pageSize) {
+		return Pageable.from(page > 0 ? page - 1 : 0, pageSize);
 	}
 
 	public static void notNull(Object object, Serializable id) {

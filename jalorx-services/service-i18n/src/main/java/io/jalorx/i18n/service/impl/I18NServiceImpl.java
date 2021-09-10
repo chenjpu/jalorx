@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import io.jalorx.boot.Pair;
 import io.jalorx.boot.annotation.Cache;
-import io.jalorx.boot.service.impl2.BaseServiceImpl;
+import io.jalorx.boot.service.impl.BaseServiceImpl;
 import io.jalorx.i18n.dao.I18NDao;
 import io.jalorx.i18n.entity.I18N;
 import io.jalorx.i18n.entity.I18NDTO;

@@ -1,6 +1,11 @@
 package io.jalorx.boot.sql;
 
-import java.util.List;
+import java.util.Collection;
+
+import static io.jalorx.boot.sql.dsl.SqlBuilder.*;
+import io.jalorx.boot.sql.dsl.SqlColumn;
+import io.jalorx.boot.sql.dsl.select.QueryExpressionDSL;
+import io.jalorx.boot.sql.dsl.select.SelectModel;
 
 /**
  * 操作的封装
@@ -18,8 +23,9 @@ public enum Op {
 	 */
 	LT {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s < #{_fq_item_%d.value}", filterName, cmd.field, i);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
+				SqlColumn<Object> column) {
+			builder.and(column, isLessThan(cmd.value));
 		}
 	},
 	/**
@@ -30,8 +36,9 @@ public enum Op {
 	 */
 	GT {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s > #{_fq_item_%d.value}", filterName, cmd.field, i);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
+				SqlColumn<Object> column) {
+			builder.and(column, isGreaterThan(cmd.value));
 		}
 	},
 	/**
@@ -42,8 +49,9 @@ public enum Op {
 	 */
 	EQ {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s = #{_fq_item_%d.value}", filterName, cmd.field, i);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
+				SqlColumn<Object> column) {
+			builder.and(column, isEqualTo(cmd.value));
 		}
 	},
 	/**
@@ -54,8 +62,9 @@ public enum Op {
 	 */
 	NE {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s != #{_fq_item_%d.value}", filterName, cmd.field, i);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
+				SqlColumn<Object> column) {
+			builder.and(column, isNotEqualTo(cmd.value));
 		}
 	},
 	/**
@@ -66,8 +75,9 @@ public enum Op {
 	 */
 	LE {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s <= #{_fq_item_%d.value}", filterName, cmd.field, i);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
+				SqlColumn<Object> column) {
+			builder.and(column, isLessThanOrEqualTo(cmd.value));
 		}
 	},
 	/**
@@ -78,8 +88,9 @@ public enum Op {
 	 */
 	GE {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s >= #{_fq_item_%d.value}", filterName, cmd.field, i);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
+				SqlColumn<Object> column) {
+			builder.and(column, isGreaterThanOrEqualTo(cmd.value));
 		}
 	},
 
@@ -91,14 +102,9 @@ public enum Op {
 	 */
 	IN {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			List<?>       list    = (List<?>) cmd.value;
-			StringBuilder builder = new StringBuilder(30 * list.size());
-			for (int j = 0, length = list.size(); j < length; j++) {
-				builder.append(String.format("#{_fq_item_%d.value[%d]},", i, j));
-			}
-			builder.deleteCharAt(builder.length() - 1);
-			return String.format("%s.%s IN (%s)", filterName, cmd.field, builder.toString());
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
+				SqlColumn<Object> column) {
+			builder.and(column, isIn((Collection) cmd.value));
 		}
 
 		@Override
@@ -114,14 +120,9 @@ public enum Op {
 	 */
 	NI {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			List<?>       list    = (List<?>) cmd.value;
-			StringBuilder builder = new StringBuilder(30 * list.size());
-			for (int j = 0, length = list.size(); j < length; j++) {
-				builder.append(String.format("#{_fq_item_%d.value[%d]},", i, j));
-			}
-			builder.deleteCharAt(builder.length() - 1);
-			return String.format("%s.%s NOT IN (%s)", filterName, cmd.field, builder.toString());
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
+				SqlColumn<Object> column) {
+			builder.and(column, isNotIn((Collection) cmd.value));
 		}
 
 		@Override
@@ -137,8 +138,8 @@ public enum Op {
 	 */
 	LK {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s LIKE #{_fq_item_%d.like} ESCAPE '!'", filterName, cmd.field, i);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd, SqlColumn<Object> column) {
+			builder.and(column, isLike(cmd.getLike()));
 		}
 	},
 	/**
@@ -149,8 +150,8 @@ public enum Op {
 	 */
 	ST {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s LIKE #{_fq_item_%d.start} ESCAPE '!'", filterName, cmd.field, i);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd, SqlColumn<Object> column) {
+			builder.and(column, isLike(cmd.getStart()));
 		}
 	},
 	/**
@@ -161,8 +162,8 @@ public enum Op {
 	 */
 	ED {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s LIKE #{_fq_item_%d.end ESCAPE '!'", filterName, cmd.field, i);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd, SqlColumn<Object> column) {
+			builder.and(column, isLike(cmd.getEnd()));
 		}
 	},
 	/**
@@ -173,8 +174,8 @@ public enum Op {
 	 */
 	NL {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s is null", filterName, cmd.field);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd, SqlColumn<Object> column) {
+			builder.and(column, isNull());
 		}
 
 		@Override
@@ -182,7 +183,7 @@ public enum Op {
 			return false;
 		}
 	},
-	
+
 	/**
 	 * 内部使用
 	 * 
@@ -191,8 +192,8 @@ public enum Op {
 	 */
 	DENY_ALL {
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return "1 != 1";
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd, SqlColumn<Object> column) {
+			builder.and(column, isNotEqualTo(column));
 		}
 
 		@Override
@@ -207,9 +208,11 @@ public enum Op {
 	 *
 	 */
 	NN {
+
 		@Override
-		String toSql(String filterName, Command cmd, int i) {
-			return String.format("%s.%s is not null", filterName, cmd.field);
+		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
+				SqlColumn<Object> column) {
+			builder.and(column, isNotNull());
 		}
 
 		@Override
@@ -222,11 +225,11 @@ public enum Op {
 	 * 操作转化成底层的数据库运算符
 	 * 
 	 * @param filterName 字段
-	 * @param cmd 动作
-	 * @param i 参数排序
+	 * @param cmd        动作
 	 * @return sql字符串
 	 */
-	abstract String toSql(String filterName, Command cmd, int i);
+	abstract void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
+			SqlColumn<Object> column);
 
 	/**
 	 * 比较的值是否是多值情况，IN

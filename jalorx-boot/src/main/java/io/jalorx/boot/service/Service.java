@@ -16,7 +16,7 @@ import io.jalorx.boot.BusinessAccessException;
 import io.jalorx.boot.Pageable;
 import io.jalorx.boot.datasource.annotation.DS;
 import io.jalorx.boot.model.Id;
-import io.jalorx.boot.sql.QueryFilter;
+import io.jalorx.boot.sql.QueryDsl;
 import io.micronaut.transaction.annotation.ReadOnly;
 
 /**
@@ -87,7 +87,7 @@ public interface Service<T extends Id<?>, ID extends Serializable> {
 	 */
 	@ReadOnly
 	@DS.Slave
-	Pageable<T> getAll(QueryFilter query, int page, int pageSize) throws BusinessAccessException;
+	Pageable<T> getAll(QueryDsl query, int page, int pageSize) throws BusinessAccessException;
 
 	/**
 	 * 获得所有的对象集合
@@ -108,7 +108,7 @@ public interface Service<T extends Id<?>, ID extends Serializable> {
 	 */
 	@ReadOnly
 	@DS.Slave
-	Iterable<T> getAll(QueryFilter query) throws BusinessAccessException;
+	Iterable<T> getAll(QueryDsl query) throws BusinessAccessException;
 
 	/**
 	 * 存储对象 注意:这个地方应该会有检查是否存在此记录的业务逻辑
