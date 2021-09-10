@@ -2,7 +2,6 @@ package io.jalorx.security.service.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +33,7 @@ public class SecurityUserPermissionServiceImpl implements SecurityUserPermission
 
   @Override
   public List<Serializable> findRoleByUserId(Serializable id) {
-	  List<Long> roleIds = Arrays.asList(userRoleRelationDao.findRoleIdByUserId((Long)id));
+	  List<Long> roleIds = userRoleRelationDao.findRoleIdByUserId((Long)id);
 	  return new ArrayList<>(roleIds);
   }
 	  

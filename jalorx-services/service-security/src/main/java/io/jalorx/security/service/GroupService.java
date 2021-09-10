@@ -1,6 +1,7 @@
 package io.jalorx.security.service;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -25,7 +26,7 @@ public interface GroupService extends BaseService<Group> {
    * 机构群组ID获取该群组已绑定用户信息 TODO @param groupId 组ID @return Long[] @exception
    */
   @ReadOnly
-  Long[] getUsersByGroupId(Long groupId);
+  List<Long> getUsersByGroupId(Long groupId);
 
   /**
    * 机构群组ID获取该群组已绑定用户信息 TODO @param groupId 组ID @return String[] @exception
@@ -55,5 +56,5 @@ public interface GroupService extends BaseService<Group> {
    * 查询某用户所在的群组信息 TODO @param userId 用户ID @return String[] @exception
    */
   @ReadOnly
-  Long[] getGroupIdsByUserId(Serializable userId);
+  List<Long> getGroupIdsByUserId(Serializable userId);
 }

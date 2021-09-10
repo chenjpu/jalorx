@@ -2,6 +2,7 @@ package io.jalorx.security.service.impl;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,8 +87,7 @@ public class OrgServiceImpl extends BaseServiceImpl<Org> implements OrgService {
 
   @Override
   public List<TreeNode> getAllByIds(Long[] ids) {
-	throw new UnsupportedOperationException();
-    //return getDao().initTree(ids);
+	return  getDao().getByIdIn(ids).stream().map(Org::treeof).collect(Collectors.toList());
   }
 
   @Override

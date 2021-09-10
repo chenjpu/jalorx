@@ -17,7 +17,7 @@ public class UserRoleRelation {
 	@EmbeddedId
 	private RelationId id;
 
-	private LocalDateTime statTime;
+	private LocalDateTime startTime;
 	private LocalDateTime endTime;
 
 	public RelationId getId() {
@@ -28,12 +28,13 @@ public class UserRoleRelation {
 		this.id = id;
 	}
 
-	public LocalDateTime getStatTime() {
-		return statTime;
+
+	public LocalDateTime getStartTime() {
+		return startTime;
 	}
 
-	public void setStatTime(LocalDateTime statTime) {
-		this.statTime = statTime;
+	public void setStartTime(LocalDateTime startTime) {
+		this.startTime = startTime;
 	}
 
 	public LocalDateTime getEndTime() {

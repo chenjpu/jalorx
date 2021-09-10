@@ -16,11 +16,11 @@ public interface UserRoleRelationDao extends GenericRepository<UserRoleRelation,
 
 	void deleteByUserIdAndRoleIdIn(Long userId, Long[] roleIds);
 
-	Long[] findRoleIdByUserId(Long userId);
+	List<Long> findRoleIdByUserId(Long userId);
 
 	void deleteByUserId(long id);
 	
-	Long[] getUserIdByRoleId(Long roleId);
+	List<Long> getUserIdByRoleId(Long roleId);
 	
 	void deleteByRoleIdAndUserIdIn(Long id, Long[] userIds);
 

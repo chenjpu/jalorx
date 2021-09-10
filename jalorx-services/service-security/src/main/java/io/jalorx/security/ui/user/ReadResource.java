@@ -1,6 +1,7 @@
 package io.jalorx.security.ui.user;
 
-import jakarta.inject.Inject;
+import java.util.List;
+
 import javax.validation.constraints.NotEmpty;
 
 import io.jalorx.boot.annotation.Operation;
@@ -13,32 +14,33 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 @Controller("/security/user")
-@Resource(code=10100,desc = "User Resource")
+@Resource(code = 10100, desc = "User Resource")
 @Validated
 @Operation.Read
 @Tag(name = "security/user")
 public class ReadResource extends BaseReadResource<User> {
 
-  @Inject
-  UserService service;
-  
-  @Override
-  protected UserService getService() {
-    return service;
-  }
+	@Inject
+	UserService service;
 
-  /**
-   * 用户角色ID集合查询
-   * 
-   * @param userId 用户ID
-   * @return Long[]
-   */
-  @Get(value = "/userRole/{userId}")
-  @Operation(code = 93, desc = "用户角色浏览")
-  public Long[] getRolesByUserId(@NotEmpty @PathVariable("userId") long userId) {
-        return service.getRolesByUserId(userId);
- }
+	@Override
+	protected UserService getService() {
+		return service;
+	}
+
+	/**
+	 * 用户角色ID集合查询
+	 * 
+	 * @param userId 用户ID
+	 * @return Long[]
+	 */
+	@Get(value = "/userRole/{userId}")
+	@Operation(code = 93, desc = "用户角色浏览")
+	public List<Long> getRolesByUserId(@NotEmpty @PathVariable("userId") long userId) {
+		return service.getRolesByUserId(userId);
+	}
 
 }

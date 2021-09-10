@@ -41,7 +41,7 @@ public interface RoleService extends BaseService<Role> {
    * 获取某角色已绑定用户信息 @param roleId 角色ID @return Long[] @exception
    */
   @ReadOnly
-  Long[] getUsersByRoleId(Long roleId);
+  List<Long> getUsersByRoleId(Long roleId);
 
   /**
    * 为某角色设置绑定用户 @param roleId 角色ID @param userIds 用户ID @return @exception

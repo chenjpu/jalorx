@@ -41,7 +41,7 @@ public class GroupServiceImpl extends BaseServiceImpl<Group> implements GroupSer
 	 * 根据组ID获取用户
 	 */
 	@Override
-	public Long[] getUsersByGroupId(Long groupId) {
+	public List<Long> getUsersByGroupId(Long groupId) {
 		return userGroupRelationDao.findUserIdByGroupId(groupId);
 	}
 
@@ -85,7 +85,7 @@ public class GroupServiceImpl extends BaseServiceImpl<Group> implements GroupSer
 	 * 查找用户加入的组
 	 */
 	@Override
-	public Long[] getGroupIdsByUserId(Serializable userId) {
+	public List<Long> getGroupIdsByUserId(Serializable userId) {
 		return userGroupRelationDao.getGroupIdByUserId((Long)userId);
 	}
 

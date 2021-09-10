@@ -1,6 +1,9 @@
 package io.jalorx.security.ui.group;
 
 import jakarta.inject.Inject;
+
+import java.util.List;
+
 import javax.validation.constraints.NotEmpty;
 
 import io.jalorx.boot.annotation.Menu;
@@ -42,7 +45,7 @@ public class AuthenticatedResource {
    * @return
    */
   @Get("/groupIds/{userId}")
-  public Long[] getGroupIdsByUserId(@NotEmpty @PathVariable("userId") long userId) {
+  public List<Long> getGroupIdsByUserId(@NotEmpty @PathVariable("userId") long userId) {
     return service.getGroupIdsByUserId(userId);
   }
 

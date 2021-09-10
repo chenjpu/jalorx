@@ -17,9 +17,12 @@ import io.jalorx.boot.annotation.Dep;
 import io.jalorx.boot.annotation.Lookup;
 import io.jalorx.boot.model.Id;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.AutoPopulated;
 import io.micronaut.data.annotation.GeneratedValue;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.Transient;
+import io.micronaut.data.annotation.event.PrePersist;
+import io.micronaut.data.annotation.event.PreUpdate;
 import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -75,6 +78,7 @@ public class User implements Account, Id<Long> {
 
 	@JsonIgnore
 	@Schema(title = "密码")
+	@AutoPopulated(updateable = false)
 	protected String password;
 
 	@JsonIgnore
@@ -124,15 +128,19 @@ public class User implements Account, Id<Long> {
 	private String backUp2;
 
 	@Schema(title = "创建时间")
+	@AutoPopulated(updateable = false)
 	private LocalDateTime createDate;
 	@Schema(title = "最后修改时间")
 	private LocalDateTime lastUpdateDate;
 
 	@Schema(title = "项目名称")
+	@AutoPopulated(updateable = false)
 	private String appName;
 	@Schema(title = "多租户id")
+	@AutoPopulated(updateable = false)
 	private String tenantId;
 	@Schema(title = "项目群")
+	@AutoPopulated(updateable = false)
 	private String appScope;
 
 	@Transient
@@ -562,6 +570,20 @@ public class User implements Account, Id<Long> {
 
 	public void setAppScope(String appScope) {
 		this.appScope = appScope;
+	}
+	
+	@PrePersist
+	public void createInit() {
+		this.createDate = LocalDateTime.now();
+		this.lastUpdateDate = LocalDateTime.now();
+		this.appName = "local";
+		this.appScope = "local";
+		this.tenantId = "global";
+	}
+
+	@PreUpdate
+	public void updateInit() {
+		this.lastUpdateDate = LocalDateTime.now();
 	}
 
 	@JsonIgnore

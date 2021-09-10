@@ -53,7 +53,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	}
 
 	@Override
-	public Long[] getRolesByUserId(Long userId) {
+	public List<Long> getRolesByUserId(Long userId) {
 		return userRoleRelationDao.findRoleIdByUserId(userId);
 	}
 

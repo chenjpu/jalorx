@@ -1,5 +1,7 @@
 package io.jalorx.security.dao;
 
+import java.util.List;
+
 import io.jalorx.security.entity.UserGroupRelation;
 import io.micronaut.data.jdbc.annotation.JdbcRepository;
 import io.micronaut.data.model.query.builder.sql.Dialect;
@@ -12,9 +14,9 @@ public interface UserGroupRelationDao extends GenericRepository<UserGroupRelatio
 
 	void deleteByGroupIdAndUserIdIn(Long id, Long[] userIds);
 
-	Long[] findUserIdByGroupIdIn(Long[] groupIds);
+	List<Long> findUserIdByGroupIdIn(Long[] groupIds);
 
-	Long[] getGroupIdByUserId(Long userId);
+	List<Long> getGroupIdByUserId(Long userId);
 	
-	Long[] findUserIdByGroupId(Long groupId);
+	List<Long> findUserIdByGroupId(Long groupId);
 }

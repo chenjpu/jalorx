@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class LookupServiceImpl extends BaseServiceImpl<Lookup> implements Lookup
 
   @Override
   public List<Lookup> lookupByGroupCode(String groupCode) {
-    return getDao().findByGroupCode(groupCode);
+    return getDao().findByGroupCode(groupCode).stream().filter(e->e.getParentId() != 0).collect(Collectors.toList());
   }
 
   @Override

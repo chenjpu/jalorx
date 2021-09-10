@@ -4,6 +4,7 @@ import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.jalorx.boot.TreeNode;
 import io.jalorx.boot.model.Id;
 import io.jalorx.boot.model.LongIdVO;
 import io.micronaut.core.annotation.Introspected;
@@ -95,6 +96,16 @@ public class Org extends LongIdVO {
 
 	public void setLeaf(boolean isLeaf) {
 		this.isLeaf = isLeaf;
+	}
+	
+	@JsonIgnore
+	public TreeNode treeof() {
+		TreeNode tn = new TreeNode();
+		tn.setId(String.valueOf(getId()));
+		tn.setCode(orgCode);
+		tn.setLabel(orgName);
+		tn.setParentId(String.valueOf(pId));
+		return tn;
 	}
 
 	@JsonIgnore

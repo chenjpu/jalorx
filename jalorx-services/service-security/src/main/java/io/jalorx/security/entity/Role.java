@@ -37,7 +37,6 @@ public class Role implements Id<Long> {
 	@NotEmpty
 	private String name; // 名称
 	@Schema(title = "编码")
-	@NotEmpty
 	private String code; // 编码
 	@Schema(title = "描述")
 	@NotEmpty
@@ -57,11 +56,11 @@ public class Role implements Id<Long> {
 	private LocalDateTime lastUpdateDate;
 
 	@Schema(title = "项目名称")
-	private String appName;
+	private String appName = "";
 	@Schema(title = "多租户id")
-	private String tenantId;
+	private String tenantId = "";
 	@Schema(title = "项目群")
-	private String appScope;
+	private String appScope = "";
 
 	/**
 	 * @return the status

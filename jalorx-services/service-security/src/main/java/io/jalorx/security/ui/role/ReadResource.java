@@ -1,6 +1,9 @@
 package io.jalorx.security.ui.role;
 
 import jakarta.inject.Inject;
+
+import java.util.List;
+
 import javax.validation.constraints.NotEmpty;
 
 import io.jalorx.boot.annotation.Operation;
@@ -37,7 +40,7 @@ public class ReadResource extends BaseReadResource<Role> {
    */
   @Get("/roleUser/{roleId}")
   @Operation(code = 93, desc = "角色用户浏览")
-  public Long[] getUsersByRoleId(@NotEmpty @PathVariable("roleId") long roleId) {
+  public List<Long> getUsersByRoleId(@NotEmpty @PathVariable("roleId") long roleId) {
     return service.getUsersByRoleId(roleId);
   }
 

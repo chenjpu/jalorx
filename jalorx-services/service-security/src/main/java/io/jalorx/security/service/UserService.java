@@ -1,6 +1,7 @@
 package io.jalorx.security.service;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -44,7 +45,7 @@ public interface UserService extends BaseService<User>,MetaDataClient<User.Meta,
    * @return Long[]
    */
   @ReadOnly
-  Long[] getRolesByUserId(Long userId);
+  List<Long> getRolesByUserId(Long userId);
 
   /**
    * 为用户解除角色绑定信息

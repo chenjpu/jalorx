@@ -1,5 +1,7 @@
 package io.jalorx.security.dao;
 
+import java.util.List;
+
 import io.jalorx.boot.repository.BaseRepository;
 import io.jalorx.security.entity.User;
 import io.micronaut.data.annotation.Id;
@@ -16,5 +18,5 @@ public interface UserDao extends BaseRepository<User> {
 
   void update(@Id Long id, String password);
 
-  String[] findEmailByIdIn(Long[] Ids);
+  String[] findEmailByIdIn(List<Long> Ids);
 }

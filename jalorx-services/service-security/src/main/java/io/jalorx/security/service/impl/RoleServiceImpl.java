@@ -2,7 +2,6 @@ package io.jalorx.security.service.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -57,12 +56,12 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
 
   @Override
   public List<Serializable> findRoleByUserId(Serializable userId) throws BusinessAccessException {
-	  List<Long> roleIds = Arrays.asList(userRoleRelationDao.findRoleIdByUserId((Long)userId));
+	  List<Long> roleIds = userRoleRelationDao.findRoleIdByUserId((Long)userId);
 	  return new ArrayList<>(roleIds);
   }
 
   @Override
-  public Long[] getUsersByRoleId(Long roleId) {
+  public List<Long> getUsersByRoleId(Long roleId) {
     return userRoleRelationDao.getUserIdByRoleId(roleId);
   }
 

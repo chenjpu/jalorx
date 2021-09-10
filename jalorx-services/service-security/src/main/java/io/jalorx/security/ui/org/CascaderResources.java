@@ -2,7 +2,6 @@ package io.jalorx.security.ui.org;
 
 import java.util.List;
 
-import jakarta.inject.Inject;
 import javax.validation.constraints.NotNull;
 
 import io.jalorx.boot.BusinessAccessException;
@@ -13,11 +12,12 @@ import io.jalorx.boot.service.CascaderService;
 import io.jalorx.boot.ui.BaseCascaderResource;
 import io.jalorx.boot.utils.StringUtils;
 import io.jalorx.security.service.OrgService;
-import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 @Controller("/security/org/cascader")
 @Resource(code=10120,desc = "Org Resource")
@@ -42,7 +42,7 @@ public class CascaderResources extends BaseCascaderResource {
    * @return
    */
   @Get("/list")
-  public List<TreeNode> list(@NotNull @Body Long pId) throws BusinessAccessException {
+  public List<TreeNode> list(@NotNull @QueryValue Long pId) throws BusinessAccessException {
     return service.getChildrenByPId(pId);
   }
 
@@ -55,7 +55,7 @@ public class CascaderResources extends BaseCascaderResource {
    */
   @Get("/tree")
   @Operation.Login
-  public List<TreeNode> initTree(@NotNull @Body String ids) {
+  public List<TreeNode> initTree(@NotNull @QueryValue String ids) {
     return service.getAllByIds(StringUtils.toLongIds(ids));
   }
 

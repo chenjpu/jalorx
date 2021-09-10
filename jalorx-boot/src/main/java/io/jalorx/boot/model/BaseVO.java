@@ -17,7 +17,10 @@ import io.jalorx.boot.POJO;
 import io.jalorx.boot.annotation.User;
 import io.jalorx.boot.utils.AuthInfoUtils;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.AutoPopulated;
 import io.micronaut.data.annotation.Transient;
+import io.micronaut.data.annotation.event.PrePersist;
+import io.micronaut.data.annotation.event.PreUpdate;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -38,21 +41,26 @@ public abstract class BaseVO implements POJO {
 	protected int revision = 1;// 版本
 	@User
 	@Schema(title = "创建人ID")
+	@AutoPopulated(updateable = false)
 	protected String createUserId;
 	@Schema(title = "创建时间")
-	protected LocalDateTime   createDate;
+	@AutoPopulated(updateable = false)
+	protected LocalDateTime createDate;
 	@User
 	@Schema(title = "最后修改人ID")
 	protected String lastUpdateUserId;
 	@Schema(title = "最后修改时间")
-	protected LocalDateTime   lastUpdateDate;
+	protected LocalDateTime lastUpdateDate;
 
 	@Schema(title = "项目名称")
-	protected String appName;
+	@AutoPopulated(updateable = false)
+	protected String appName = "";
 	@Schema(title = "多租户id")
-	protected String tenantId;
+	@AutoPopulated(updateable = false)
+	protected String tenantId = "";
 	@Schema(title = "项目群")
-	protected String appScope;
+	@AutoPopulated(updateable = false)
+	protected String appScope = "";
 
 	public void setAppName(String appName) {
 		this.appName = appName;
@@ -78,28 +86,26 @@ public abstract class BaseVO implements POJO {
 		this.appScope = appScope;
 	}
 
+	@PrePersist
 	public void createInit() {
-		this.createDate     = LocalDateTime.now();
+		this.createDate = LocalDateTime.now();
 		this.lastUpdateDate = LocalDateTime.now();
-		this.appName        = "local";
-		this.appScope       = "local";
-		this.tenantId       = "global";
+		this.appName = "local";
+		this.appScope = "local";
+		this.tenantId = "global";
 		if (AuthInfoUtils.isLogin()) {
-			String userId = AuthInfoUtils.getAuthInfo()
-					.getStringUserId();
-			this.createUserId     = userId;
+			String userId = AuthInfoUtils.getAuthInfo().getStringUserId();
+			this.createUserId = userId;
 			this.lastUpdateUserId = userId;
 		}
 	}
 
+	@PreUpdate
 	public void updateInit() {
 		this.lastUpdateDate = LocalDateTime.now();
 		if (AuthInfoUtils.isLogin()) {
-			if (AuthInfoUtils.isLogin()) {
-				String userId = AuthInfoUtils.getAuthInfo()
-						.getStringUserId();
-				this.lastUpdateUserId = userId;
-			}
+			String userId = AuthInfoUtils.getAuthInfo().getStringUserId();
+			this.lastUpdateUserId = userId;
 		}
 	}
 
@@ -196,8 +202,7 @@ public abstract class BaseVO implements POJO {
 	@JsonIgnore()
 	@Transient
 	public long getCurrentUserId() {
-		return AuthInfoUtils.getAuthInfo()
-				.getUserId();
+		return AuthInfoUtils.getAuthInfo().getUserId();
 	}
 
 }

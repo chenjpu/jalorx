@@ -15,6 +15,9 @@ import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.inject.Inject;
+
+import java.util.List;
+
 import javax.validation.constraints.NotEmpty;
 
 @Controller("/security/role")
@@ -54,17 +57,12 @@ public class DeleteResource extends BaseDeleteResource<Role> {
   @Delete("/deleteRoleAndPermsById/{id}")
   @Operation(code = 94, desc = "角色删除")
   public Boolean deleteRoleAndPermsById(@PathVariable("id") long id) {
-    //ResultInfo resultInfo = new ResultInfo();
-    Long[] data = service.getUsersByRoleId(id);
-    if (data.length > 0) {
-      //resultInfo.setSuccess(false);
-      //resultInfo.setErrors("该角色已绑定用户，请先解除绑定后再删除！");
+    List<Long> data = service.getUsersByRoleId(id);
+    if (!data.isEmpty()) {
       throw new BusinessAccessException(ErrCode.A_EXIST_LINKED_DATA);
     } else {
-      //resultInfo.setSuccess(true);
       service.deleteRoleAndPermsById(id);
     }
-    //return resultInfo;
     return true;
   }
 
