@@ -5,6 +5,7 @@ dependencies {
 	annotationProcessor "io.micronaut:micronaut-inject-java"
 
 	implementation project(":jalorx-boot")
+	implementation "io.micronaut:micronaut-management"
 	implementation "io.micronaut.micrometer:micronaut-micrometer-core"
     implementation "io.micronaut.micrometer:micronaut-micrometer-registry-prometheus"
 }

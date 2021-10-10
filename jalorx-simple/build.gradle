@@ -105,11 +105,6 @@ eclipse {
     }
 }
 
-configurations.all{
-    exclude group: 'io.projectreactor', module: 'reactor-tools'
-    exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
-}
-
 shadowJar {
   archiveBaseName = 'jalorx-app'
   archiveClassifier = ''

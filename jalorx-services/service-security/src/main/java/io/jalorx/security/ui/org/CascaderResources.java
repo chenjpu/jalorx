@@ -42,7 +42,7 @@ public class CascaderResources extends BaseCascaderResource {
    * @return
    */
   @Get("/list")
-  public List<TreeNode> list(@NotNull @QueryValue Long pId) throws BusinessAccessException {
+  public List<TreeNode> listQuery(@NotNull @QueryValue Long pId) throws BusinessAccessException {
     return service.getChildrenByPId(pId);
   }
 
