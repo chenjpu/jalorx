@@ -3,7 +3,6 @@ package io.jalorx.boot.service.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -14,11 +13,10 @@ import io.jalorx.boot.model.Id;
 import io.jalorx.boot.repository.GenericRepository;
 import io.jalorx.boot.service.Service;
 import io.jalorx.boot.sql.QueryDsl;
-import io.jalorx.boot.sql.QueryDslSelectProvider;
-import io.jalorx.boot.sql.SelectProvider;
+import io.jalorx.boot.sql.QueryDslSpec;
 import io.jalorx.boot.utils.DaoUtils;
-import io.micronaut.core.reflect.GenericTypeUtils;
 import io.micronaut.core.util.CollectionUtils;
+import io.micronaut.data.repository.jpa.criteria.PredicateSpecification;
 import jakarta.inject.Inject;
 
 /**
@@ -34,16 +32,10 @@ public abstract class GenericServiceImpl<T extends Id<PK>, PK extends Serializab
 	protected abstract GenericRepository<T, PK> getDao();
 
 	@Inject
-	private QueryDslSelectProvider dslSelectProvider;
+	private QueryDslSpec queryDslSpec;
 
-	private Class<?> entityClass;
-
-	public GenericServiceImpl() {
-		this.entityClass = getEntityClass(this.getClass());
-	}
-
-	protected QueryDslSelectProvider getDslSelectProvider() {
-		return dslSelectProvider;
+	protected QueryDslSpec getDslSelectSpec() {
+		return queryDslSpec;
 	}
 
 	// @Cacheable(cacheNames = "id", key = "#id")
@@ -88,12 +80,8 @@ public abstract class GenericServiceImpl<T extends Id<PK>, PK extends Serializab
 
 	// @Cacheable(cacheNames = "list", key = "#filter")
 	public Iterable<T> getAll(QueryDsl filter) throws BusinessAccessException {
-		if (entityClass != null) {
-			SelectProvider sp = dslSelectProvider.from(filter, entityClass);
-			return getDao().findAll(sp);
-		} else {
-			return getDao().findAll();
-		}
+		PredicateSpecification<T> sp = queryDslSpec.from(filter);
+		return getDao().findAll(sp);
 	}
 
 	// @Caching(evict = {@CacheEvict(cacheNames = "id", key = "#id"),
@@ -128,12 +116,8 @@ public abstract class GenericServiceImpl<T extends Id<PK>, PK extends Serializab
 	// @Cacheable(cacheNames = "list", keyGenerator = "cache.pageableKey")
 	public Pageable<T> getAll(QueryDsl filter, int page, int pageSize) throws BusinessAccessException {
 		this.validatePageSize(pageSize);
-		if (entityClass != null) {
-			SelectProvider sp = dslSelectProvider.from(filter, entityClass);
-			return Pageable.of(getDao().findAll(sp, DaoUtils.from(page, pageSize)));
-		} else {
-			return Pageable.of(getDao().findAll(DaoUtils.from(page, pageSize)));
-		}
+		PredicateSpecification<T> sp = queryDslSpec.from(filter);
+		return Pageable.of(getDao().findAll(sp, DaoUtils.from(page, pageSize)));
 	}
 
 	// @Caching(evict = {@CacheEvict(cacheNames = "id", key = "#o.id"),
@@ -172,13 +156,4 @@ public abstract class GenericServiceImpl<T extends Id<PK>, PK extends Serializab
 		}
 		throw new BusinessAccessException(ErrCode.A_NUMBER_EXCEEDING_LIMITS, pageSize);
 	}
-
-	protected Class<?> getEntityClass(Class<?> superclass) {
-		Optional<Class> clazz = GenericTypeUtils.resolveSuperGenericTypeArgument(superclass);
-		if (clazz.isPresent() || superclass == Object.class) {
-			return clazz.orElse(null);
-		}
-		return getEntityClass(superclass.getSuperclass());
-	}
-
 }

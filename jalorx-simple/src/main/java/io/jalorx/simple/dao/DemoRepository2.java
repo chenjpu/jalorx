@@ -1,12 +1,7 @@
 package io.jalorx.simple.dao;
 
-import java.util.Optional;
-
-import io.jalorx.boot.sql.SelectProvider;
 import io.jalorx.simple.model.Demo;
 import io.micronaut.data.jdbc.annotation.JdbcRepository;
-import io.micronaut.data.model.Page;
-import io.micronaut.data.model.Pageable;
 import io.micronaut.data.model.query.builder.sql.Dialect;
 import io.micronaut.data.repository.GenericRepository;
 
@@ -14,9 +9,9 @@ import io.micronaut.data.repository.GenericRepository;
 public interface DemoRepository2 extends GenericRepository<Demo, Long>{
 	
 
-	 Optional<Demo> findOne(SelectProvider sqlProvider);
+	 //Optional<Demo> findOne(SelectProvider sqlProvider);
 
-	 Page<Demo> findAll(SelectProvider sqlProvider,Pageable pageable);
+	 //Page<Demo> findAll(SelectProvider sqlProvider,Pageable pageable);
 	 
 	 Iterable<Demo> findByAgeGreaterThan(int age);
     

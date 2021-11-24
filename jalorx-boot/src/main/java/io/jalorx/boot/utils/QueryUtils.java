@@ -63,9 +63,9 @@ public class QueryUtils {
 			Op     op   = Op.toOp(fieldInfo[fieldInfo.length - 1]);
 			if (op.needValue()) {
 				convertValue = op.isMultiple() ? convertList(type, value) : convertObject(type, value);
-				return new Command(name, op, convertValue);
+				return new Command(type,name, op, convertValue);
 			} else {
-				return new Command(name, op);
+				return new Command(type,name, op);
 			}
 		} else {
 			logger.error("Query param name [{}] is not right format[field(_T)?_OP].", key);

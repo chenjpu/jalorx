@@ -6,9 +6,8 @@ package io.jalorx.boot.sql;
 import java.io.Serializable;
 import java.util.Objects;
 
-import io.jalorx.boot.sql.dsl.SqlColumn;
-import io.jalorx.boot.sql.dsl.select.QueryExpressionDSL;
-import io.jalorx.boot.sql.dsl.select.SelectModel;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Root;
 
 /**
  * @author chenb
@@ -16,21 +15,23 @@ import io.jalorx.boot.sql.dsl.select.SelectModel;
  */
 public class Command implements Serializable {
 
-	public static final Command DENY_ALL = new Command("denyAll", Op.DENY_ALL);
+	public static final Command DENY_ALL = new Command("I","id", Op.DENY_ALL);
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -105312395358927876L;
+	final String              type;
 	final String              field;
 	final Op                  operator;
 	final Object              value;
 
-	public Command(String field, Op operator) {
-		this(field, operator, null);
+	public Command(String type,String field, Op operator) {
+		this(type,field, operator, null);
 	}
 
-	public Command(String field, Op operator, Object value) {
+	public Command(String type,String field, Op operator, Object value) {
+		this.type    = type;
 		this.field    = field;
 		this.operator = operator;
 		this.value    = escape(value);
@@ -66,20 +67,16 @@ public class Command implements Serializable {
 		return value;
 	}
 
-	public Object getLike() {
+	public String getLike() {
 		return "%" + value + "%";
 	}
 
-	public Object getStart() {
+	public String getStart() {
 		return value + "%";
 	}
 
-	public Object getEnd() {
+	public String getEnd() {
 		return "%" + value;
-	}
-	
-	public void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder,SqlColumn<Object> column) {
-		operator.and(builder, this, column);
 	}
 
 	@Override
@@ -106,5 +103,9 @@ public class Command implements Serializable {
 					&& Objects.equals(value, anotherCommand.value);
 		}
 		return false;
+	}
+
+	 public <T> void and(CriteriaBuilder criteriaBuilder, Root<T> root) {
+		operator.and(criteriaBuilder, this, root);
 	}
 }

@@ -6,6 +6,7 @@ package io.jalorx.boot.utils;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.split;
 
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -104,6 +105,8 @@ public class StringUtils {
 				return Float.valueOf(paramValue);
 			case "J":
 				return Double.valueOf(paramValue);
+			case "M":
+				return new BigDecimal(paramValue);
 			case "D":
 				return DateUtils.parseDate(paramValue, "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss");
 			case "T":

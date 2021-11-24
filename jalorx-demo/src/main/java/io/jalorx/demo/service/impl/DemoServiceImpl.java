@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import io.jalorx.boot.service.impl.BaseServiceImpl;
 import io.jalorx.demo.dao.DemoDao;
 import io.jalorx.demo.dao.DemoRepository2;
-import io.jalorx.demo.dao.sql.DemoSqlSupport;
 import io.jalorx.demo.inner.ExportFile;
 import io.jalorx.demo.inner.ImportFile;
 import io.jalorx.demo.model.Demo;
@@ -74,20 +73,20 @@ public class DemoServiceImpl extends BaseServiceImpl<Demo> implements DemoServic
 	////
 	@Override
 	public Demo get(Long id) {
-		return dynamicDao.findOne(DemoSqlSupport.queryPerson(id)).get();
-		//return super.get(id);
+		//return dynamicDao.findOne(DemoSqlSupport.queryPerson(id)).get();
+		return super.get(id);
 	}
 
 	@Override
 	public Demo getMysql(Long id) {
-		return dynamicDao.findOne(DemoSqlSupport.queryPerson(id)).get();
-		//return super.get(id);
+		//return dynamicDao.findOne(DemoSqlSupport.queryPerson(id)).get();
+		return super.get(id);
 	}
 	
 	@Override
 	public Iterable<Demo> getGradAge(int age) {
-		//dynamicDao.findByAgeGreaterThan(age);
-		return dynamicDao.findAll(DemoSqlSupport.queryAll(age),Pageable.from(1, 3));
+		return dynamicDao.findByAgeGreaterThan(age);
+		//return dynamicDao.findAll(DemoSqlSupport.queryAll(age),Pageable.from(1, 3));
 	}
 
 	@Override

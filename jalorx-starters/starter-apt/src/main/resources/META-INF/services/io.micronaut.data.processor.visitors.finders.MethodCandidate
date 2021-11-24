@@ -1,9 +1,0 @@
-io.jalorx.apt.data.visitors.finders.ExistsByFinder
-io.jalorx.apt.data.visitors.finders.FindOneMethod
-io.jalorx.apt.data.visitors.finders.CountMethod
-io.jalorx.apt.data.visitors.finders.page.FindPageByMethod
-io.jalorx.apt.data.visitors.finders.page.ListPageMethod
-io.jalorx.apt.data.visitors.finders.slice.FindSliceByMethod
-io.jalorx.apt.data.visitors.finders.slice.ListSliceMethod
-#io.jalorx.apt.data.visitors.finders.FindByFinder
-#io.jalorx.apt.data.visitors.finders.ListMethod

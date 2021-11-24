@@ -45,20 +45,20 @@ public class DemoServiceImpl extends BaseServiceImpl<Demo> implements DemoServic
 	////
 	@Override
 	public Demo get(Long id) {
-		return dynamicDao.findOne(DemoSqlSupport.queryPerson(id)).get();
-		//return super.get(id);
+		//return dynamicDao.findOne(DemoSqlSupport.queryPerson(id)).get();
+		return super.get(id);
 	}
 
 	@Override
 	public Demo getMysql(Long id) {
-		return dynamicDao.findOne(DemoSqlSupport.queryPerson(id)).get();
-		//return super.get(id);
+		//return dynamicDao.findOne(DemoSqlSupport.queryPerson(id)).get();
+		return super.get(id);
 	}
 	
 	@Override
 	public Iterable<Demo> getGradAge(int age) {
-		//dynamicDao.findByAgeGreaterThan(age);
-		return dynamicDao.findAll(DemoSqlSupport.queryAll(age),Pageable.from(1, 3));
+		return dynamicDao.findByAgeGreaterThan(age);
+		//return dynamicDao.findAll(DemoSqlSupport.queryAll(age),Pageable.from(1, 3));
 	}
 
 	@Override

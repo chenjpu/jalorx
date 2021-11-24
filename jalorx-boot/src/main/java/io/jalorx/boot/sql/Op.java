@@ -1,11 +1,12 @@
 package io.jalorx.boot.sql;
 
-import java.util.Collection;
+import java.math.BigDecimal;
+import java.util.Date;
 
-import static io.jalorx.boot.sql.dsl.SqlBuilder.*;
-import io.jalorx.boot.sql.dsl.SqlColumn;
-import io.jalorx.boot.sql.dsl.select.QueryExpressionDSL;
-import io.jalorx.boot.sql.dsl.select.SelectModel;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 /**
  * 操作的封装
@@ -23,10 +24,10 @@ public enum Op {
 	 */
 	LT {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
-				SqlColumn<Object> column) {
-			builder.and(column, isLessThan(cmd.value));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			compare(builder::lessThan, command, root);
 		}
+
 	},
 	/**
 	 * 大于
@@ -36,9 +37,8 @@ public enum Op {
 	 */
 	GT {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
-				SqlColumn<Object> column) {
-			builder.and(column, isGreaterThan(cmd.value));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			compare(builder::greaterThan, command, root);
 		}
 	},
 	/**
@@ -49,9 +49,8 @@ public enum Op {
 	 */
 	EQ {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
-				SqlColumn<Object> column) {
-			builder.and(column, isEqualTo(cmd.value));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			builder.equal(root.get(command.field), command.value);
 		}
 	},
 	/**
@@ -62,9 +61,8 @@ public enum Op {
 	 */
 	NE {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
-				SqlColumn<Object> column) {
-			builder.and(column, isNotEqualTo(cmd.value));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			builder.notEqual(root.get(command.field), command.value);
 		}
 	},
 	/**
@@ -75,9 +73,8 @@ public enum Op {
 	 */
 	LE {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
-				SqlColumn<Object> column) {
-			builder.and(column, isLessThanOrEqualTo(cmd.value));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			compare(builder::lessThanOrEqualTo, command, root);
 		}
 	},
 	/**
@@ -88,9 +85,8 @@ public enum Op {
 	 */
 	GE {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
-				SqlColumn<Object> column) {
-			builder.and(column, isGreaterThanOrEqualTo(cmd.value));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			compare(builder::greaterThanOrEqualTo, command, root);
 		}
 	},
 
@@ -102,9 +98,8 @@ public enum Op {
 	 */
 	IN {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
-				SqlColumn<Object> column) {
-			builder.and(column, isIn((Collection) cmd.value));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			builder.in(root.get(command.field)).value(command.value);
 		}
 
 		@Override
@@ -120,9 +115,8 @@ public enum Op {
 	 */
 	NI {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
-				SqlColumn<Object> column) {
-			builder.and(column, isNotIn((Collection) cmd.value));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			builder.not(builder.in(root.get(command.field)).value(command.value));
 		}
 
 		@Override
@@ -138,8 +132,8 @@ public enum Op {
 	 */
 	LK {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd, SqlColumn<Object> column) {
-			builder.and(column, isLike(cmd.getLike()));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			builder.like(root.get(command.field), command.getLike());
 		}
 	},
 	/**
@@ -150,8 +144,8 @@ public enum Op {
 	 */
 	ST {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd, SqlColumn<Object> column) {
-			builder.and(column, isLike(cmd.getStart()));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			builder.like(root.get(command.field), command.getStart(), '!');
 		}
 	},
 	/**
@@ -162,8 +156,8 @@ public enum Op {
 	 */
 	ED {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd, SqlColumn<Object> column) {
-			builder.and(column, isLike(cmd.getEnd()));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			builder.like(root.get(command.field), command.getEnd(), '!');
 		}
 	},
 	/**
@@ -174,8 +168,8 @@ public enum Op {
 	 */
 	NL {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd, SqlColumn<Object> column) {
-			builder.and(column, isNull());
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			builder.isNull(root.get(command.field));
 		}
 
 		@Override
@@ -192,8 +186,8 @@ public enum Op {
 	 */
 	DENY_ALL {
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd, SqlColumn<Object> column) {
-			builder.and(column, isNotEqualTo(column));
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			builder.notEqual(root.get(command.field), root.get(command.field));
 		}
 
 		@Override
@@ -210,9 +204,8 @@ public enum Op {
 	NN {
 
 		@Override
-		void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
-				SqlColumn<Object> column) {
-			builder.and(column, isNotNull());
+		<T> void and(CriteriaBuilder builder, Command command, Root<T> root) {
+			builder.isNotNull(root.get(command.field));
 		}
 
 		@Override
@@ -228,8 +221,7 @@ public enum Op {
 	 * @param cmd        动作
 	 * @return sql字符串
 	 */
-	abstract void and(QueryExpressionDSL<SelectModel>.QueryExpressionWhereBuilder builder, Command cmd,
-			SqlColumn<Object> column);
+	abstract <T> void and(CriteriaBuilder builder, Command command, Root<T> root);
 
 	/**
 	 * 比较的值是否是多值情况，IN
@@ -258,4 +250,34 @@ public enum Op {
 	public static Op toOp(String operatorName) {
 		return Op.valueOf(operatorName);
 	}
+
+	static <Y extends Comparable<? super Y>, T> Predicate compare(Contrast c, Command command, Root<T> root) {
+		switch (command.type) {
+		case "S":
+			 return c.test(root.get(command.field), (String) (command.value));
+		case "Z":
+			return c.test(root.get(command.field), (Boolean) (command.value));
+		case "B":
+			return c.test(root.get(command.field), (Byte) (command.value));
+		case "I":
+			return c.test(root.get(command.field), (Integer) (command.value));
+		case "L":
+			return c.test(root.get(command.field), (Long) (command.value));
+		case "F":
+			return c.test(root.get(command.field), (Float) (command.value));
+		case "J":
+			return c.test(root.get(command.field), (Double) (command.value));
+		case "M":
+			return c.test(root.get(command.field), (BigDecimal) (command.value));
+		case "D":
+		case "T":
+			return c.test(root.get(command.field), (Date) (command.value));
+		}
+		return null;
+	}
+}
+
+@FunctionalInterface
+interface Contrast {
+	<Y extends Comparable<? super Y>> Predicate test(Expression<? extends Y> x, Y y);
 }
