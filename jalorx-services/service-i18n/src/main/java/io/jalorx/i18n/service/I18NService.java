@@ -3,7 +3,7 @@ package io.jalorx.i18n.service;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import io.jalorx.boot.Pair;
 import io.jalorx.boot.service.BaseService;

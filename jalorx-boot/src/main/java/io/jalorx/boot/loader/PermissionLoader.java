@@ -75,7 +75,7 @@ public class PermissionLoader
 
 		BeanContext beanContext = event.getSource();
 
-		Collection<BeanDefinition<?>> definitions = beanContext.getBeanDefinitions(Qualifiers.byStereotype(Resource.class));
+		Collection<BeanDefinition<Object>> definitions = beanContext.getBeanDefinitions(Qualifiers.byStereotype(Resource.class));
 
 		Map<Integer, PermissionResource> resourcesMap = new HashMap<>();
 

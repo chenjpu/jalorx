@@ -3,7 +3,7 @@ package io.jalorx.boot.datasource;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import com.zaxxer.hikari.HikariConfig;
 

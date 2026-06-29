@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -78,7 +78,7 @@ public class User implements Account, Id<Long> {
 
 	@JsonIgnore
 	@Schema(title = "密码")
-	@AutoPopulated(updateable = false)
+	@AutoPopulated(updatable = false)
 	protected String password;
 
 	@JsonIgnore
@@ -128,19 +128,19 @@ public class User implements Account, Id<Long> {
 	private String backUp2;
 
 	@Schema(title = "创建时间")
-	@AutoPopulated(updateable = false)
+	@AutoPopulated(updatable = false)
 	private LocalDateTime createDate;
 	@Schema(title = "最后修改时间")
 	private LocalDateTime lastUpdateDate;
 
 	@Schema(title = "项目名称")
-	@AutoPopulated(updateable = false)
+	@AutoPopulated(updatable = false)
 	private String appName;
 	@Schema(title = "多租户id")
-	@AutoPopulated(updateable = false)
+	@AutoPopulated(updatable = false)
 	private String tenantId;
 	@Schema(title = "项目群")
-	@AutoPopulated(updateable = false)
+	@AutoPopulated(updatable = false)
 	private String appScope;
 
 	@Transient

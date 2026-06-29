@@ -16,7 +16,7 @@ import io.jalorx.boot.UncertifiedException;
 import io.jalorx.boot.annotation.Operation;
 import io.jalorx.boot.annotation.Resource;
 import io.jalorx.boot.utils.AuthInfoUtils;
-import io.micrometer.core.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import io.micronaut.context.env.Environment;
 import io.micronaut.core.annotation.AnnotationValue;
 import io.micronaut.core.async.publisher.Publishers;

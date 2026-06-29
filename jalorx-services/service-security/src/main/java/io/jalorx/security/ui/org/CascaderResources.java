@@ -2,7 +2,7 @@ package io.jalorx.security.ui.org;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import io.jalorx.boot.BusinessAccessException;
 import io.jalorx.boot.TreeNode;

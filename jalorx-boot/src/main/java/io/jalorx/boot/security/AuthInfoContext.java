@@ -3,9 +3,8 @@ package io.jalorx.boot.security;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
-
+import org.jspecify.annotations.Nullable;
 import io.jalorx.boot.AuthInfo;
-import io.micrometer.core.lang.Nullable;
 
 public final class AuthInfoContext {
 

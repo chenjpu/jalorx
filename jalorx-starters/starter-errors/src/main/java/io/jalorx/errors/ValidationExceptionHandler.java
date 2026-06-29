@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Set;
 
 import jakarta.inject.Singleton;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.ElementKind;
-import javax.validation.Path;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ElementKind;
+import jakarta.validation.Path;
 
 import io.jalorx.boot.errors.AbstractExceptionHandler;
 import io.jalorx.boot.errors.ErrCode;

@@ -3,7 +3,7 @@ package io.jalorx.security.service;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import io.jalorx.boot.service.BaseService;
 import io.jalorx.boot.service.CascaderService;

@@ -2,8 +2,8 @@ package io.jalorx.security.ui.group;
 
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import io.jalorx.boot.BusinessAccessException;
 import io.jalorx.boot.Pageable;

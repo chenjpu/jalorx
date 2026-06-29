@@ -1,6 +1,6 @@
 package io.jalorx.security.service;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import io.jalorx.security.entity.User;
 import io.micronaut.transaction.annotation.ReadOnly;

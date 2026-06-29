@@ -1,7 +1,7 @@
 package io.jalorx.security.ui.perm;
 
 import jakarta.inject.Inject;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import io.jalorx.boot.annotation.Operation;
 import io.jalorx.boot.annotation.Resource;

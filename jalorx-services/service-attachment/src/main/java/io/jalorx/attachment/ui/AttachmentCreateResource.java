@@ -28,6 +28,7 @@ import io.micronaut.validation.Validated;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Controller("/attachment")
 @Resource(code = 10104, desc = "Attachment Resource")
@@ -66,7 +67,8 @@ public class AttachmentCreateResource {
     // 文件重命名，防止重复
     Path filePath = dir.resolve(uuid);
     // 文件对象
-    Publisher<Boolean> uploadPublisher = file.transferTo(filePath.toFile());
+    Publisher<?> uploadPublisher = file.transferTo(filePath.toFile());
+    
     return Flux.from(uploadPublisher).map(success -> {
       if (success) {
         Attachment at = new Attachment();

@@ -18,7 +18,7 @@ import jakarta.inject.Inject;
 
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 @Controller("/security/role")
 @Resource(code=10102,desc = "Role Resource")

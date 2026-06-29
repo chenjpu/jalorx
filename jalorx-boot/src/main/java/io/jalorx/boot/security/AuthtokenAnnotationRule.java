@@ -3,7 +3,7 @@ package io.jalorx.boot.security;
 import org.reactivestreams.Publisher;
 
 import io.jalorx.boot.annotation.AuthToken;
-import io.micrometer.core.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import io.micronaut.core.async.publisher.Publishers;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.security.authentication.Authentication;
@@ -19,7 +19,7 @@ public class AuthtokenAnnotationRule extends AbstractSecurityRule {
 	 */
 	@Override
 	public Publisher<SecurityRuleResult> check(HttpRequest<?> request, @Nullable RouteMatch<?> routeMatch, @Nullable Authentication authentication) {
-
+		/*
 		if (routeMatch instanceof MethodBasedRouteMatch) {
 			MethodBasedRouteMatch<?, ?> methodRoute = ((MethodBasedRouteMatch<?, ?>) routeMatch);
 			if (methodRoute.hasAnnotation(AuthToken.class)) {
@@ -35,6 +35,7 @@ public class AuthtokenAnnotationRule extends AbstractSecurityRule {
 
 			}
 		}
+		*/
 		return Publishers.just(SecurityRuleResult.UNKNOWN);
 	}
 

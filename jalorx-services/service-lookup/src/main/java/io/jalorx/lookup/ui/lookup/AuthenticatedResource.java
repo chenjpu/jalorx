@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 import jakarta.inject.Inject;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import io.jalorx.boot.Pair;
 import io.jalorx.boot.annotation.Menu;

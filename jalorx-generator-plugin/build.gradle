@@ -12,9 +12,9 @@ plugins {
     id "eclipse"
 }
 
-group 'io.jalorx'
-version '3.0'
-description "JalorX Gradle Generator Plugin"
+group='io.jalorx'
+version='3.0'
+description="JalorX Gradle Generator Plugin"
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"  

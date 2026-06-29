@@ -1,5 +1,5 @@
 description = "JalorX Starts errors"
-group   projectStarterGroupId
+group=projectStarterGroupId
 
 dependencies {
 	annotationProcessor "io.micronaut:micronaut-inject-java"

@@ -2,7 +2,7 @@ package io.jalorx.security.service;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import io.jalorx.boot.entity.PermissionOperation;
 import io.jalorx.boot.entity.PermissionResource;

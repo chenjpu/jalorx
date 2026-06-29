@@ -1,6 +1,6 @@
 package io.jalorx.security.service;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import io.jalorx.boot.service.BaseService;
 import io.jalorx.security.entity.Action;

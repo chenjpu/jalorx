@@ -1,5 +1,5 @@
 description = "JalorX Service Attachment"
-group   projectServiceGroupId
+group=projectServiceGroupId
 
 dependencies {
 	annotationProcessor "io.micronaut.openapi:micronaut-openapi"

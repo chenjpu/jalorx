@@ -3,7 +3,7 @@ package io.jalorx.security.service;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import io.jalorx.boot.service.BaseService;
 import io.jalorx.security.entity.Group;

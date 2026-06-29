@@ -1,7 +1,7 @@
 package io.jalorx.lookup.service;
 
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import io.jalorx.boot.service.BaseService;
 import io.jalorx.lookup.entity.Area;

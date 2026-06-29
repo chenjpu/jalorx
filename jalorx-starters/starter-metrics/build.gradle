@@ -1,5 +1,5 @@
 description = "JalorX Starts metrics"
-group   projectStarterGroupId
+group=projectStarterGroupId
 
 dependencies {
 	annotationProcessor "io.micronaut:micronaut-inject-java"

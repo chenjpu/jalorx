@@ -1,6 +1,6 @@
 package io.jalorx.security.entity;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 import io.jalorx.boot.annotation.Lookup;
 import io.jalorx.boot.model.CommonVO;

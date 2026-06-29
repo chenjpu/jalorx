@@ -5,7 +5,7 @@ import static io.micronaut.configuration.metrics.micrometer.MeterRegistryFactory
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ public class DynamicDataSourceFactory implements AutoCloseable {
 	@Primary
 	@Requires(property = DynamicDatasourceConfiguration.PREFIX)
 	public DataSourceTransactionManager dataSourceTransactionManager(RoutingDataSourceWrapper localDatasource) {
-		return new DataSourceTransactionManager(localDatasource.getDataSource());
+		return new DataSourceTransactionManager(localDatasource.getDataSource(),null,null);
 	}
 
 	@Context

@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import jakarta.inject.Inject;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 import io.jalorx.boot.BusinessAccessException;
 import io.jalorx.boot.annotation.Operation;

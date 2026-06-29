@@ -2,7 +2,7 @@ package io.jalorx.boot.ui;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.ArrayUtils;
 

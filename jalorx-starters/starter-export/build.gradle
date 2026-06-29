@@ -1,5 +1,5 @@
 description = "JalorX Starts export"
-group   projectStarterGroupId
+group=projectStarterGroupId
 
 dependencies {
 	annotationProcessor "io.micronaut:micronaut-inject-java"

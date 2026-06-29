@@ -1,5 +1,5 @@
 description = "JalorX Starts data"
-group   projectStarterGroupId
+group=projectStarterGroupId
 
 dependencies {
 	annotationProcessor "io.micronaut:micronaut-inject-java"

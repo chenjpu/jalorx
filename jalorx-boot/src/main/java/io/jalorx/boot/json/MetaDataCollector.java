@@ -39,7 +39,7 @@ public abstract class MetaDataCollector<A extends Annotation, T> {
 	}
 
 	public MetaDataCollector() {
-		this.annoType = GenericTypeUtils.resolveSuperTypeGenericArguments(this.getClass(), MetaDataCollector.class)[0];
+		this.annoType = (Class<A>) GenericTypeUtils.resolveSuperTypeGenericArguments(this.getClass(), MetaDataCollector.class)[0];
 	}
 
 	protected abstract List<T> collector(A a, Object vaule);

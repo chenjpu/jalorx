@@ -2,7 +2,7 @@ package io.jalorx.boot.ui;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import io.jalorx.boot.BusinessAccessException;
 import io.jalorx.boot.Pageable;

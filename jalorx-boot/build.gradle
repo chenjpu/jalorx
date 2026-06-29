@@ -1,16 +1,17 @@
 
 description = "JalorX Boot"
-group   projectGroupId
+group=projectGroupId
 
 dependencies {
     implementation "io.swagger.core.v3:swagger-annotations"
-    implementation "io.micronaut:micronaut-validation"
+    implementation "io.micronaut.validation:micronaut-validation"
     implementation "io.micronaut.cache:micronaut-cache-core"
     implementation "io.micronaut.security:micronaut-security"
     implementation "io.micronaut.sql:micronaut-jdbc"
     implementation "io.micronaut.sql:micronaut-jdbc-hikari"
     implementation "io.micronaut.data:micronaut-data-model"
     implementation "io.micronaut.data:micronaut-data-jdbc"
+    
     
     compileOnly "io.micronaut.micrometer:micronaut-micrometer-core"
     testImplementation "io.micronaut.test:micronaut-test-junit5"

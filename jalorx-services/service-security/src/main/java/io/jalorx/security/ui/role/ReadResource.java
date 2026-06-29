@@ -4,7 +4,7 @@ import jakarta.inject.Inject;
 
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 import io.jalorx.boot.annotation.Operation;
 import io.jalorx.boot.annotation.Resource;

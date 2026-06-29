@@ -2,7 +2,7 @@ plugins {
     id 'java-platform'
 }
 
-group projectGroupId
+group=projectGroupId
 
 apply plugin: 'maven-publish'
 

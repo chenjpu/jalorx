@@ -41,10 +41,10 @@ public abstract class BaseVO implements POJO {
 	protected int revision = 1;// 版本
 	@User
 	@Schema(title = "创建人ID")
-	@AutoPopulated(updateable = false)
+	@AutoPopulated(updatable = false)
 	protected String createUserId;
 	@Schema(title = "创建时间")
-	@AutoPopulated(updateable = false)
+	@AutoPopulated(updatable = false)
 	protected LocalDateTime createDate;
 	@User
 	@Schema(title = "最后修改人ID")
@@ -53,13 +53,13 @@ public abstract class BaseVO implements POJO {
 	protected LocalDateTime lastUpdateDate;
 
 	@Schema(title = "项目名称")
-	@AutoPopulated(updateable = false)
+	@AutoPopulated(updatable = false)
 	protected String appName = "";
 	@Schema(title = "多租户id")
-	@AutoPopulated(updateable = false)
+	@AutoPopulated(updatable = false)
 	protected String tenantId = "";
 	@Schema(title = "项目群")
-	@AutoPopulated(updateable = false)
+	@AutoPopulated(updatable = false)
 	protected String appScope = "";
 
 	public void setAppName(String appName) {
