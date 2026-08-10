@@ -5,9 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import io.jalorx.boot.UncertifiedException;
 import io.jalorx.boot.utils.AuthInfoUtils;
+import io.micronaut.http.HttpRequest;
 import io.micronaut.security.rules.SecurityRule;
 
-public abstract class AbstractSecurityRule implements SecurityRule {
+public abstract class AbstractSecurityRule implements SecurityRule<HttpRequest<?>> {
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractSecurityRule.class);
 

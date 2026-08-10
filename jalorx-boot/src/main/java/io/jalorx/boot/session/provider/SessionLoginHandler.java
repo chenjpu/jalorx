@@ -40,7 +40,7 @@ import jakarta.inject.Singleton;
  * @since 2.0
  */
 @Singleton
-public class SessionLoginHandler implements LoginHandler {
+public class SessionLoginHandler implements LoginHandler<HttpRequest<?>, MutableHttpResponse<?>> {
 
 	protected final SessionStore<Session> sessionStore;
 

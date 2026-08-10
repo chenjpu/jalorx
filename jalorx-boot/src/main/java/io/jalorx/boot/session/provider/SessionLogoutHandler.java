@@ -17,7 +17,7 @@ import jakarta.inject.Singleton;
  * @since 2.0
  */
 @Singleton
-public class SessionLogoutHandler implements LogoutHandler {
+public class SessionLogoutHandler implements LogoutHandler<HttpRequest<?>, MutableHttpResponse<?>> {
 
 	@Override
 	public MutableHttpResponse<?> logout(HttpRequest<?> request) {

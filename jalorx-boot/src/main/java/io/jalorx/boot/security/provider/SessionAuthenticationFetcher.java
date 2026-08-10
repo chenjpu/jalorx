@@ -15,7 +15,7 @@ import jakarta.inject.Singleton;
 import reactor.core.publisher.Mono;
 
 @Singleton
-public class SessionAuthenticationFetcher implements AuthenticationFetcher {
+public class SessionAuthenticationFetcher implements AuthenticationFetcher<HttpRequest<?>> {
 
 	/**
 	 * The order of the fetcher.

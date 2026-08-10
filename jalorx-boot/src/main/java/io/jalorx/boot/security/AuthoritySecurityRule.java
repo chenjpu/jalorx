@@ -23,15 +23,18 @@ import io.micronaut.core.async.publisher.Publishers;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.inject.ExecutableMethod;
+import io.micronaut.inject.annotation.EvaluatedAnnotationValue;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.security.rules.SecurityRuleResult;
 import io.micronaut.security.rules.SensitiveEndpointRule;
 import io.micronaut.web.router.MethodBasedRouteMatch;
+import io.micronaut.web.router.RouteAttributes;
 import io.micronaut.web.router.RouteMatch;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import reactor.core.publisher.Mono;
 
 /**
  * Security rule implementation
@@ -53,53 +56,53 @@ public class AuthoritySecurityRule extends AbstractSecurityRule {
 	Environment environment;
 
 	@Override
-	public Publisher<SecurityRuleResult>  check(HttpRequest<?> request, @Nullable RouteMatch<?> routeMatch, @Nullable Authentication authentication) {
+	public Publisher<SecurityRuleResult> check(HttpRequest<?> request, @Nullable Authentication authentication) {
+		 try (RouteMatch<?> routeMatch = RouteAttributes.getRouteMatch(request).orElse(null)) {
+	            if (routeMatch instanceof MethodBasedRouteMatch) {
+	                MethodBasedRouteMatch<?, ?> methodRoute = ((MethodBasedRouteMatch<?, ?>) routeMatch);
+	                return Publishers.just(loginMap
+	        				.computeIfAbsent(methodRoute.getExecutableMethod(), r -> this.secured(routeMatch))
+	        				.map(set -> {
+	        					if (set.contains(SecurityRule.IS_ANONYMOUS)) {
+	        						return SecurityRuleResult.ALLOWED;
+	        					}
+	        					if (set.contains(SecurityRule.IS_AUTHENTICATED)) {
+	        						boolean login = checkLogin();
+	        						LOG.debug("Check Operation Login[{}]", login);
+	        						if (login) {
+	        							return SecurityRuleResult.ALLOWED;
+	        						} else {
+	        							throw new UncertifiedException();
+	        						}
+	        					}
+	        					return SecurityRuleResult.UNKNOWN;
+	        				})
+	        				.orElseGet(() -> operationMap
+	        						.computeIfAbsent(methodRoute.getExecutableMethod(), r -> this.operation(methodRoute))
+	        						.map(permission -> {
+	        							// 受控服务必须登录状态
+	        							AuthInfo subject = AuthInfoUtils.getAuthInfo();
+	        							// 超级用户
+	        							if (subject.isRoot()) {
+	        								return SecurityRuleResult.ALLOWED;
+	        							}
 
-		if (routeMatch == null || !(routeMatch instanceof MethodBasedRouteMatch)) {
-			return Publishers.just(SecurityRuleResult.ALLOWED);
-		}
+	        							if (subject.isPermitted(permission)) {
+	        								LOG.debug("User[{}] has right for permission [{}]", subject.getAccount(), permission);
+	        								return SecurityRuleResult.ALLOWED;
+	        							}
+	        							LOG.debug("User[{}] has no right for permission [{}]", subject.getAccount(), permission);
+	        							throw new UnauthorizedException(permission);
 
-		MethodBasedRouteMatch<?, ?> methodRouteMatch = (MethodBasedRouteMatch<?, ?>) routeMatch;
-
-		return Publishers.just(loginMap
-				.computeIfAbsent(methodRouteMatch.getExecutableMethod(), r -> this.secured(routeMatch))
-				.map(set -> {
-					if (set.contains(SecurityRule.IS_ANONYMOUS)) {
-						return SecurityRuleResult.ALLOWED;
-					}
-					if (set.contains(SecurityRule.IS_AUTHENTICATED)) {
-						boolean login = checkLogin();
-						LOG.debug("Check Operation Login[{}]", login);
-						if (login) {
-							return SecurityRuleResult.ALLOWED;
-						} else {
-							throw new UncertifiedException();
-						}
-					}
-					return SecurityRuleResult.UNKNOWN;
-				})
-				.orElseGet(() -> operationMap
-						.computeIfAbsent(methodRouteMatch.getExecutableMethod(), r -> this.operation(routeMatch))
-						.map(permission -> {
-							// 受控服务必须登录状态
-							AuthInfo subject = AuthInfoUtils.getAuthInfo();
-							// 超级用户
-							if (subject.isRoot()) {
-								return SecurityRuleResult.ALLOWED;
-							}
-
-							if (subject.isPermitted(permission)) {
-								LOG.debug("User[{}] has right for permission [{}]", subject.getAccount(), permission);
-								return SecurityRuleResult.ALLOWED;
-							}
-							LOG.debug("User[{}] has no right for permission [{}]", subject.getAccount(), permission);
-							throw new UnauthorizedException(permission);
-
-						})
-						.orElseGet(() -> {
-							LOG.warn("Lack of @Operation.Anonymous for route [{}]", routeMatch);
-							return SecurityRuleResult.ALLOWED;
-						})));
+	        						})
+	        						.orElseGet(() -> {
+	        							LOG.warn("Lack of @Operation.Anonymous for route [{}]", routeMatch);
+	        							return SecurityRuleResult.ALLOWED;
+	        						})));
+	                 
+	            }
+	        }
+	        return Mono.just(SecurityRuleResult.UNKNOWN);
 	}
 
 	/**
@@ -108,7 +111,7 @@ public class AuthoritySecurityRule extends AbstractSecurityRule {
 	 * @param routeMatch
 	 * @return
 	 */
-	private Optional<String> operation(RouteMatch<?> routeMatch) {
+	private Optional<String> operation( MethodBasedRouteMatch<?, ?> routeMatch) {
 		return routeMatch.findAnnotation(Operation.class)
 				.map(op -> {
 					// .方法对应的资源定义

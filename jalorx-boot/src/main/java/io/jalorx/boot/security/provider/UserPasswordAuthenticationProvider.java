@@ -11,13 +11,12 @@ import io.jalorx.boot.RowRule;
 import io.jalorx.boot.model.RuntimeRole;
 import io.jalorx.boot.model.SimpleAuthInfo;
 import io.jalorx.boot.security.PasswordEncoder;
-import io.micrometer.core.lang.Nullable;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.async.publisher.Publishers;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.security.authentication.AuthenticationFailed;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
-import io.micronaut.security.authentication.AuthenticationProvider;
+import io.micronaut.security.authentication.provider.HttpRequestAuthenticationProvider;
 import io.micronaut.security.authentication.AuthenticationRequest;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import jakarta.inject.Singleton;
@@ -25,7 +24,7 @@ import reactor.core.publisher.Flux;
 
 @Requires(beans = {AccountFetcher.class,AuthFetcher.class})
 @Singleton
-public class UserPasswordAuthenticationProvider implements AuthenticationProvider {
+public class UserPasswordAuthenticationProvider implements HttpRequestAuthenticationProvider<Object> {
 
 	private final AccountFetcher  accountFetcher;
 	private final AuthFetcher     authFetcher;
@@ -39,8 +38,8 @@ public class UserPasswordAuthenticationProvider implements AuthenticationProvide
 	}
 
 	@Override
-	public Publisher<AuthenticationResponse> authenticate(@Nullable HttpRequest<?> httpRequest,
-			AuthenticationRequest<?, ?> authenticationRequest) {
+	public AuthenticationResponse authenticate(HttpRequest<Object> httpRequest,
+			AuthenticationRequest<String, String> authenticationRequest) {
 		return Flux.from(fetchAccount(authenticationRequest))
 				.switchMap(account -> {
 					//账号过期
@@ -64,13 +63,12 @@ public class UserPasswordAuthenticationProvider implements AuthenticationProvide
 						return Flux.just(new AuthenticationFailed(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH));
 					}
 				})
-				.switchIfEmpty(Flux.just(new AuthenticationFailed(AuthenticationFailureReason.USER_NOT_FOUND)));
+				.switchIfEmpty(Flux.just(new AuthenticationFailed(AuthenticationFailureReason.USER_NOT_FOUND))).blockFirst();
 	}
 
 	@SuppressWarnings("rawtypes")
 	protected Publisher<Account> fetchAccount(AuthenticationRequest authenticationRequest) {
-		final String account = authenticationRequest.getIdentity()
-				.toString();
+		final String account = authenticationRequest.getIdentity().toString();
 		return accountFetcher.findByAccount(account);
 	}
 
