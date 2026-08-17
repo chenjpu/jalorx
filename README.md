@@ -1,3 +1,5 @@
+
+
 # JalorX
 
 JalorX是集成业界流行和成熟的技术框架和良好用户体验的应用快速开发框架
@@ -113,9 +115,8 @@ dolt sql-server -p=123
 http://127.0.0.1:8080
 
 user: root
-passward : 123
+password : 123
 ```
 **1、导入jalorx-demo工程之前，需要demo工程根目录运行  gradle eclipse**
 
 **2、出现非预期的行为，可以通过根目录运行gradle eclipse和项目中Refresh Gradle Project刷新解决**
-
